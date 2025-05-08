@@ -37,4 +37,34 @@ class ProductoController {
         
         return $producto;
     }
+
+
+    public function getProductosFiltrados($nombre = '', $categoria = '', $precioMax = '')
+    {
+        // Conectarse a la base de datos
+        $conexion = Database::connect();
+        $sql = "SELECT * FROM productos WHERE 1=1";
+
+        if (!empty($nombre)) {
+            $sql .= " AND nombre LIKE '%" . $conexion->real_escape_string($nombre) . "%'";
+        }
+
+        if (!empty($categoria)) {
+            $sql .= " AND categoria LIKE '%" . $conexion->real_escape_string($categoria) . "%'";
+        }
+
+        if (!empty($precioMax)) {
+            $sql .= " AND precio <= " . floatval($precioMax);
+        }
+
+        $result = $conexion->query($sql);
+        $productos = [];
+
+        while ($row = $result->fetch_object('Producto')) {
+            $productos[] = $row;
+        }
+
+        return $productos;
+    }
+
 }
