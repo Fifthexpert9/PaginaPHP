@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 19-02-2025 a las 12:21:39
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Tiempo de generación: 08-05-2025 a las 09:39:39
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -46,6 +46,37 @@ INSERT INTO `producto` (`id_producto`, `nombre`, `imagen_path`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `productosprueba`
+--
+
+CREATE TABLE `productosprueba` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `descripcion` text DEFAULT NULL,
+  `precio` decimal(10,2) NOT NULL,
+  `imagen` varchar(255) DEFAULT NULL,
+  `categoria` varchar(100) DEFAULT NULL,
+  `stock` int(11) DEFAULT 0,
+  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `productosprueba`
+--
+
+INSERT INTO `productosprueba` (`id`, `nombre`, `descripcion`, `precio`, `imagen`, `categoria`, `stock`, `fecha_creacion`) VALUES
+(1, 'Camiseta Blanca', 'Camiseta de algodón 100% para uso diario.', 14.99, 'img/camiseta_blanca.jpg', 'Ropa', 50, '2025-05-08 07:23:02'),
+(2, 'Zapatillas Running', 'Zapatillas ligeras y cómodas para correr.', 59.99, 'img/zapatillas_running.jpg', 'Calzado', 30, '2025-05-08 07:23:02'),
+(3, 'Mochila Escolar', 'Mochila resistente con múltiples compartimentos.', 24.95, 'img/mochila_escolar.jpg', 'Accesorios', 20, '2025-05-08 07:23:02'),
+(4, 'Auriculares Bluetooth', 'Auriculares inalámbricos con cancelación de ruido.', 39.90, 'img/auriculares_bt.jpg', 'Electrónica', 15, '2025-05-08 07:23:02'),
+(5, 'Pantalón Jeans', 'Jeans de corte recto con ajuste moderno.', 29.95, 'img/jeans.jpg', 'Ropa', 40, '2025-05-08 07:23:02'),
+(6, 'Reloj Digital', 'Reloj resistente al agua con cronómetro.', 19.95, 'img/reloj_digital.jpg', 'Accesorios', 25, '2025-05-08 07:23:02'),
+(7, 'Sudadera Negra', 'Sudadera con capucha ideal para el invierno.', 34.99, 'img/sudadera_negra.jpg', 'Ropa', 35, '2025-05-08 07:23:02'),
+(8, 'Smartphone X100', 'Teléfono inteligente con pantalla HD y gran batería.', 199.00, 'img/smartphone_x100.jpg', 'Electrónica', 10, '2025-05-08 07:23:02');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `usuario`
 --
 
@@ -75,6 +106,12 @@ ALTER TABLE `producto`
   ADD PRIMARY KEY (`id_producto`);
 
 --
+-- Indices de la tabla `productosprueba`
+--
+ALTER TABLE `productosprueba`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `usuario`
 --
 ALTER TABLE `usuario`
@@ -89,6 +126,12 @@ ALTER TABLE `usuario`
 --
 ALTER TABLE `producto`
   MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT de la tabla `productosprueba`
+--
+ALTER TABLE `productosprueba`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
