@@ -363,6 +363,78 @@ require_once __DIR__ . '/../models/user.php';
         vertical-align: middle;
         margin-right: 0.3rem;
     }
+
+        /* Layout general: filtros a la izquierda, productos a la derecha */
+    .shop-layout {
+      display: flex;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    /* Formulario de filtrado */
+    .filter-form {
+      width: 250px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      height: fit-content;
+    }
+
+    .filter-form h3 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    .filter-form label {
+      font-weight: 600;
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0.3rem;
+      color: #555;
+    }
+
+    .filter-form input,
+    .filter-form select {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 0.95rem;
+    }
+
+    .filter-form button {
+      margin-top: 1.5rem;
+      width: 100%;
+      background-color: #28a745;
+      color: white;
+      padding: 0.7rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .filter-form button:hover {
+      background-color: #218838;
+    }
+
+    /* Contenedor de productos */
+    .productos-grid {
+      flex: 1;
+    }
+
+    /* Mejora para las tarjetas */
+    .card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
   </style>
 </head>
 <body>
