@@ -41,30 +41,28 @@ class ProductoController {
 
     public function getProductosFiltrados($nombre = '', $categoria = '', $precioMax = '')
     {
-        // Conectarse a la base de datos
-        $conexion = Database::connect();
-        $sql = "SELECT * FROM productos WHERE 1=1";
+        $db = new BBDD();
 
-        if (!empty($nombre)) {
-            $sql .= " AND nombre LIKE '%" . $conexion->real_escape_string($nombre) . "%'";
-        }
-
-        if (!empty($categoria)) {
-            $sql .= " AND categoria LIKE '%" . $conexion->real_escape_string($categoria) . "%'";
-        }
-
-        if (!empty($precioMax)) {
-            $sql .= " AND precio <= " . floatval($precioMax);
-        }
-
-        $result = $conexion->query($sql);
+        $productosDB = $db->getProductosFiltrados($nombre, $categoria, $precioMax);
         $productos = [];
 
-        while ($row = $result->fetch_object('Producto')) {
-            $productos[] = $row;
+        foreach ($productosDB as $prod) {
+            $productos[] = new Producto(
+                $prod['id_producto'],
+                $prod['nombre'],
+                $prod['imagen_path']
+            );
         }
 
         return $productos;
     }
+
+    public function getCategoriasDisponibles()
+    {
+        $db = new BBDD();
+
+        return $db->getCategorias();
+    }
+
 
 }

@@ -242,6 +242,50 @@ class BBDD {
             echo "Se ha roto" ;
         }
     }
+
+
+    public function getProductosFiltrados($nombre = '', $categoria = '', $precioMax = '')
+    {
+        $sql = "SELECT id_producto, nombre, imagen_path FROM productos WHERE 1=1";
+        $params = [];
+
+        if (!empty($nombre)) {
+            $sql .= " AND nombre LIKE ?";
+            $params[] = '%' . $nombre . '%';
+        }
+
+        if (!empty($categoria)) {
+            $sql .= " AND categoria = ?";
+            $params[] = $categoria;
+        }
+
+        if (!empty($precioMax)) {
+            $sql .= " AND precio <= ?";
+            $params[] = $precioMax;
+        }
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function getCategorias()
+    {
+        $sql = "SELECT DISTINCT categoria FROM productos WHERE categoria IS NOT NULL AND categoria != ''";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+
+        $categorias = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $categorias[] = $row['categoria'];
+        }
+
+        return $categorias;
+    }
+
+
 }
 
 
