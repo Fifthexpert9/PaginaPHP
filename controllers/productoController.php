@@ -48,9 +48,9 @@ class ProductoController {
 
         foreach ($productosDB as $prod) {
             $productos[] = new Producto(
-                $prod['id_producto'],
+                $prod['id'],
                 $prod['nombre'],
-                $prod['imagen_path']
+                $prod['imagen']
             );
         }
 

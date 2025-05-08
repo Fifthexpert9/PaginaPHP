@@ -246,7 +246,7 @@ class BBDD {
 
     public function getProductosFiltrados($nombre = '', $categoria = '', $precioMax = '')
     {
-        $sql = "SELECT id_producto, nombre, imagen_path FROM productos WHERE 1=1";
+        $sql = "SELECT id, nombre, imagen FROM productosPrueba WHERE 1=1";
         $params = [];
 
         if (!empty($nombre)) {
@@ -273,7 +273,7 @@ class BBDD {
 
     public function getCategorias()
     {
-        $sql = "SELECT DISTINCT categoria FROM productos WHERE categoria IS NOT NULL AND categoria != ''";
+        $sql = "SELECT DISTINCT categoria FROM productosPrueba WHERE categoria IS NOT NULL AND categoria != ''";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
 
