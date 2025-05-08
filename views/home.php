@@ -37,13 +37,16 @@ require_once __DIR__ . '/header.php';
             </select>
 
             <label for="precioMax">Precio máximo</label>
-            <input type="number" step="0.01" name="precioMax" id="precioMax" value="<?= htmlspecialchars($_GET['precioMax'] ?? '') ?>">
+            <input type="number" step="0.01" name="precio_max" id="precioMax" value="<?= htmlspecialchars($_GET['precioMax'] ?? '') ?>">
 
             <button type="submit">Aplicar filtros</button>
         </form>
 
         <div class="productos-grid grid">
-            <?php foreach($productos as $producto): ?>
+            <?php if (empty($productos)): ?>
+                <p>No se encontraron productos.</p>
+            <?php endif; ?>
+            <?php foreach($productos as $producto):?>
                 <div class="card">
                     <h2><?= htmlspecialchars($producto->getNombre()) ?></h2>
                     <img src="<?= htmlspecialchars($producto->getImagen()) ?>" alt="<?= htmlspecialchars($producto->getNombre()) ?>">
