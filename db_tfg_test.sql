@@ -18,7 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `examen1eval`
+CREATE DATABASE IF NOT EXISTS `db_tfg_test` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `db_tfg_test`;
 --
 
 -- --------------------------------------------------------

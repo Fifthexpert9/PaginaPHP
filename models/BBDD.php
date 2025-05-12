@@ -3,7 +3,7 @@
 
 class BBDD {
     
-    private $cadenaConexion = 'mysql:dbname=examen1eval;host=localhost';
+    private $cadenaConexion = 'mysql:dbname=db_tfg_test;host=localhost';
     private $usuario = 'root' ;
     private $password = '' ;
     
@@ -13,8 +13,7 @@ class BBDD {
         
         try
         {
-            $this->db = new PDO($this->cadenaConexion, $this->usuario, $this->password) ;
-//            echo "La conexión se ha realizado correctamente";
+            $this->db = new PDO($this->cadenaConexion, $this->usuario, $this->password);
             
         } catch (Exception $ex) {
             
