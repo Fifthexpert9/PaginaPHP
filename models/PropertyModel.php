@@ -5,7 +5,6 @@ namespace models;
 class PropertyModel {
     private $id;
     private $property_type;
-    private $action;
     private $addressId;
     private $builtSize;
     private $price;
@@ -16,7 +15,6 @@ class PropertyModel {
     public function __construct(
         $id,
         $property_type,
-        $action,
         $addressId,
         $builtSize,
         $price,
@@ -26,7 +24,6 @@ class PropertyModel {
         ) {
         $this->id = $id;
         $this->property_type = $property_type;
-        $this->action = $action;
         $this->addressId = $addressId;
         $this->builtSize = $builtSize;
         $this->price = $price;
@@ -38,7 +35,6 @@ class PropertyModel {
     // Getters
     public function getId() { return $this->id; }
     public function getPropertyType() { return $this->property_type; }
-    public function getAction() { return $this->action; }
     public function getAddressId() { return $this->addressId; }
     public function getBuiltSize() { return $this->builtSize; }
     public function getPrice() { return $this->price; }
@@ -48,7 +44,6 @@ class PropertyModel {
 
     // Setters
     public function setPropertyType($property_type) { $this->property_type = $property_type; }
-    public function setAction($action) { $this->action = $action; }
     public function setAddressId($addressId) { $this->addressId = $addressId; }
     public function setBuiltSize($builtSize) { $this->builtSize = $builtSize; }
     public function setPrice($price) { $this->price = $price; }

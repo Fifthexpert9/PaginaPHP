@@ -16,7 +16,6 @@ class RoomModel extends PropertyModel {
     public function __construct(
         $id,
         $property_type,
-        $action,
         $address_id,
         $built_size,
         $price,
@@ -33,7 +32,7 @@ class RoomModel extends PropertyModel {
         $students_only,
         $gender_restriction
     ) {
-        parent::__construct($id, $property_type, $action, $address_id, $built_size, $price, $status, $immediate_availability, $user_id);
+        parent::__construct($id, $property_type, $address_id, $built_size, $price, $status, $immediate_availability, $user_id);
         $this->private_bathroom = $private_bathroom;
         $this->room_size = $room_size;
         $this->max_roommates = $max_roommates;

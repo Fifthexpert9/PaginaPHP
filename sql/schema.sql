@@ -40,12 +40,6 @@ CREATE TABLE
             'Casa'
             --,'Mansión'
         ) NOT NULL, -- Tipo de propiedad
-        `action` ENUM (
-            'Compra',
-            'Alquiler',
-            'Alquiler vacacional',
-            'Compartir piso'
-        ) NOT NULL, -- Tipo de acción
         `address_id` int (11) NOT NULL, -- Relación con la tabla address
         `built_size` int (11) DEFAULT NULL, -- Superficie construida (m²)
         `price` decimal(10, 2) NOT NULL, -- Precio
@@ -168,7 +162,12 @@ CREATE TABLE
         `property_id` int (11) NOT NULL, -- Relación con la propiedad
         `user_id` int (11) NOT NULL, -- Usuario que publica el anuncio
         `price` decimal(10, 2) NOT NULL,
-        `category` varchar(50) NOT NULL, -- Venta, alquiler, etc.
+        `action` ENUM (
+            'Compra',
+            'Alquiler',
+            'Alquiler vacacional',
+            'Compartir piso'
+        ) NOT NULL, -- Tipo de acción
         `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
         PRIMARY KEY (`id`),
         FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE,
