@@ -33,12 +33,12 @@ CREATE TABLE
 CREATE TABLE
     `property` (
         `id` int (11) NOT NULL AUTO_INCREMENT,
-        `type` ENUM (
+        `property_type` ENUM (
             'Habitación',
             'Estudio',
             'Piso',
-            'Casa',
-            'Mansión'
+            'Casa'
+            --,'Mansión'
         ) NOT NULL, -- Tipo de propiedad
         `action` ENUM (
             'Compra',
@@ -103,7 +103,7 @@ CREATE TABLE
 CREATE TABLE
     `property_apartment` (
         `property_id` int (11) NOT NULL,
-        `type` ENUM ('Loft', 'Ático', 'Dúplex', 'Bajo con jardín') NOT NULL, -- Tipo de apartamento
+        `apartment_type` ENUM ('Loft', 'Ático', 'Dúplex', 'Bajo con jardín') NOT NULL, -- Tipo de apartamento
         `num_rooms` int (11) DEFAULT NULL, -- Número de habitaciones
         `num_bathrooms` int (11) DEFAULT NULL, -- Número de baños
         `furnished` BOOLEAN DEFAULT NULL, -- ¿Amueblado? (Sí/No)
@@ -121,7 +121,7 @@ CREATE TABLE
 CREATE TABLE
     `property_house` (
         `property_id` int (11) NOT NULL,
-        `type` ENUM (
+        `house_type` ENUM (
             'Unifamiliar',
             'Chalet',
             'Adosado',
@@ -143,6 +143,7 @@ CREATE TABLE
         FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
+/*
 CREATE TABLE
     `property_mansion` (
         `property_id` int (11) NOT NULL,
@@ -159,6 +160,7 @@ CREATE TABLE
         PRIMARY KEY (`property_id`),
         FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+*/
 
 CREATE TABLE
     `advert` (
