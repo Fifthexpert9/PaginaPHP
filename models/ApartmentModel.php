@@ -2,7 +2,8 @@
 
 namespace models;
 
-class ApartmentModel extends PropertyModel {
+class ApartmentModel {
+    private $property_id;
     private $apartment_type;
     private $num_rooms;
     private $num_bathrooms;
@@ -16,14 +17,7 @@ class ApartmentModel extends PropertyModel {
     private $pets_allowed;
 
     public function __construct(
-        $id,
-        $property_type,
-        $address_id,
-        $built_size,
-        $price,
-        $status,
-        $immediate_availability,
-        $user_id,
+        $property_id,
         $apartment_type,
         $num_rooms,
         $num_bathrooms,
@@ -36,7 +30,7 @@ class ApartmentModel extends PropertyModel {
         $pool,
         $pets_allowed
     ) {
-        parent::__construct($id, $property_type, $address_id, $built_size, $price, $status, $immediate_availability, $user_id);
+        $this->property_id = $property_id;
         $this->apartment_type = $apartment_type;
         $this->num_rooms = $num_rooms;
         $this->num_bathrooms = $num_bathrooms;
@@ -51,6 +45,7 @@ class ApartmentModel extends PropertyModel {
     }
 
     // Getters
+    public function getPropertyId() { return $this->property_id; }
     public function getApartmentType() { return $this->apartment_type; }
     public function getNumRooms() { return $this->num_rooms; }
     public function getNumBathrooms() { return $this->num_bathrooms; }
@@ -62,7 +57,9 @@ class ApartmentModel extends PropertyModel {
     public function hasGarage() { return $this->garage; }
     public function hasPool() { return $this->pool; }
     public function arePetsAllowed() { return $this->pets_allowed; }
+
     // Setters
+    public function setPropertyId($property_id) { $this->property_id = $property_id; }
     public function setApartmentType($apartment_type) { $this->apartment_type = $apartment_type; }
     public function setNumRooms($num_rooms) { $this->num_rooms = $num_rooms; }
     public function setNumBathrooms($num_bathrooms) { $this->num_bathrooms = $num_bathrooms; }
@@ -74,5 +71,4 @@ class ApartmentModel extends PropertyModel {
     public function setGarage($garage) { $this->garage = $garage; }
     public function setPool($pool) { $this->pool = $pool; }
     public function setPetsAllowed($pets_allowed) { $this->pets_allowed = $pets_allowed; }
-    
 }

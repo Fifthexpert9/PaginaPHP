@@ -17,6 +17,11 @@ class UserController {
             return ['success' => false, 'message' => 'Todos los campos son obligatorios.'];
         }
 
+        // Validar si el email ya existe
+        if ($this->userService->emailExists($email)) {
+            return ['success' => false, 'message' => 'El correo ya está registrado.'];
+        }
+
         $user = new UserModel(null, $name, $last_name, null, $email, password_hash($password, PASSWORD_BCRYPT), date('Y-m-d H:i:s'));
 
         if ($this->userService->addUser($user)) {
@@ -31,9 +36,9 @@ class UserController {
             return ['success' => false, 'message' => 'El correo y la contraseña son obligatorios.'];
         }
 
-        $user = $this->userService->getUserByEmail($email);
+        $user = $this->userService->authenticate($email, $password);
 
-        if ($user && password_verify($password, $user->getPassword())) {
+        if ($user) {
             return ['success' => true, 'message' => 'Inicio de sesión exitoso.', 'user' => $user];
         } else {
             return ['success' => false, 'message' => 'Credenciales incorrectas.'];

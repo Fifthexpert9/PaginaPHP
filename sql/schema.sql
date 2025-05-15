@@ -9,8 +9,8 @@ CREATE TABLE
         `id` int (11) NOT NULL AUTO_INCREMENT,
         `name` varchar(100) NOT NULL,
         `last_name` varchar(100) NOT NULL,
-        `email` varchar(100) NOT NULL UNIQUE,
         `username` varchar(50) NOT NULL UNIQUE,
+        `email` varchar(100) NOT NULL UNIQUE,
         `password` varchar(255) NOT NULL,
         `role` ENUM ('admin', 'user') NOT NULL DEFAULT 'user', -- Rol del usuario
         `registration_date` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -168,6 +168,7 @@ CREATE TABLE
             'Alquiler vacacional',
             'Compartir piso'
         ) NOT NULL, -- Tipo de acción
+        `description` text NOT NULL, -- Descripción del anuncio
         `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
         PRIMARY KEY (`id`),
         FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE,
@@ -177,12 +178,12 @@ CREATE TABLE
 CREATE TABLE
     `favorites` (
         `id` int (11) NOT NULL AUTO_INCREMENT,
-        `user_id` int (11) NOT NULL, -- Usuario que guarda la propiedad como favorita
-        `property_id` int (11) NOT NULL, -- Propiedad marcada como favorita
-        `created_at` timestamp NOT NULL DEFAULT current_timestamp(), -- Fecha en que se marcó como favorita
+        `user_id` int (11) NOT NULL, -- Usuario que guarda el anuncio como favorito
+        `advert_id` int (11) NOT NULL, -- Anuncio marcado como favorito
+        `created_at` timestamp NOT NULL DEFAULT current_timestamp(), -- Fecha en que se marcó como favorito
         PRIMARY KEY (`id`),
         FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-        FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE
+        FOREIGN KEY (`advert_id`) REFERENCES `advert` (`id`) ON DELETE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE
@@ -190,10 +191,12 @@ CREATE TABLE
         `id` int (11) NOT NULL AUTO_INCREMENT, -- ID único del mensaje
         `sender_id` int (11) NOT NULL, -- Usuario que envía el mensaje
         `receiver_id` int (11) NOT NULL, -- Usuario que recibe el mensaje
+        `advert_id` int (11) DEFAULT NULL, -- Anuncio relacionada (opcional)
         `subject` varchar(255) NOT NULL, -- Asunto del mensaje
         `content` text NOT NULL, -- Contenido del mensaje
         `sent_at` timestamp NOT NULL DEFAULT current_timestamp(), -- Fecha y hora de envío
         PRIMARY KEY (`id`),
         FOREIGN KEY (`sender_id`) REFERENCES `user` (`id`) ON DELETE CASCADE, -- Relación con el usuario remitente
-        FOREIGN KEY (`receiver_id`) REFERENCES `user` (`id`) ON DELETE CASCADE -- Relación con el usuario destinatario
+        FOREIGN KEY (`receiver_id`) REFERENCES `user` (`id`) ON DELETE CASCADE, -- Relación con el usuario destinatario
+        FOREIGN KEY (`advert_id`) REFERENCES `advert` (`id`) ON DELETE CASCADE -- Relación con el anuncio
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;

@@ -193,4 +193,30 @@ class UserService {
             return false;
         }
     }
+
+    public function emailExists($email) {
+        $sql = "SELECT COUNT(*) FROM `user` WHERE `email` = :email";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':email' => $email]);
+        return $stmt->fetchColumn() > 0;
+    }
+
+    public function authenticate($email, $password) {
+        $sql = "SELECT * FROM `user` WHERE `email` = :email";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':email' => $email]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row && password_verify($password, $row['password'])) {
+            return new UserModel(
+                $row['id'],
+                $row['name'],
+                $row['last_name'],
+                $row['username'],
+                $row['email'],
+                $row['password'],
+                $row['registration_date']
+            );
+        }
+        return null;
+    }
 }

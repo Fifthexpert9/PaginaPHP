@@ -9,6 +9,7 @@ class UserModel {
     private $username;
     private $email;
     private $password;
+    private $role;
     private $registration_date;
 
     public function __construct($id, $name, $last_name, $username, $email, $password, $registration_date) {
@@ -18,6 +19,7 @@ class UserModel {
         $this->username = $username;
         $this->email = $email;
         $this->password = $password;
+        $this->role = 'user';
         $this->registration_date = $registration_date;
     }
 
@@ -28,6 +30,7 @@ class UserModel {
     public function getUsername() { return $this->username; }
     public function getEmail() { return $this->email; }
     public function getPassword() { return $this->password; }
+    public function getRole() { return $this->role; }
     public function getRegistrationDate() { return $this->registration_date; }
 
     // Setters
@@ -35,5 +38,6 @@ class UserModel {
     public function setLastName($last_name) { $this->last_name = $last_name; }
     public function setUsername($username) { $this->username = $username; }
     public function setEmail($email) { $this->email = $email; }
+    public function setRole($role) { $this->role = $role; }
     public function setPassword($password) { $this->password = $password; }
 }

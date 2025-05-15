@@ -2,7 +2,8 @@
 
 namespace models;
 
-class HouseModel extends PropertyModel {
+class HouseModel {
+    private $property_id;
     private $house_type;
     private $garden_size;
     private $num_floors;
@@ -17,14 +18,7 @@ class HouseModel extends PropertyModel {
     private $pets_allowed;
 
     public function __construct(
-        $id,
-        $property_type,
-        $address_id,
-        $built_size,
-        $price,
-        $status,
-        $immediate_availability,
-        $user_id,
+        $property_id,
         $house_type,
         $garden_size,
         $num_floors,
@@ -38,7 +32,7 @@ class HouseModel extends PropertyModel {
         $air_conditioning,
         $pets_allowed
     ) {
-        parent::__construct($id, $property_type, $address_id, $built_size, $price, $status, $immediate_availability, $user_id);
+        $this->property_id = $property_id;
         $this->house_type = $house_type;
         $this->garden_size = $garden_size;
         $this->num_floors = $num_floors;
@@ -54,6 +48,7 @@ class HouseModel extends PropertyModel {
     }
 
     // Getters
+    public function getPropertyId() { return $this->property_id; }
     public function getHouseType() { return $this->house_type; }
     public function getGardenSize() { return $this->garden_size; }
     public function getNumFloors() { return $this->num_floors; }
@@ -68,6 +63,7 @@ class HouseModel extends PropertyModel {
     public function getPetsAllowed() { return $this->pets_allowed; }
 
     // Setters
+    public function setPropertyId($property_id) { $this->property_id = $property_id; }
     public function setHouseType($house_type) { $this->house_type = $house_type; }
     public function setGardenSize($garden_size) { $this->garden_size = $garden_size; }
     public function setNumFloors($num_floors) { $this->num_floors = $num_floors; }

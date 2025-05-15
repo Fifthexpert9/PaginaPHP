@@ -2,7 +2,8 @@
 
 namespace models;
 
-class RoomModel extends PropertyModel {
+class RoomModel {
+    private $property_id;
     private $private_bathroom;
     private $room_size;
     private $max_roommates;
@@ -14,14 +15,7 @@ class RoomModel extends PropertyModel {
     private $gender_restriction;
 
     public function __construct(
-        $id,
-        $property_type,
-        $address_id,
-        $built_size,
-        $price,
-        $status,
-        $immediate_availability,
-        $user_id,
+        $property_id,
         $private_bathroom,
         $room_size,
         $max_roommates,
@@ -32,7 +26,7 @@ class RoomModel extends PropertyModel {
         $students_only,
         $gender_restriction
     ) {
-        parent::__construct($id, $property_type, $address_id, $built_size, $price, $status, $immediate_availability, $user_id);
+        $this->property_id = $property_id;
         $this->private_bathroom = $private_bathroom;
         $this->room_size = $room_size;
         $this->max_roommates = $max_roommates;
@@ -45,6 +39,7 @@ class RoomModel extends PropertyModel {
     }
 
     // Getters
+    public function getPropertyId() { return $this->property_id; }
     public function getPrivateBathroom() { return $this->private_bathroom; }
     public function getRoomSize() { return $this->room_size; }
     public function getMaxRoommates() { return $this->max_roommates; }
@@ -56,6 +51,7 @@ class RoomModel extends PropertyModel {
     public function getGenderRestriction() { return $this->gender_restriction; }
 
     // Setters
+    public function setPropertyId($property_id) { $this->property_id = $property_id; }
     public function setPrivateBathroom($private_bathroom) { $this->private_bathroom = $private_bathroom; }
     public function setRoomSize($room_size) { $this->room_size = $room_size; }
     public function setMaxRoommates($max_roommates) { $this->max_roommates = $max_roommates; }
