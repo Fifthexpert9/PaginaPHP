@@ -1,8 +1,8 @@
 <?php
+<?php
 
 namespace controllers;
 
-use models\PropertyModel;
 use services\RoomService;
 use models\RoomModel;
 
@@ -13,44 +13,53 @@ class RoomController {
         $this->roomService = $roomService;
     }
 
-    public function createRoom(PropertyModel $property, $room_data) {
-        if (!$property->getId()) {
-            throw new \InvalidArgumentException("La propiedad debe tener un ID válido.");
-        }
+    /**
+     * Crea los detalles de una habitación.
+     * @param int $property_id
+     * @param array $data Datos de la habitación
+     * @return bool True si se creó correctamente
+     */
+    public function createRoom($property_id, $data) {
+        $room = new RoomModel(
+            $property_id,
+            $data['private_bathroom'],
+            $data['room_size'],
+            $data['max_roommates'],
+            $data['includes_expenses'],
+            $data['pets_allowed'],
+            $data['furnished'],
+            $data['common_areas'],
+            $data['students_only'],
+            $data['gender_restriction']
+        );
+        return $this->roomService->createRoom($room);
+    }
 
+    /**
+     * Obtiene los detalles de una habitación por property_id.
+     * @param int $property_id
+     * @return RoomModel|null
+     */
+    public function getRoomByPropertyId($property_id) {
+        return $this->roomService->getRoomByPropertyId($property_id);
+    }
 
-        $requiredFields = ['private_bathroom', 'room_size', 'max_roommates', 'includes_expenses', 'pets_allowed', 'furnished', 'common_areas', 'students_only', 'gender_restriction'];
-        foreach ($requiredFields as $field) {
-            if (!isset($room_data[$field])) {
-                throw new \InvalidArgumentException("El campo {$field} es obligatorio.");
-            }
-        }
+    /**
+     * Actualiza los detalles de una habitación.
+     * @param int $property_id
+     * @param array $fields Campos a actualizar
+     * @return bool
+     */
+    public function updateRoom($property_id, $fields) {
+        return $this->roomService->updateRoom($property_id, $fields);
+    }
 
-        try {
-            $room = new RoomModel(
-            $property->getId(),
-            $property->getPropertyType(),
-            $property->getAddressId(),
-            $property->getBuiltSize(),
-            $property->getPrice(),
-            $property->getStatus(),
-            $property->getImmediateAvailability(),
-            $property->getUserId(),
-            $room_data['private_bathroom'],
-            $room_data['room_size'],
-            $room_data['max_roommates'],
-            $room_data['includes_expenses'],
-            $room_data['pets_allowed'],
-            $room_data['furnished'],
-            $room_data['common_areas'],
-            $room_data['students_only'],
-            $room_data['gender_restriction']
-            );
-
-            return $this->roomService->createRoom($room);
-        } catch (\Exception $e) {
-            throw new \RuntimeException("Error al crear la habitación: " . $e->getMessage());
-            return false;
-        }
+    /**
+     * Elimina los detalles de una habitación por property_id.
+     * @param int $property_id
+     * @return bool
+     */
+    public function deleteRoom($property_id) {
+        return $this->roomService->deleteRoom($property_id);
     }
 }
