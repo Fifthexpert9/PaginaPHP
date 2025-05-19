@@ -435,6 +435,110 @@ require_once __DIR__ . '/../models/user.php';
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
 
+    /* Nueva estructura de layout */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .filters, .ads {
+      background-color: #fff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .filters h3, .ads h3 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    .filter-form label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .filter-form input, .filter-form select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .filter-form button {
+      margin-top: 1rem;
+      width: 100%;
+      padding: 0.7rem;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .filter-form button:hover {
+      background-color: #218838;
+    }
+
+    .properties-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .property-card {
+      background-color: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .property-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+
+    .property-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .property-card .price {
+      font-weight: bold;
+      color: #333;
+      margin: 0.5rem 0;
+    }
+
+    .property-card .btn-detalle {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .property-card .btn-detalle:hover {
+      background-color: #0056b3;
+    }
+
+    .ads-list .ad-card {
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
   </style>
 </head>
 <body>

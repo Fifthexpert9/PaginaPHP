@@ -14,54 +14,59 @@ $categorias = $productoController->getCategoriasDisponibles();
 require_once __DIR__ . '/header.php';
 ?>
 
-<main>
-    <h1>Bienvenido a Tienda Online</h1>
-    <p>Encuentra los mejores productos a los mejores precios.</p>
-    <br><br>
+<div class="main-layout">
+  <!-- Filtros -->
+  <aside class="filters">
+    <h3>Filtrar propiedades</h3>
+    <form method="GET" class="filter-form">
+      <label for="tipo">Tipo</label>
+      <select name="tipo" id="tipo">
+        <option value="">Todos</option>
+        <option value="piso">Piso</option>
+        <option value="casa">Casa</option>
+        <option value="habitacion">Habitación</option>
+      </select>
 
-    <div class="shop-layout">
-        <form method="GET" class="filter-form">
-            <h3>Filtrar productos</h3>
+      <label for="precioMax">Precio máximo</label>
+      <input type="number" step="0.01" name="precio_max" id="precioMax" placeholder="Ej: 1000" value="<?= htmlspecialchars($_GET['precio_max'] ?? '') ?>">
 
-            <label for="nombre">Nombre</label>
-            <input type="text" name="nombre" id="nombre" value="<?= htmlspecialchars($_GET['nombre'] ?? '') ?>">
+      <label for="habitaciones">Habitaciones</label>
+      <input type="number" name="habitaciones" id="habitaciones" placeholder="Ej: 3" value="<?= htmlspecialchars($_GET['habitaciones'] ?? '') ?>">
 
-            <label for="categoria">Categoría</label>
-            <select name="categoria" id="categoria">
-                <option value="">Todas</option>
-                <?php foreach ($categorias as $cat): ?>
-                    <option value="<?= htmlspecialchars($cat) ?>" <?= (($_GET['categoria'] ?? '') === $cat) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($cat) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+      <button type="submit">Aplicar filtros</button>
+    </form>
+  </aside>
 
-            <label for="precioMax">Precio máximo</label>
-            <input type="number" step="0.01" name="precio_max" id="precioMax" value="<?= htmlspecialchars($_GET['precioMax'] ?? '') ?>">
-
-            <button type="submit">Aplicar filtros</button>
-        </form>
-
-        <div class="productos-grid grid">
-            <?php if (empty($productos)): ?>
-                <p>No se encontraron productos.</p>
-            <?php endif; ?>
-            <?php foreach($productos as $producto):?>
-                <div class="card">
-                    <h2><?= htmlspecialchars($producto->getNombre()) ?></h2>
-                    <img src="<?= htmlspecialchars($producto->getImagen()) ?>" alt="<?= htmlspecialchars($producto->getNombre()) ?>">
-                    <?php if (isset($_SESSION['usuario'])): ?>
-                        <button type="submit">Añadir al carrito</button>
-                    <?php else: ?>
-                        <!-- <a href="#" class="login-card-btn" onclick="document.getElementById('loginBtn').click();">
-                            <i class="material-icons">login</i> Iniciar Sesión
-                        </a> -->
-                    <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
+  <!-- Contenido principal -->
+  <main class="properties">
+    <h2>Propiedades disponibles</h2>
+    <div class="properties-grid">
+      <!-- Aquí se iteran las propiedades -->
+      <?php foreach ($productos as $producto): ?>
+        <div class="property-card">
+          <img src="<?= htmlspecialchars($producto->getImagen()) ?>" alt="<?= htmlspecialchars($producto->getNombre()) ?>">
+          <h3><?= htmlspecialchars($producto->getNombre()) ?></h3>
+          <p><?= htmlspecialchars($producto->getDescripcion()) ?></p>
+          <p class="price">€<?= htmlspecialchars($producto->getPrecio()) ?></p>
+          <a href="/detallePropiedad?id=<?= $producto->getId() ?>" class="btn-detalle">Ver detalles</a>
         </div>
+      <?php endforeach; ?>
     </div>
-</main>
+  </main>
 
+  <!-- Anuncios destacados -->
+  <aside class="ads">
+    <h3>Anuncios destacados</h3>
+    <div class="ads-list">
+      <!-- Aquí se iteran los anuncios -->
+      <?php foreach ($anuncios as $anuncio): ?>
+        <div class="ad-card">
+          <h4><?= htmlspecialchars($anuncio->getTitulo()) ?></h4>
+          <p><?= htmlspecialchars($anuncio->getDescripcion()) ?></p>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </aside>
+</div>
 
 <?php require_once __DIR__ . '/footer.php'; ?>
