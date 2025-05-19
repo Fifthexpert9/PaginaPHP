@@ -66,4 +66,12 @@ class AdvertController {
     public function deleteAdvert($id) {
         return $this->advertService->deleteAdvert($id);
     }
+
+    /**
+     * Obtiene los anuncios destacados.
+     * @return AdvertModel[]
+     */
+    public function getFeaturedAdverts() {
+        return $this->advertService->getFeaturedAdverts();
+    }
 }

@@ -2,6 +2,9 @@
 
 namespace controllers;
 
+require_once __DIR__ . '/../models/Advertmodel.php';
+
+
 use services\ApartmentService;
 use models\ApartmentModel;
 

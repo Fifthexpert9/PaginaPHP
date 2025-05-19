@@ -1,6 +1,7 @@
 <?php
-
 namespace services;
+
+require_once __DIR__ . '/../models/ApartmentModel.php';
 
 use models\ApartmentModel;
 use models\DatabaseModel;
@@ -86,4 +87,55 @@ class ApartmentService {
             return false;
         }
     }
+
+
+    public function getFilteredApartmentsSql($tipo, $precioMax, $habitaciones) {
+        $query = "SELECT * FROM property WHERE 1=1";
+        $params = [];
+
+        if (!empty($tipo)) {
+            $query .= " AND property_type = :tipo";
+            $params[':tipo'] = $tipo;
+        }
+        if (!empty($precioMax)) {
+            $query .= " AND price <= :precioMax";
+            $params[':precioMax'] = $precioMax;
+        }
+        if (!empty($habitaciones)) {
+            $query .= " AND status >= :habitaciones";
+            $params[':habitaciones'] = $habitaciones;
+        }
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($params);
+
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $apartments = [];
+
+        foreach ($rows as $row) {
+            $apartments[] = new ApartmentModel(
+                $row['property_id'],
+                $row['apartment_type'],
+                $row['num_rooms'],
+                $row['num_bathrooms'],
+                $row['furnished'],
+                $row['balcony'],
+                $row['floor'],
+                $row['elevator'],
+                $row['air_conditioning'],
+                $row['garage'],
+                $row['pool'],
+                $row['pets_allowed']
+            );
+        }
+
+        return $apartments;
+    }
+
+
+    
+    public function getFilteredApartments($tipo, $precioMax, $habitaciones) {
+        return $this->getFilteredApartmentsSql($tipo, $precioMax, $habitaciones);
+    }
+
 }

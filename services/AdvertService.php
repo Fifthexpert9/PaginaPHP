@@ -94,4 +94,25 @@ class AdvertService {
             return false;
         }
     }
+
+    public function getFeaturedAdverts() {
+        $sql = "SELECT * FROM advert ORDER BY created_at DESC LIMIT 5"; // Ejemplo: los 5 anuncios más recientes
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+
+        $adverts = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $adverts[] = new AdvertModel(
+                $row['id'],
+                $row['property_id'],
+                $row['user_id'],
+                $row['price'],
+                $row['action'],
+                $row['description'],
+                $row['created_at']
+            );
+        }
+
+        return $adverts;
+    }
 }

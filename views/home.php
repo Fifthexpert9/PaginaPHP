@@ -1,15 +1,38 @@
 <?php
-require_once 'controllers/productoController.php';
-$productoController = new ProductoController();
+require_once __DIR__ . '/../controllers/ApartmentController.php';
+require_once __DIR__ . '/../controllers/AdvertController.php';
+require_once __DIR__ . '/../services/ApartmentService.php';
+require_once __DIR__ . '/../services/AdvertService.php';
+require_once __DIR__ . '/../models/DatabaseModel.php';
+
+use controllers\ApartmentController;
+use controllers\AdvertController;
+use services\ApartmentService;
+use services\AdvertService;
+use models\DatabaseModel;
+
+// Crear instancia de DatabaseModel
+$databaseModel = new DatabaseModel();
+
+// Crear instancia de ApartmentService con la base de datos
+$apartmentService = new ApartmentService($databaseModel);
+
+// Crear instancia de ApartmentController con el servicio
+$apartmentController = new ApartmentController($apartmentService);
 
 // Obtener filtros desde GET
-$nombre = $_GET['nombre'] ?? '';
-$categoria = $_GET['categoria'] ?? '';
+$tipo = $_GET['tipo'] ?? '';
 $precioMax = $_GET['precio_max'] ?? '';
+$habitaciones = $_GET['habitaciones'] ?? '';
 
-// Obtener productos y categorías
-$productos = $productoController->getProductosFiltrados($nombre, $categoria, $precioMax);
-$categorias = $productoController->getCategoriasDisponibles();
+// Obtener propiedades filtradas
+$propiedades = $apartmentService->getFilteredApartments($tipo, $precioMax, $habitaciones);
+
+// Obtener anuncios destacados (opcional)
+require_once __DIR__ . '/../controllers/AdvertController.php';
+$advertService = new AdvertService($databaseModel);
+$advertController = new AdvertController($advertService);
+$anuncios = $advertController->getFeaturedAdverts();
 
 require_once __DIR__ . '/header.php';
 ?>
@@ -22,16 +45,16 @@ require_once __DIR__ . '/header.php';
       <label for="tipo">Tipo</label>
       <select name="tipo" id="tipo">
         <option value="">Todos</option>
-        <option value="piso">Piso</option>
-        <option value="casa">Casa</option>
-        <option value="habitacion">Habitación</option>
+        <option value="piso" <?= $tipo === 'piso' ? 'selected' : '' ?>>Piso</option>
+        <option value="casa" <?= $tipo === 'casa' ? 'selected' : '' ?>>Casa</option>
+        <option value="habitacion" <?= $tipo === 'habitacion' ? 'selected' : '' ?>>Habitación</option>
       </select>
 
       <label for="precioMax">Precio máximo</label>
-      <input type="number" step="0.01" name="precio_max" id="precioMax" placeholder="Ej: 1000" value="<?= htmlspecialchars($_GET['precio_max'] ?? '') ?>">
+      <input type="number" step="0.01" name="precio_max" id="precioMax" placeholder="Ej: 1000" value="<?= htmlspecialchars($precioMax) ?>">
 
       <label for="habitaciones">Habitaciones</label>
-      <input type="number" name="habitaciones" id="habitaciones" placeholder="Ej: 3" value="<?= htmlspecialchars($_GET['habitaciones'] ?? '') ?>">
+      <input type="number" name="habitaciones" id="habitaciones" placeholder="Ej: 3" value="<?= htmlspecialchars($habitaciones) ?>">
 
       <button type="submit">Aplicar filtros</button>
     </form>
@@ -41,16 +64,19 @@ require_once __DIR__ . '/header.php';
   <main class="properties">
     <h2>Propiedades disponibles</h2>
     <div class="properties-grid">
-      <!-- Aquí se iteran las propiedades -->
-      <?php foreach ($productos as $producto): ?>
-        <div class="property-card">
-          <img src="<?= htmlspecialchars($producto->getImagen()) ?>" alt="<?= htmlspecialchars($producto->getNombre()) ?>">
-          <h3><?= htmlspecialchars($producto->getNombre()) ?></h3>
-          <p><?= htmlspecialchars($producto->getDescripcion()) ?></p>
-          <p class="price">€<?= htmlspecialchars($producto->getPrecio()) ?></p>
-          <a href="/detallePropiedad?id=<?= $producto->getId() ?>" class="btn-detalle">Ver detalles</a>
-        </div>
-      <?php endforeach; ?>
+      <?php if (empty($propiedades)): ?>
+        <p>No se encontraron propiedades con los filtros seleccionados.</p>
+      <?php else: ?>
+        <?php foreach ($propiedades as $propiedad): ?>
+          <div class="property-card">
+            <img src="<?= htmlspecialchars($propiedad->getImagen()) ?>" alt="<?= htmlspecialchars($propiedad->getTitulo()) ?>">
+            <h3><?= htmlspecialchars($propiedad->getTitulo()) ?></h3>
+            <p><?= htmlspecialchars($propiedad->getDescripcion()) ?></p>
+            <p class="price">€<?= htmlspecialchars($propiedad->getPrecio()) ?></p>
+            <a href="/detallePropiedad?id=<?= $propiedad->getId() ?>" class="btn-detalle">Ver detalles</a>
+          </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
   </main>
 
@@ -58,13 +84,16 @@ require_once __DIR__ . '/header.php';
   <aside class="ads">
     <h3>Anuncios destacados</h3>
     <div class="ads-list">
-      <!-- Aquí se iteran los anuncios -->
-      <?php foreach ($anuncios as $anuncio): ?>
-        <div class="ad-card">
-          <h4><?= htmlspecialchars($anuncio->getTitulo()) ?></h4>
-          <p><?= htmlspecialchars($anuncio->getDescripcion()) ?></p>
-        </div>
-      <?php endforeach; ?>
+      <?php if (empty($anuncios)): ?>
+        <p>No hay anuncios destacados en este momento.</p>
+      <?php else: ?>
+        <?php foreach ($anuncios as $anuncio): ?>
+          <div class="ad-card">
+            <h4><?= htmlspecialchars($anuncio->getTitulo()) ?></h4>
+            <p><?= htmlspecialchars($anuncio->getDescripcion()) ?></p>
+          </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
   </aside>
 </div>

@@ -71,4 +71,5 @@ class ApartmentModel {
     public function setGarage($garage) { $this->garage = $garage; }
     public function setPool($pool) { $this->pool = $pool; }
     public function setPetsAllowed($pets_allowed) { $this->pets_allowed = $pets_allowed; }
+
 }
