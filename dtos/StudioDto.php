@@ -4,6 +4,19 @@ namespace dtos;
 
 /**
  * DTO para exponer información de un estudio junto con los datos de la propiedad y la dirección.
+ *
+ * @property int $property_id ID de la propiedad.
+ * @property string $property_type Tipo de propiedad.
+ * @property int $built_size Superficie construida (m²).
+ * @property float $price Precio del estudio.
+ * @property string $status Estado del estudio.
+ * @property bool $immediate_availability Disponibilidad inmediata.
+ * @property int $user_id ID del usuario propietario.
+ * @property AddressDto $address Objeto con la dirección del estudio.
+ * @property bool $furnished Indica si está amueblado.
+ * @property bool $balcony Indica si tiene balcón.
+ * @property bool $air_conditioning Indica si tiene aire acondicionado.
+ * @property bool $pets_allowed Indica si se permiten mascotas.
  */
 class StudioDto {
     // Datos de la propiedad
@@ -24,6 +37,22 @@ class StudioDto {
     public $air_conditioning;
     public $pets_allowed;
 
+    /**
+     * Constructor de StudioDto.
+     *
+     * @param int $property_id ID de la propiedad.
+     * @param string $property_type Tipo de propiedad.
+     * @param int $built_size Superficie construida (m²).
+     * @param float $price Precio del estudio.
+     * @param string $status Estado del estudio.
+     * @param bool $immediate_availability Disponibilidad inmediata.
+     * @param int $user_id ID del usuario propietario.
+     * @param AddressDto $address Objeto con la dirección del estudio.
+     * @param bool $furnished Indica si está amueblado.
+     * @param bool $balcony Indica si tiene balcón.
+     * @param bool $air_conditioning Indica si tiene aire acondicionado.
+     * @param bool $pets_allowed Indica si se permiten mascotas.
+     */
     public function __construct(
         $property_id,
         $property_type,
@@ -52,6 +81,11 @@ class StudioDto {
         $this->pets_allowed = $pets_allowed;
     }
 
+    /**
+     * Devuelve el estudio como un array asociativo.
+     *
+     * @return array<string, mixed> Datos del estudio.
+     */
     public function toArray() {
         return [
             'property_id' => $this->property_id,

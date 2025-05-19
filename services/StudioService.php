@@ -7,19 +7,36 @@ use models\DatabaseModel;
 use PDO;
 use PDOException;
 
+/**
+ * Servicio para gestionar operaciones relacionadas con estudios en la base de datos.
+ */
 class StudioService {
+    /**
+     * @var PDO Conexión a la base de datos.
+     */
     private $db;
 
+    /**
+     * Constructor de StudioService.
+     *
+     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     */
     public function __construct(DatabaseModel $databaseModel) {
         $this->db = $databaseModel->db;
     }
 
+    /**
+     * Crea un nuevo estudio en la base de datos.
+     *
+     * @param StudioModel $studio Modelo con los datos del estudio.
+     * @return bool True si la inserción fue exitosa, false en caso contrario.
+     */
     public function createStudio(StudioModel $studio) {
         $sql = "INSERT INTO property_studio (property_id, furnished, balcony, air_conditioning, pets_allowed)
                 VALUES (:property_id, :furnished, :balcony, :air_conditioning, :pets_allowed)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
-            ':property_id' => $studio->getId(),
+            ':property_id' => $studio->getPropertyId(),
             ':furnished' => $studio->getFurnished(),
             ':balcony' => $studio->getBalcony(),
             ':air_conditioning' => $studio->getAirConditioning(),
@@ -27,6 +44,12 @@ class StudioService {
         ]);
     }
 
+    /**
+     * Obtiene un estudio por el ID de la propiedad asociada.
+     *
+     * @param int $propertyId ID de la propiedad.
+     * @return StudioModel|null Modelo del estudio o null si no existe.
+     */
     public function getStudioByPropertyId($propertyId) {
         $sql = "SELECT * FROM property_studio WHERE property_id = :property_id";
         $stmt = $this->db->prepare($sql);
@@ -44,6 +67,13 @@ class StudioService {
         return null;
     }
 
+    /**
+     * Actualiza los campos de un estudio existente.
+     *
+     * @param int $propertyId ID de la propiedad asociada al estudio.
+     * @param array $fields Campos a actualizar (clave => valor).
+     * @return bool True si la actualización fue exitosa, false en caso contrario.
+     */
     public function updateStudio($propertyId, $fields) {
         try {
             $setClause = [];
@@ -62,6 +92,12 @@ class StudioService {
         }
     }
 
+    /**
+     * Elimina un estudio por el ID de la propiedad asociada.
+     *
+     * @param int $propertyId ID de la propiedad asociada al estudio.
+     * @return bool True si la eliminación fue exitosa, false en caso contrario.
+     */
     public function deleteStudio($propertyId) {
         try {
             $sql = "DELETE FROM property_studio WHERE property_id = :property_id";

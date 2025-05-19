@@ -7,13 +7,31 @@ use models\UserModel;
 use PDO;
 use PDOException;
 
+/**
+ * Servicio para gestionar operaciones relacionadas con usuarios en la base de datos.
+ */
 class UserService {
+    /**
+     * @var PDO Conexión a la base de datos.
+     */
     private $db;
 
+    /**
+     * Constructor de UserService.
+     *
+     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     */
     public function __construct(DatabaseModel $databaseModel) {
         $this->db = $databaseModel->db;
     }
 
+    /**
+     * Genera un nombre de usuario único a partir del nombre y apellido.
+     *
+     * @param string $name Nombre del usuario.
+     * @param string $last_name Apellido del usuario.
+     * @return string Nombre de usuario generado.
+     */
     public function createUsername($name, $last_name) {
         $namePart = substr(strtolower($name), 0, 3);
         $lastNamePart = substr(strtolower($last_name), 0, 3);
@@ -34,6 +52,12 @@ class UserService {
         return $username;
     }
 
+    /**
+     * Agrega un nuevo usuario a la base de datos.
+     *
+     * @param UserModel $user Modelo con los datos del usuario.
+     * @return bool True si la inserción fue exitosa, false en caso contrario.
+     */
     public function addUser(UserModel $user) {
         try {
             $username = $this->createUsername($user->getName(), $user->getLastName());
@@ -59,6 +83,12 @@ class UserService {
         }
     }
 
+    /**
+     * Obtiene un usuario por su ID.
+     *
+     * @param int $id ID del usuario.
+     * @return UserModel|null Modelo del usuario o null si no existe.
+     */
     public function getUserById($id) {
         try {
             $sql = "SELECT * FROM `user` WHERE `id` = :id";
@@ -85,6 +115,12 @@ class UserService {
         }
     }
 
+    /**
+     * Obtiene un usuario por su email.
+     *
+     * @param string $email Email del usuario.
+     * @return UserModel|null Modelo del usuario o null si no existe.
+     */
     public function getUserByEmail($email) {
         try {
             $sql = "SELECT * FROM `user` WHERE `email` = :email";
@@ -111,6 +147,12 @@ class UserService {
         }
     }
 
+    /**
+     * Obtiene un usuario por su nombre de usuario.
+     *
+     * @param string $username Nombre de usuario.
+     * @return UserModel|null Modelo del usuario o null si no existe.
+     */
     public function getUserByUsername($username) {
         try {
             $sql = "SELECT * FROM `user` WHERE `username` = :username";
@@ -137,6 +179,11 @@ class UserService {
         }
     }
 
+    /**
+     * Obtiene todos los usuarios de la base de datos.
+     *
+     * @return UserModel[] Array de modelos de usuario.
+     */
     public function getAllUsers() {
         try {
             $sql = "SELECT * FROM `user`";
@@ -164,6 +211,13 @@ class UserService {
         }
     }
 
+    /**
+     * Actualiza los campos de un usuario existente.
+     *
+     * @param int $id ID del usuario a actualizar.
+     * @param array $fields Campos a actualizar (clave => valor).
+     * @return bool True si la actualización fue exitosa, false en caso contrario.
+     */
     public function updateUser($id, $fields) {
         try {
             $setClause = [];
@@ -183,6 +237,12 @@ class UserService {
         }
     }
     
+    /**
+     * Elimina un usuario por su ID.
+     *
+     * @param int $id ID del usuario a eliminar.
+     * @return bool True si la eliminación fue exitosa, false en caso contrario.
+     */
     public function deleteUser($id) {
         try {
             $sql = "DELETE FROM `user` WHERE `id` = :id";
@@ -194,6 +254,12 @@ class UserService {
         }
     }
 
+    /**
+     * Verifica si un email ya existe en la base de datos.
+     *
+     * @param string $email Email a verificar.
+     * @return bool True si el email existe, false en caso contrario.
+     */
     public function emailExists($email) {
         $sql = "SELECT COUNT(*) FROM `user` WHERE `email` = :email";
         $stmt = $this->db->prepare($sql);
@@ -201,6 +267,13 @@ class UserService {
         return $stmt->fetchColumn() > 0;
     }
 
+    /**
+     * Autentica un usuario por email y contraseña.
+     *
+     * @param string $email Email del usuario.
+     * @param string $password Contraseña en texto plano.
+     * @return UserModel|null Modelo del usuario si la autenticación es correcta, null en caso contrario.
+     */
     public function authenticate($email, $password) {
         $sql = "SELECT * FROM `user` WHERE `email` = :email";
         $stmt = $this->db->prepare($sql);

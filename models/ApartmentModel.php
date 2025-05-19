@@ -2,20 +2,75 @@
 
 namespace models;
 
+/**
+ * Modelo de dominio para representar un apartamento.
+ */
 class ApartmentModel {
+    /**
+     * @var int ID de la propiedad asociada.
+     */
     private $property_id;
+    /**
+     * @var string Tipo de apartamento.
+     */
     private $apartment_type;
+    /**
+     * @var int Número de habitaciones.
+     */
     private $num_rooms;
+    /**
+     * @var int Número de baños.
+     */
     private $num_bathrooms;
+    /**
+     * @var bool Indica si está amueblado.
+     */
     private $furnished;
+    /**
+     * @var bool Indica si tiene balcón.
+     */
     private $balcony;
+    /**
+     * @var int Planta en la que se encuentra.
+     */
     private $floor;
+    /**
+     * @var bool Indica si tiene ascensor.
+     */
     private $elevator;
+    /**
+     * @var bool Indica si tiene aire acondicionado.
+     */
     private $air_conditioning;
+    /**
+     * @var bool Indica si tiene garaje.
+     */
     private $garage;
+    /**
+     * @var bool Indica si tiene piscina.
+     */
     private $pool;
+    /**
+     * @var bool Indica si se permiten mascotas.
+     */
     private $pets_allowed;
 
+    /**
+     * Constructor de ApartmentModel.
+     *
+     * @param int $property_id ID de la propiedad asociada.
+     * @param string $apartment_type Tipo de apartamento.
+     * @param int $num_rooms Número de habitaciones.
+     * @param int $num_bathrooms Número de baños.
+     * @param bool $furnished Indica si está amueblado.
+     * @param bool $balcony Indica si tiene balcón.
+     * @param int $floor Planta en la que se encuentra.
+     * @param bool $elevator Indica si tiene ascensor.
+     * @param bool $air_conditioning Indica si tiene aire acondicionado.
+     * @param bool $garage Indica si tiene garaje.
+     * @param bool $pool Indica si tiene piscina.
+     * @param bool $pets_allowed Indica si se permiten mascotas.
+     */
     public function __construct(
         $property_id,
         $apartment_type,

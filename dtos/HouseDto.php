@@ -4,6 +4,27 @@ namespace dtos;
 
 /**
  * DTO para exponer información de una casa junto con los datos de la propiedad y la dirección.
+ *
+ * @property int $property_id ID de la propiedad.
+ * @property string $property_type Tipo de propiedad.
+ * @property int $built_size Superficie construida (m²).
+ * @property float $price Precio de la casa.
+ * @property string $status Estado de la casa.
+ * @property bool $immediate_availability Disponibilidad inmediata.
+ * @property int $user_id ID del usuario propietario.
+ * @property AddressDto $address Objeto con la dirección de la casa.
+ * @property string $house_type Tipo de casa.
+ * @property int $garden_size Tamaño del jardín.
+ * @property int $num_floors Número de plantas.
+ * @property int $num_rooms Número de habitaciones.
+ * @property int $num_bathrooms Número de baños.
+ * @property bool $private_garage Indica si tiene garaje privado.
+ * @property bool $private_pool Indica si tiene piscina privada.
+ * @property bool $furnished Indica si está amueblada.
+ * @property bool $terrace Indica si tiene terraza.
+ * @property bool $storage_room Indica si tiene trastero.
+ * @property bool $air_conditioning Indica si tiene aire acondicionado.
+ * @property bool $pets_allowed Indica si se permiten mascotas.
  */
 class HouseDto {
     // Datos de la propiedad
@@ -32,6 +53,30 @@ class HouseDto {
     public $air_conditioning;
     public $pets_allowed;
 
+    /**
+     * Constructor de HouseDto.
+     *
+     * @param int $property_id ID de la propiedad.
+     * @param string $property_type Tipo de propiedad.
+     * @param int $built_size Superficie construida (m²).
+     * @param float $price Precio de la casa.
+     * @param string $status Estado de la casa.
+     * @param bool $immediate_availability Disponibilidad inmediata.
+     * @param int $user_id ID del usuario propietario.
+     * @param AddressDto $address Objeto con la dirección de la casa.
+     * @param string $house_type Tipo de casa.
+     * @param int $garden_size Tamaño del jardín.
+     * @param int $num_floors Número de plantas.
+     * @param int $num_rooms Número de habitaciones.
+     * @param int $num_bathrooms Número de baños.
+     * @param bool $private_garage Indica si tiene garaje privado.
+     * @param bool $private_pool Indica si tiene piscina privada.
+     * @param bool $furnished Indica si está amueblada.
+     * @param bool $terrace Indica si tiene terraza.
+     * @param bool $storage_room Indica si tiene trastero.
+     * @param bool $air_conditioning Indica si tiene aire acondicionado.
+     * @param bool $pets_allowed Indica si se permiten mascotas.
+     */
     public function __construct(
         $property_id,
         $property_type,
@@ -76,6 +121,11 @@ class HouseDto {
         $this->pets_allowed = $pets_allowed;
     }
 
+    /**
+     * Devuelve la casa como un array asociativo.
+     *
+     * @return array<string, mixed> Datos de la casa.
+     */
     public function toArray() {
         return [
             'property_id' => $this->property_id,

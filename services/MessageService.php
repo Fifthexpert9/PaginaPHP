@@ -7,13 +7,30 @@ use models\DatabaseModel;
 use PDO;
 use PDOException;
 
+/**
+ * Servicio para gestionar operaciones relacionadas con mensajes entre usuarios en la base de datos.
+ */
 class MessageService {
+    /**
+     * @var PDO Conexión a la base de datos.
+     */
     private $db;
 
+    /**
+     * Constructor de MessageService.
+     *
+     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     */
     public function __construct(DatabaseModel $databaseModel) {
         $this->db = $databaseModel->db;
     }
 
+    /**
+     * Crea un nuevo mensaje en la base de datos.
+     *
+     * @param MessageModel $message Modelo con los datos del mensaje.
+     * @return bool True si la inserción fue exitosa, false en caso contrario.
+     */
     public function createMessage(MessageModel $message) {
         $sql = "INSERT INTO message (sender_id, receiver_id, advert_id, subject, content, sent_at)
                 VALUES (:sender_id, :receiver_id, :advert_id, :subject, :content, :sent_at)";
@@ -28,6 +45,12 @@ class MessageService {
         ]);
     }
 
+    /**
+     * Obtiene un mensaje por su ID.
+     *
+     * @param int $id ID del mensaje.
+     * @return MessageModel|null Modelo del mensaje o null si no existe.
+     */
     public function getMessageById($id) {
         $sql = "SELECT * FROM message WHERE id = :id";
         $stmt = $this->db->prepare($sql);
@@ -47,6 +70,12 @@ class MessageService {
         return null;
     }
 
+    /**
+     * Obtiene todos los mensajes enviados o recibidos por un usuario.
+     *
+     * @param int $userId ID del usuario.
+     * @return MessageModel[] Array de mensajes del usuario.
+     */
     public function getMessagesByUserId($userId) {
         $sql = "SELECT * FROM message WHERE sender_id = :user_id OR receiver_id = :user_id ORDER BY sent_at DESC";
         $stmt = $this->db->prepare($sql);
@@ -66,6 +95,13 @@ class MessageService {
         return $messages;
     }
 
+    /**
+     * Actualiza los campos de un mensaje existente.
+     *
+     * @param int $id ID del mensaje a actualizar.
+     * @param array $fields Campos a actualizar (clave => valor).
+     * @return bool True si la actualización fue exitosa, false en caso contrario.
+     */
     public function updateMessage($id, $fields) {
         try {
             $setClause = [];
@@ -84,6 +120,12 @@ class MessageService {
         }
     }
 
+    /**
+     * Elimina un mensaje por su ID.
+     *
+     * @param int $id ID del mensaje a eliminar.
+     * @return bool True si la eliminación fue exitosa, false en caso contrario.
+     */
     public function deleteMessage($id) {
         try {
             $sql = "DELETE FROM message WHERE id = :id";

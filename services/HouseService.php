@@ -7,13 +7,30 @@ use models\DatabaseModel;
 use PDO;
 use PDOException;
 
+/**
+ * Servicio para gestionar operaciones relacionadas con casas en la base de datos.
+ */
 class HouseService {
+    /**
+     * @var PDO Conexión a la base de datos.
+     */
     private $db;
 
+    /**
+     * Constructor de HouseService.
+     *
+     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     */
     public function __construct(DatabaseModel $databaseModel) {
         $this->db = $databaseModel->db;
     }
 
+    /**
+     * Crea una nueva casa en la base de datos.
+     *
+     * @param HouseModel $house Modelo con los datos de la casa.
+     * @return bool True si la inserción fue exitosa, false en caso contrario.
+     */
     public function createHouse(HouseModel $house) {
         $sql = "INSERT INTO property_house (property_id, house_type, garden_size, num_floors, num_rooms, num_bathrooms, private_garage, private_pool, furnished, terrace, storage_room, air_conditioning, pets_allowed)
                 VALUES (:property_id, :house_type, :garden_size, :num_floors, :num_rooms, :num_bathrooms, :private_garage, :private_pool, :furnished, :terrace, :storage_room, :air_conditioning, :pets_allowed)";
@@ -35,6 +52,12 @@ class HouseService {
         ]);
     }
 
+    /**
+     * Obtiene una casa por el ID de la propiedad asociada.
+     *
+     * @param int $propertyId ID de la propiedad.
+     * @return HouseModel|null Modelo de la casa o null si no existe.
+     */
     public function getHouseByPropertyId($propertyId) {
         $sql = "SELECT * FROM property_house WHERE property_id = :property_id";
         $stmt = $this->db->prepare($sql);
@@ -60,6 +83,13 @@ class HouseService {
         return null;
     }
 
+    /**
+     * Actualiza los campos de una casa existente.
+     *
+     * @param int $propertyId ID de la propiedad asociada a la casa.
+     * @param array $fields Campos a actualizar (clave => valor).
+     * @return bool True si la actualización fue exitosa, false en caso contrario.
+     */
     public function updateHouse($propertyId, $fields) {
         try {
             $setClause = [];
@@ -78,6 +108,12 @@ class HouseService {
         }
     }
 
+    /**
+     * Elimina una casa por el ID de la propiedad asociada.
+     *
+     * @param int $propertyId ID de la propiedad asociada a la casa.
+     * @return bool True si la eliminación fue exitosa, false en caso contrario.
+     */
     public function deleteHouse($propertyId) {
         try {
             $sql = "DELETE FROM property_house WHERE property_id = :property_id";

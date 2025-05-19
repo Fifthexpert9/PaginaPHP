@@ -7,13 +7,30 @@ use models\DatabaseModel;
 use PDO;
 use PDOException;
 
+/**
+ * Servicio para gestionar operaciones relacionadas con anuncios en la base de datos.
+ */
 class AdvertService {
+    /**
+     * @var PDO Conexión a la base de datos.
+     */
     private $db;
 
+    /**
+     * Constructor de AdvertService.
+     *
+     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     */
     public function __construct(DatabaseModel $databaseModel) {
         $this->db = $databaseModel->db;
     }
 
+    /**
+     * Crea un nuevo anuncio en la base de datos.
+     *
+     * @param AdvertModel $advert Modelo con los datos del anuncio.
+     * @return bool True si la inserción fue exitosa, false en caso contrario.
+     */
     public function createAdvert(AdvertModel $advert) {
         $sql = "INSERT INTO advert (property_id, user_id, price, action, description, created_at)
                 VALUES (:property_id, :user_id, :price, :action, :description, :created_at)";
@@ -28,6 +45,12 @@ class AdvertService {
         ]);
     }
 
+    /**
+     * Obtiene un anuncio por su ID.
+     *
+     * @param int $id ID del anuncio.
+     * @return AdvertModel|null El anuncio encontrado o null si no existe.
+     */
     public function getAdvertById($id) {
         $sql = "SELECT * FROM advert WHERE id = :id";
         $stmt = $this->db->prepare($sql);
@@ -47,6 +70,12 @@ class AdvertService {
         return null;
     }
 
+    /**
+     * Obtiene todos los anuncios publicados por un usuario.
+     *
+     * @param int $userId ID del usuario.
+     * @return AdvertModel[] Array de anuncios del usuario.
+     */
     public function getAdvertsByUserId($userId) {
         $sql = "SELECT * FROM advert WHERE user_id = :user_id";
         $stmt = $this->db->prepare($sql);
@@ -66,6 +95,13 @@ class AdvertService {
         return $adverts;
     }
 
+    /**
+     * Actualiza los campos de un anuncio existente.
+     *
+     * @param int $id ID del anuncio a actualizar.
+     * @param array $fields Campos a actualizar (clave => valor).
+     * @return bool True si la actualización fue exitosa, false en caso contrario.
+     */
     public function updateAdvert($id, $fields) {
         try {
             $setClause = [];
@@ -84,6 +120,12 @@ class AdvertService {
         }
     }
 
+    /**
+     * Elimina un anuncio por su ID.
+     *
+     * @param int $id ID del anuncio a eliminar.
+     * @return bool True si la eliminación fue exitosa, false en caso contrario.
+     */
     public function deleteAdvert($id) {
         try {
             $sql = "DELETE FROM advert WHERE id = :id";
