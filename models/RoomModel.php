@@ -2,18 +2,65 @@
 
 namespace models;
 
+/**
+ * Modelo de dominio para representar una habitación dentro de una propiedad.
+ */
 class RoomModel {
+    /**
+     * @var int ID de la propiedad asociada.
+     */
     private $property_id;
+    /**
+     * @var bool Indica si la habitación tiene baño privado.
+     */
     private $private_bathroom;
+    /**
+     * @var int Tamaño de la habitación.
+     */
     private $room_size;
+    /**
+     * @var int Número máximo de compañeros.
+     */
     private $max_roommates;
+    /**
+     * @var bool Indica si incluye gastos.
+     */
     private $includes_expenses;
+    /**
+     * @var bool Indica si se permiten mascotas.
+     */
     private $pets_allowed;
+    /**
+     * @var bool Indica si la habitación está amueblada.
+     */
     private $furnished;
+    /**
+     * @var string Áreas comunes disponibles.
+     */
     private $common_areas;
+    /**
+     * @var bool Indica si es solo para estudiantes.
+     */
     private $students_only;
+    /**
+     * @var string Restricción de género.
+     */
     private $gender_restriction;
 
+    /**
+     * Constructor de RoomModel.
+     *
+     * @param int $property_id ID de la propiedad asociada.
+     * @param bool $private_bathroom Indica si tiene baño privado.
+     * @param int $room_size Tamaño de la habitación.
+     * @param int $max_roommates Número máximo de compañeros.
+     * @param bool $includes_expenses Indica si incluye gastos.
+     * @param bool $pets_allowed Indica si se permiten mascotas.
+     * @param bool $furnished Indica si está amueblada.
+     * @param string $common_areas Áreas comunes disponibles.
+     * @param bool $students_only Indica si es solo para estudiantes.
+     * @param string $gender_restriction Restricción de género.
+     */
     public function __construct(
         $property_id,
         $private_bathroom,

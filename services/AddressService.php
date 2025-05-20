@@ -7,13 +7,30 @@ use models\DatabaseModel;
 use PDO;
 use PDOException;
 
+/**
+ * Servicio para gestionar operaciones relacionadas con direcciones en la base de datos.
+ */
 class AddressService {
+    /**
+     * @var PDO Conexión a la base de datos.
+     */
     private $db;
 
+    /**
+     * Constructor de AddressService.
+     *
+     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     */
     public function __construct(DatabaseModel $databaseModel) {
         $this->db = $databaseModel->db;
     }
 
+    /**
+     * Crea una nueva dirección en la base de datos.
+     *
+     * @param AddressModel $address Modelo con los datos de la dirección.
+     * @return int ID de la dirección creada.
+     */
     public function createAddress(AddressModel $address) {
         $sql = "INSERT INTO address (street, city, province, postal_code, country, latitude, longitude)
                 VALUES (:street, :city, :province, :postal_code, :country, :latitude, :longitude)";
@@ -30,6 +47,12 @@ class AddressService {
         return $this->db->lastInsertId();
     }
 
+    /**
+     * Obtiene una dirección por su ID.
+     *
+     * @param int $id ID de la dirección.
+     * @return AddressModel|null Modelo de la dirección o null si no existe.
+     */
     public function getAddressById($id) {
         $sql = "SELECT * FROM address WHERE id = :id";
         $stmt = $this->db->prepare($sql);
@@ -50,8 +73,14 @@ class AddressService {
         return null;
     }
 
-    /*  Maybe could be difficult to implement
-
+    /**
+     * Actualiza los campos de una dirección existente.
+     *
+     * @param int $id ID de la dirección a actualizar.
+     * @param array $fields Campos a actualizar (clave => valor).
+     * @return bool True si la actualización fue exitosa, false en caso contrario.
+     */
+    /*
     public function updateAddress($id, $fields) {
         try {
             $setClause = [];
@@ -71,6 +100,12 @@ class AddressService {
     }
     */
 
+    /**
+     * Elimina una dirección por su ID.
+     *
+     * @param int $id ID de la dirección a eliminar.
+     * @return bool True si la eliminación fue exitosa, false en caso contrario.
+     */
     public function deleteAddress($id) {
         try {
             $sql = "DELETE FROM address WHERE id = :id";
@@ -82,8 +117,12 @@ class AddressService {
         }
     }
 
-    /*  Not sure if needed
-
+    /**
+     * Obtiene todas las direcciones de la base de datos.
+     *
+     * @return AddressModel[] Array de modelos de direcciones.
+     */
+    /*
     public function getAllAddresses() {
         $sql = "SELECT * FROM address";
         $stmt = $this->db->query($sql);

@@ -4,6 +4,26 @@ namespace dtos;
 
 /**
  * DTO para exponer información de un apartamento junto con los datos de la propiedad y la dirección.
+ *
+ * @property int $property_id ID de la propiedad.
+ * @property string $property_type Tipo de propiedad.
+ * @property int $built_size Superficie construida (m²).
+ * @property float $price Precio del apartamento.
+ * @property string $status Estado del apartamento.
+ * @property bool $immediate_availability Disponibilidad inmediata.
+ * @property int $user_id ID del usuario propietario.
+ * @property AddressDto $address Objeto con la dirección del apartamento.
+ * @property string $apartment_type Tipo de apartamento.
+ * @property int $num_rooms Número de habitaciones.
+ * @property int $num_bathrooms Número de baños.
+ * @property bool $furnished Indica si está amueblado.
+ * @property bool $balcony Indica si tiene balcón.
+ * @property int $floor Planta en la que se encuentra.
+ * @property bool $elevator Indica si tiene ascensor.
+ * @property bool $air_conditioning Indica si tiene aire acondicionado.
+ * @property bool $garage Indica si tiene garaje.
+ * @property bool $pool Indica si tiene piscina.
+ * @property bool $pets_allowed Indica si se permiten mascotas.
  */
 class ApartmentDto {
     // Datos de la propiedad
@@ -31,6 +51,29 @@ class ApartmentDto {
     public $pool;
     public $pets_allowed;
 
+    /**
+     * Constructor de ApartmentDto.
+     *
+     * @param int $property_id ID de la propiedad.
+     * @param string $property_type Tipo de propiedad.
+     * @param int $built_size Superficie construida (m²).
+     * @param float $price Precio del apartamento.
+     * @param string $status Estado del apartamento.
+     * @param bool $immediate_availability Disponibilidad inmediata.
+     * @param int $user_id ID del usuario propietario.
+     * @param AddressDto $address Objeto con la dirección del apartamento.
+     * @param string $apartment_type Tipo de apartamento.
+     * @param int $num_rooms Número de habitaciones.
+     * @param int $num_bathrooms Número de baños.
+     * @param bool $furnished Indica si está amueblado.
+     * @param bool $balcony Indica si tiene balcón.
+     * @param int $floor Planta en la que se encuentra.
+     * @param bool $elevator Indica si tiene ascensor.
+     * @param bool $air_conditioning Indica si tiene aire acondicionado.
+     * @param bool $garage Indica si tiene garaje.
+     * @param bool $pool Indica si tiene piscina.
+     * @param bool $pets_allowed Indica si se permiten mascotas.
+     */
     public function __construct(
         $property_id,
         $property_type,
@@ -73,6 +116,11 @@ class ApartmentDto {
         $this->pets_allowed = $pets_allowed;
     }
 
+    /**
+     * Devuelve el apartamento como un array asociativo.
+     *
+     * @return array<string, mixed> Datos del apartamento.
+     */
     public function toArray() {
         return [
             'property_id' => $this->property_id,

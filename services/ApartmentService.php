@@ -8,13 +8,30 @@ use models\DatabaseModel;
 use PDO;
 use PDOException;
 
+/**
+ * Servicio para gestionar operaciones relacionadas con apartamentos en la base de datos.
+ */
 class ApartmentService {
+    /**
+     * @var PDO Conexión a la base de datos.
+     */
     private $db;
 
+    /**
+     * Constructor de ApartmentService.
+     *
+     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     */
     public function __construct(DatabaseModel $databaseModel) {
         $this->db = $databaseModel->db;
     }
 
+    /**
+     * Crea un nuevo apartamento en la base de datos.
+     *
+     * @param ApartmentModel $apartment Modelo con los datos del apartamento.
+     * @return bool True si la inserción fue exitosa, false en caso contrario.
+     */
     public function createApartment(ApartmentModel $apartment) {
         $sql = "INSERT INTO property_apartment (property_id, apartment_type, num_rooms, num_bathrooms, furnished, balcony, floor, elevator, air_conditioning, garage, pool, pets_allowed)
                 VALUES (:property_id, :apartment_type, :num_rooms, :num_bathrooms, :furnished, :balcony, :floor, :elevator, :air_conditioning, :garage, :pool, :pets_allowed)";
@@ -35,6 +52,12 @@ class ApartmentService {
         ]);
     }
 
+    /**
+     * Obtiene un apartamento por el ID de la propiedad asociada.
+     *
+     * @param int $propertyId ID de la propiedad.
+     * @return ApartmentModel|null Modelo del apartamento o null si no existe.
+     */
     public function getApartmentByPropertyId($propertyId) {
         $sql = "SELECT * FROM property_apartment WHERE property_id = :property_id";
         $stmt = $this->db->prepare($sql);
@@ -59,6 +82,13 @@ class ApartmentService {
         return null;
     }
 
+    /**
+     * Actualiza los campos de un apartamento existente.
+     *
+     * @param int $propertyId ID de la propiedad asociada al apartamento.
+     * @param array $fields Campos a actualizar (clave => valor).
+     * @return bool True si la actualización fue exitosa, false en caso contrario.
+     */
     public function updateApartment($propertyId, $fields) {
         try {
             $setClause = [];
@@ -77,6 +107,12 @@ class ApartmentService {
         }
     }
 
+    /**
+     * Elimina un apartamento por el ID de la propiedad asociada.
+     *
+     * @param int $propertyId ID de la propiedad asociada al apartamento.
+     * @return bool True si la eliminación fue exitosa, false en caso contrario.
+     */
     public function deleteApartment($propertyId) {
         try {
             $sql = "DELETE FROM property_apartment WHERE property_id = :property_id";

@@ -2,21 +2,80 @@
 
 namespace models;
 
+/**
+ * Modelo de dominio para representar una casa.
+ */
 class HouseModel {
+    /**
+     * @var int ID de la propiedad asociada.
+     */
     private $property_id;
+    /**
+     * @var string Tipo de casa.
+     */
     private $house_type;
+    /**
+     * @var int Tamaño del jardín.
+     */
     private $garden_size;
+    /**
+     * @var int Número de plantas.
+     */
     private $num_floors;
+    /**
+     * @var int Número de habitaciones.
+     */
     private $num_rooms;
+    /**
+     * @var int Número de baños.
+     */
     private $num_bathrooms;
+    /**
+     * @var bool Indica si tiene garaje privado.
+     */
     private $private_garage;
+    /**
+     * @var bool Indica si tiene piscina privada.
+     */
     private $private_pool;
+    /**
+     * @var bool Indica si está amueblada.
+     */
     private $furnished;
+    /**
+     * @var bool Indica si tiene terraza.
+     */
     private $terrace;
+    /**
+     * @var bool Indica si tiene trastero.
+     */
     private $storage_room;
+    /**
+     * @var bool Indica si tiene aire acondicionado.
+     */
     private $air_conditioning;
+    /**
+     * @var bool Indica si se permiten mascotas.
+     */
     private $pets_allowed;
 
+    /**
+     * Constructor de HouseModel.
+     *
+     * @param int $property_id ID de la propiedad asociada.
+     * @param string $house_type Tipo de casa.
+     * @param int $garden_size Tamaño del jardín.
+     * @param int $num_floors Número de plantas.
+     * @param int $num_rooms Número de habitaciones.
+     * @param int $num_bathrooms Número de baños.
+     * @param bool $private_garage Indica si tiene garaje privado.
+     * @param bool $private_pool Indica si tiene piscina privada.
+     * @param bool $furnished Indica si está amueblada.
+     * @param bool $terrace Indica si tiene terraza.
+     * @param bool $storage_room Indica si tiene trastero.
+     * @param bool $air_conditioning Indica si tiene aire acondicionado.
+     * @param bool $pets_allowed Indica si se permiten mascotas.
+     */
     public function __construct(
         $property_id,
         $house_type,
