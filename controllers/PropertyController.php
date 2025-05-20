@@ -2,14 +2,16 @@
 
 namespace controllers;
 
+require_once __DIR__ . '/../services/PropertyService.php';
+
 use services\PropertyService;
 use models\PropertyModel;
 
 class PropertyController {
     private $propertyService;
 
-    public function __construct(PropertyService $propertyService) {
-        $this->propertyService = $propertyService;
+    public function __construct() {
+        $this->propertyService = new PropertyService();
     }
 
     /**
@@ -67,5 +69,16 @@ class PropertyController {
      */
     public function deleteProperty($id) {
         return $this->propertyService->deleteProperty($id);
+    }
+
+    /**
+     * Obtiene propiedades filtradas por tipo, precio máximo y número de habitaciones.
+     * @param string $tipo
+     * @param float $precioMax
+     * @param int $habitaciones
+     * @return array
+     */
+    public function getFilteredProperties($tipo, $precioMax, $habitaciones) {
+        return $this->propertyService->getFilteredProperties($tipo, $precioMax, $habitaciones);
     }
 }

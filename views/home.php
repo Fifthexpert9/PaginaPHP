@@ -1,32 +1,21 @@
 <?php
-require_once __DIR__ . '/../controllers/ApartmentController.php';
-require_once __DIR__ . '/../controllers/AdvertController.php';
-require_once __DIR__ . '/../services/ApartmentService.php';
-require_once __DIR__ . '/../services/AdvertService.php';
-require_once __DIR__ . '/../models/DatabaseModel.php';
 
-use controllers\ApartmentController;
+require_once __DIR__ . '/../controllers/PropertyController.php';
+
+use controllers\PropertyController;
 use controllers\AdvertController;
-use services\ApartmentService;
 use services\AdvertService;
-use models\DatabaseModel;
 
-// Crear instancia de DatabaseModel
-$databaseModel = new DatabaseModel();
-
-// Crear instancia de ApartmentService con la base de datos
-$apartmentService = new ApartmentService($databaseModel);
-
-// Crear instancia de ApartmentController con el servicio
-$apartmentController = new ApartmentController($apartmentService);
+// Instancias
+$propertyController = new PropertyController();
 
 // Obtener filtros desde GET
 $tipo = $_GET['tipo'] ?? '';
 $precioMax = $_GET['precio_max'] ?? '';
 $habitaciones = $_GET['habitaciones'] ?? '';
 
-// Obtener propiedades filtradas
-$propiedades = $apartmentService->getFilteredApartments($tipo, $precioMax, $habitaciones);
+// Obtener propiedades filtradas usando el controller
+$propiedades = $propertyController->getFilteredProperties($tipo, $precioMax, $habitaciones);
 
 // Obtener anuncios destacados (opcional)
 require_once __DIR__ . '/../controllers/AdvertController.php';
@@ -69,10 +58,10 @@ require_once __DIR__ . '/header.php';
       <?php else: ?>
         <?php foreach ($propiedades as $propiedad): ?>
           <div class="property-card">
-            <img src="<?= htmlspecialchars($propiedad->getImagen()) ?>" alt="<?= htmlspecialchars($propiedad->getTitulo()) ?>">
-            <h3><?= htmlspecialchars($propiedad->getTitulo()) ?></h3>
-            <p><?= htmlspecialchars($propiedad->getDescripcion()) ?></p>
-            <p class="price">€<?= htmlspecialchars($propiedad->getPrecio()) ?></p>
+            <h3><?= htmlspecialchars($propiedad->getPropertyType()) ?></h3>
+            <p>Superficie: <?= htmlspecialchars($propiedad->getBuiltSize()) ?> m²</p>
+            <p class="price">€<?= htmlspecialchars($propiedad->getPrice()) ?></p>
+            <p>Habitaciones: <?= htmlspecialchars($propiedad->getStatus()) ?></p>
             <a href="/detallePropiedad?id=<?= $propiedad->getId() ?>" class="btn-detalle">Ver detalles</a>
           </div>
         <?php endforeach; ?>

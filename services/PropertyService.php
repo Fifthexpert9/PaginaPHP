@@ -2,6 +2,9 @@
 
 namespace services;
 
+require_once __DIR__ . '/../models/PropertyModel.php';
+require_once __DIR__ . '/../models/DatabaseModel.php';
+
 use models\PropertyModel;
 use models\AddressModel;
 use models\DatabaseModel;
@@ -10,12 +13,16 @@ use PDOException;
 
 class PropertyService {
     private $db;
-
+/*
     public function __construct(DatabaseModel $databaseModel) {
         $this->db = $databaseModel->db;
     }
+*/
 
     public function createProperty(PropertyModel $property) {
+
+        $db = new DatabaseModel();
+
         $sql = "INSERT INTO property (property_type, address_id, built_size, price, status, immediate_availability, user_id)
                 VALUES (:property_type, :address_id, :built_size, :price, :status, :immediate_availability, :user_id)";
         $stmt = $this->db->prepare($sql);
@@ -32,6 +39,9 @@ class PropertyService {
     }
     
     public function getPropertyById($id) {
+
+        $db = new DatabaseModel();
+
         $sql = "SELECT * FROM property WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $id]);
@@ -50,6 +60,9 @@ class PropertyService {
     */
 
     public function getPropertiesByUserId($userId) {
+
+        $db = new DatabaseModel();
+
         $sql = "SELECT * FROM property WHERE user_id = :user_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':user_id' => $userId]);
@@ -57,6 +70,9 @@ class PropertyService {
     }
 
     public function updateProperty($id, $fields) {
+
+        $db = new DatabaseModel();
+
         try {
             $setClause = [];
             foreach ($fields as $key => $value) {
@@ -75,8 +91,51 @@ class PropertyService {
     }
 
     public function deleteProperty($id) {
+
+        $db = new DatabaseModel();
+
         $sql = "DELETE FROM property WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([':id' => $id]);
+    }
+
+    public function getFilteredProperties($tipo, $precioMax, $habitaciones) {
+
+        $db = new DatabaseModel();
+
+        $query = "SELECT * FROM property WHERE 1=1";
+        $params = [];
+
+        if (!empty($tipo)) {
+            $query .= " AND property_type = :tipo";
+            $params[':tipo'] = $tipo;
+        }
+        if (!empty($precioMax)) {
+            $query .= " AND price <= :precioMax";
+            $params[':precioMax'] = $precioMax;
+        }
+        if (!empty($habitaciones)) {
+            $query .= " AND status >= :habitaciones";
+            $params[':habitaciones'] = $habitaciones;
+        }
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($params);
+
+        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $properties = [];
+        foreach ($rows as $row) {
+            $properties[] = new \models\PropertyModel(
+                $row['id'],
+                $row['property_type'],
+                $row['address_id'],
+                $row['built_size'],
+                $row['price'],
+                $row['status'],
+                $row['immediate_availability'],
+                $row['user_id']
+            );
+        }
+        return $properties;
     }
 }
