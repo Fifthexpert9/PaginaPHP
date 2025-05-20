@@ -77,8 +77,8 @@ require_once __DIR__ . '/header.php';
       <?php else: ?>
         <?php foreach ($anuncios as $anuncio): ?>
           <div class="ad-card">
-            <h4><?= htmlspecialchars($anuncio->getTitulo()) ?></h4>
-            <p><?= htmlspecialchars($anuncio->getDescripcion()) ?></p>
+            <h4><?= htmlspecialchars($anuncio->getAction()) ?></h4>
+            <p><?= htmlspecialchars($anuncio->getDescription()) ?></p>
           </div>
         <?php endforeach; ?>
       <?php endif; ?>

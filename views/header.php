@@ -112,6 +112,7 @@ require_once __DIR__ . '/../models/UserModel.php';
     }
     footer {
       text-align: center;
+      margin-top: auto;
     }
     .overlay {
       display: none;

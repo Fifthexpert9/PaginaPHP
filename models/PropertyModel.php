@@ -19,7 +19,7 @@ class PropertyModel {
         $built_size,
         $price,
         $status,
-        $immediateAvailability,
+        $immediate_availability,
         $user_id
         ) {
         $this->id = $id;
