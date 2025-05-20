@@ -1,67 +1,89 @@
 <?php
-require_once 'controllers/productoController.php';
-$productoController = new ProductoController();
+
+require_once __DIR__ . '/../controllers/PropertyController.php';
+
+use controllers\PropertyController;
+use controllers\AdvertController;
+use services\AdvertService;
+
+// Instancias
+$propertyController = new PropertyController();
 
 // Obtener filtros desde GET
-$nombre = $_GET['nombre'] ?? '';
-$categoria = $_GET['categoria'] ?? '';
+$tipo = $_GET['tipo'] ?? '';
 $precioMax = $_GET['precio_max'] ?? '';
+$habitaciones = $_GET['habitaciones'] ?? '';
 
-// Obtener productos y categorías
-$productos = $productoController->getProductosFiltrados($nombre, $categoria, $precioMax);
-$categorias = $productoController->getCategoriasDisponibles();
+// Obtener propiedades filtradas usando el controller
+$propiedades = $propertyController->getFilteredProperties($tipo, $precioMax, $habitaciones);
+
+// Obtener anuncios destacados (opcional)
+require_once __DIR__ . '/../controllers/AdvertController.php';
+$advertController = new AdvertController();
+$anuncios = $advertController->getFeaturedAdverts();
 
 require_once __DIR__ . '/header.php';
 ?>
 
-<main>
-    <h1>Bienvenido a Tienda Online</h1>
-    <p>Encuentra los mejores productos a los mejores precios.</p>
-    <br><br>
+<div class="main-layout">
+  <!-- Filtros -->
+  <aside class="filters">
+    <h3>Filtrar propiedades</h3>
+    <form method="GET" class="filter-form">
+      <label for="tipo">Tipo</label>
+      <select name="tipo" id="tipo">
+        <option value="">Todos</option>
+        <option value="piso" <?= $tipo === 'piso' ? 'selected' : '' ?>>Piso</option>
+        <option value="casa" <?= $tipo === 'casa' ? 'selected' : '' ?>>Casa</option>
+        <option value="habitacion" <?= $tipo === 'habitacion' ? 'selected' : '' ?>>Habitación</option>
+      </select>
 
-    <div class="shop-layout">
-        <form method="GET" class="filter-form">
-            <h3>Filtrar productos</h3>
+      <label for="precioMax">Precio máximo</label>
+      <input type="number" step="0.01" name="precio_max" id="precioMax" placeholder="Ej: 1000" value="<?= htmlspecialchars($precioMax) ?>">
 
-            <label for="nombre">Nombre</label>
-            <input type="text" name="nombre" id="nombre" value="<?= htmlspecialchars($_GET['nombre'] ?? '') ?>">
+      <label for="habitaciones">Habitaciones</label>
+      <input type="number" name="habitaciones" id="habitaciones" placeholder="Ej: 3" value="<?= htmlspecialchars($habitaciones) ?>">
 
-            <label for="categoria">Categoría</label>
-            <select name="categoria" id="categoria">
-                <option value="">Todas</option>
-                <?php foreach ($categorias as $cat): ?>
-                    <option value="<?= htmlspecialchars($cat) ?>" <?= (($_GET['categoria'] ?? '') === $cat) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($cat) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+      <button type="submit">Aplicar filtros</button>
+    </form>
+  </aside>
 
-            <label for="precioMax">Precio máximo</label>
-            <input type="number" step="0.01" name="precio_max" id="precioMax" value="<?= htmlspecialchars($_GET['precioMax'] ?? '') ?>">
-
-            <button type="submit">Aplicar filtros</button>
-        </form>
-
-        <div class="productos-grid grid">
-            <?php if (empty($productos)): ?>
-                <p>No se encontraron productos.</p>
-            <?php endif; ?>
-            <?php foreach($productos as $producto):?>
-                <div class="card">
-                    <h2><?= htmlspecialchars($producto->getNombre()) ?></h2>
-                    <img src="<?= htmlspecialchars($producto->getImagen()) ?>" alt="<?= htmlspecialchars($producto->getNombre()) ?>">
-                    <?php if (isset($_SESSION['usuario'])): ?>
-                        <button type="submit">Añadir al carrito</button>
-                    <?php else: ?>
-                        <!-- <a href="#" class="login-card-btn" onclick="document.getElementById('loginBtn').click();">
-                            <i class="material-icons">login</i> Iniciar Sesión
-                        </a> -->
-                    <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
-        </div>
+  <!-- Contenido principal -->
+  <main class="properties">
+    <h2>Propiedades disponibles</h2>
+    <div class="properties-grid">
+      <?php if (empty($propiedades)): ?>
+        <p>No se encontraron propiedades con los filtros seleccionados.</p>
+      <?php else: ?>
+        <?php foreach ($propiedades as $propiedad): ?>
+          <div class="property-card">
+            <h3><?= htmlspecialchars($propiedad->getPropertyType()) ?></h3>
+            <p>Superficie: <?= htmlspecialchars($propiedad->getBuiltSize()) ?> m²</p>
+            <p class="price">€<?= htmlspecialchars($propiedad->getPrice()) ?></p>
+            <p>Habitaciones: <?= htmlspecialchars($propiedad->getStatus()) ?></p>
+            <a href="/detallePropiedad?id=<?= $propiedad->getId() ?>" class="btn-detalle">Ver detalles</a>
+          </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
-</main>
+  </main>
 
+  <!-- Anuncios destacados -->
+  <aside class="ads">
+    <h3>Anuncios destacados</h3>
+    <div class="ads-list">
+      <?php if (empty($anuncios)): ?>
+        <p>No hay anuncios destacados en este momento.</p>
+      <?php else: ?>
+        <?php foreach ($anuncios as $anuncio): ?>
+          <div class="ad-card">
+            <h4><?= htmlspecialchars($anuncio->getAction()) ?></h4>
+            <p><?= htmlspecialchars($anuncio->getDescription()) ?></p>
+          </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
+    </div>
+  </aside>
+</div>
 
 <?php require_once __DIR__ . '/footer.php'; ?>
