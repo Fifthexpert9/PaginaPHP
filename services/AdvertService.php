@@ -2,6 +2,9 @@
 
 namespace services;
 
+require_once __DIR__ . '/../models/AdvertModel.php';
+require_once __DIR__ . '/../models/DatabaseModel.php';
+
 use models\AdvertModel;
 use models\DatabaseModel;
 use PDO;
@@ -9,15 +12,18 @@ use PDOException;
 
 class AdvertService {
     private $db;
-
+/*
     public function __construct(DatabaseModel $databaseModel) {
         $this->db = $databaseModel->db;
     }
-
+*/
     public function createAdvert(AdvertModel $advert) {
+
+        $db = new DatabaseModel();
+
         $sql = "INSERT INTO advert (property_id, user_id, price, action, description, created_at)
                 VALUES (:property_id, :user_id, :price, :action, :description, :created_at)";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $db->db->prepare($sql);
         return $stmt->execute([
             ':property_id' => $advert->getPropertyId(),
             ':user_id' => $advert->getUserId(),
@@ -29,8 +35,11 @@ class AdvertService {
     }
 
     public function getAdvertById($id) {
+
+        $db = new DatabaseModel();
+
         $sql = "SELECT * FROM advert WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $db->db->prepare($sql);
         $stmt->execute([':id' => $id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($row) {
@@ -48,8 +57,11 @@ class AdvertService {
     }
 
     public function getAdvertsByUserId($userId) {
+
+        $db = new DatabaseModel();
+
         $sql = "SELECT * FROM advert WHERE user_id = :user_id";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $db->db->prepare($sql);
         $stmt->execute([':user_id' => $userId]);
         $adverts = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -67,6 +79,9 @@ class AdvertService {
     }
 
     public function updateAdvert($id, $fields) {
+
+        $db = new DatabaseModel();
+
         try {
             $setClause = [];
             foreach ($fields as $key => $value) {
@@ -75,7 +90,7 @@ class AdvertService {
             $setClause = implode(", ", $setClause);
 
             $sql = "UPDATE advert SET $setClause WHERE id = :id";
-            $stmt = $this->db->prepare($sql);
+            $stmt = $db->db->prepare($sql);
             $fields['id'] = $id;
             return $stmt->execute($fields);
         } catch (PDOException $e) {
@@ -85,9 +100,12 @@ class AdvertService {
     }
 
     public function deleteAdvert($id) {
+
+        $db = new DatabaseModel();
+
         try {
             $sql = "DELETE FROM advert WHERE id = :id";
-            $stmt = $this->db->prepare($sql);
+            $stmt = $db->db->prepare($sql);
             return $stmt->execute([':id' => $id]);
         } catch (PDOException $e) {
             error_log('Error al eliminar anuncio: ' . $e->getMessage());
@@ -96,8 +114,11 @@ class AdvertService {
     }
 
     public function getFeaturedAdverts() {
+
+        $db = new DatabaseModel();
+
         $sql = "SELECT * FROM advert ORDER BY created_at DESC LIMIT 5"; // Ejemplo: los 5 anuncios más recientes
-        $stmt = $this->db->prepare($sql);
+        $stmt = $db->db->prepare($sql);
         $stmt->execute();
 
         $adverts = [];

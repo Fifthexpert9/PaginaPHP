@@ -25,7 +25,7 @@ class PropertyService {
 
         $sql = "INSERT INTO property (property_type, address_id, built_size, price, status, immediate_availability, user_id)
                 VALUES (:property_type, :address_id, :built_size, :price, :status, :immediate_availability, :user_id)";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $db->db->prepare($sql);
         $stmt->execute([
             ':property_type' => $property->getPropertyType(),
             ':address_id' => $property->getAddressId(),
@@ -35,7 +35,7 @@ class PropertyService {
             ':immediate_availability' => $property->getImmediateAvailability(),
             ':user_id' => $property->getUserId()
         ]);
-        return $this->db->lastInsertId();
+        return $db->lastInsertId();
     }
     
     public function getPropertyById($id) {
@@ -43,7 +43,7 @@ class PropertyService {
         $db = new DatabaseModel();
 
         $sql = "SELECT * FROM property WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $db->db->prepare($sql);
         $stmt->execute([':id' => $id]);
         $property = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -64,7 +64,7 @@ class PropertyService {
         $db = new DatabaseModel();
 
         $sql = "SELECT * FROM property WHERE user_id = :user_id";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $db->db->prepare($sql);
         $stmt->execute([':user_id' => $userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -81,7 +81,7 @@ class PropertyService {
             $setClause = implode(", ", $setClause);
 
             $sql = "UPDATE property SET $setClause WHERE id = :id";
-            $stmt = $this->db->prepare($sql);
+            $stmt = $db->db->prepare($sql);
             $fields['id'] = $id;
             return $stmt->execute($fields);
         } catch (PDOException $e) {
@@ -95,7 +95,7 @@ class PropertyService {
         $db = new DatabaseModel();
 
         $sql = "DELETE FROM property WHERE id = :id";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $db->db->prepare($sql);
         return $stmt->execute([':id' => $id]);
     }
 
@@ -119,7 +119,7 @@ class PropertyService {
             $params[':habitaciones'] = $habitaciones;
         }
 
-        $stmt = $this->db->prepare($query);
+        $stmt = $db->db->prepare($query);
         $stmt->execute($params);
 
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);

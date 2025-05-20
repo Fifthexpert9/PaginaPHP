@@ -2,14 +2,16 @@
 
 namespace controllers;
 
+require_once __DIR__ . '/../services/AdvertService.php';
+
 use services\AdvertService;
 use models\AdvertModel;
 
 class AdvertController {
     private $advertService;
 
-    public function __construct(AdvertService $advertService) {
-        $this->advertService = $advertService;
+    public function __construct() {
+        $this->advertService = new AdvertService();
     }
 
     /**

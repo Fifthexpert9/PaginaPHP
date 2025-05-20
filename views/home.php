@@ -19,8 +19,7 @@ $propiedades = $propertyController->getFilteredProperties($tipo, $precioMax, $ha
 
 // Obtener anuncios destacados (opcional)
 require_once __DIR__ . '/../controllers/AdvertController.php';
-$advertService = new AdvertService($databaseModel);
-$advertController = new AdvertController($advertService);
+$advertController = new AdvertController();
 $anuncios = $advertController->getFeaturedAdverts();
 
 require_once __DIR__ . '/header.php';
