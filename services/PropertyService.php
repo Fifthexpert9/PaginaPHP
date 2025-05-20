@@ -25,9 +25,11 @@ class PropertyService {
      *
      * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
      */
+    /*
     public function __construct(DatabaseModel $databaseModel) {
         $this->db = $databaseModel->db;
     }
+    /*
 
     /**
      * Crea una nueva propiedad en la base de datos.

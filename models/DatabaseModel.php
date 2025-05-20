@@ -38,7 +38,7 @@ class DatabaseModel {
      * Constructor privado para evitar instanciación directa.
      * Establece la conexión a la base de datos.
      */
-    private function __construct() {
+    public function __construct() {
         try {
             $this->db = new PDO($this->dbConnectionString, $this->dbUser, $this->dbPassword);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
