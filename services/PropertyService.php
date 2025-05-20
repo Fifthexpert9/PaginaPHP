@@ -127,4 +127,80 @@ class PropertyService {
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([':id' => $id]);
     }
+
+    /**
+     * Busca propiedades según los filtros generales y específicos.
+     *
+     * @param array $filters Filtros de búsqueda (ej: [
+     *   'property_types' => ['Piso', 'Estudio'],
+     *   'price_max' => 800,
+     *   'apartment' => ['num_rooms' => 3],
+     *   'studio' => ['has_balcony' => 1]
+     * ])
+     * @return array Propiedades encontradas
+     */
+    public function searchProperties($filters = []) {
+        $sql = "SELECT p.*";
+        $joins = "";
+        $wheres = ["1=1"];
+        $params = [];
+
+        // JOINs y selección de columnas específicas según tipos de vivienda
+        $propertyTypes = $filters['property_types'] ?? [];
+        if (in_array('Piso', $propertyTypes)) {
+            $sql .= ", a.*";
+            $joins .= " LEFT JOIN property_apartment a ON p.id = a.property_id";
+        }
+        if (in_array('Estudio', $propertyTypes)) {
+            $sql .= ", s.*";
+            $joins .= " LEFT JOIN property_studio s ON p.id = s.property_id";
+        }
+        if (in_array('Casa', $propertyTypes)) {
+            $sql .= ", h.*";
+            $joins .= " LEFT JOIN property_house h ON p.id = h.property_id";
+        }
+        // Añade más tipos según tu modelo
+
+        $sql = "SELECT " . substr($sql, 9) . " FROM property p" . $joins;
+
+        // Filtros generales
+        if (!empty($propertyTypes)) {
+            $in = implode(',', array_fill(0, count($propertyTypes), '?'));
+            $wheres[] = "p.property_type IN ($in)";
+            $params = array_merge($params, $propertyTypes);
+        }
+        if (!empty($filters['price_max'])) {
+            $wheres[] = "p.price <= ?";
+            $params[] = $filters['price_max'];
+        }
+        if (!empty($filters['price_min'])) {
+            $wheres[] = "p.price >= ?";
+            $params[] = $filters['price_min'];
+        }
+        if (!empty($filters['user_id'])) {
+            $wheres[] = "p.user_id = ?";
+            $params[] = $filters['user_id'];
+        }
+
+        // Filtros específicos por tipo
+        if (!empty($filters['apartment']['num_rooms'])) {
+            $wheres[] = "a.num_rooms = ?";
+            $params[] = $filters['apartment']['num_rooms'];
+        }
+        if (!empty($filters['studio']['has_balcony'])) {
+            $wheres[] = "s.has_balcony = ?";
+            $params[] = $filters['studio']['has_balcony'];
+        }
+        if (!empty($filters['house']['garden_size'])) {
+            $wheres[] = "h.garden_size >= ?";
+            $params[] = $filters['house']['garden_size'];
+        }
+        // Añade más filtros específicos según tus necesidades
+
+        $sql .= " WHERE " . implode(' AND ', $wheres);
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }
