@@ -2,12 +2,13 @@
 
 require_once __DIR__ . '/../controllers/PropertyController.php';
 
-use controllers\PropertyController;
+//use controllers\PropertyController;
 use controllers\AdvertController;
 use services\AdvertService;
+use services\PropertyService;
 
 // Instancias
-$propertyController = new PropertyController();
+$propertyService = new PropertyService();
 
 // Obtener filtros desde GET
 $tipo = $_GET['tipo'] ?? '';
@@ -15,7 +16,7 @@ $precioMax = $_GET['precio_max'] ?? '';
 $habitaciones = $_GET['habitaciones'] ?? '';
 
 // Obtener propiedades filtradas usando el controller
-$propiedades = $propertyController->getFilteredProperties($tipo, $precioMax, $habitaciones);
+$propiedades = $propertyService->getFilteredProperties($tipo, $precioMax, $habitaciones);
 
 // Obtener anuncios destacados (opcional)
 require_once __DIR__ . '/../controllers/AdvertController.php';
