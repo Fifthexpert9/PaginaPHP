@@ -163,10 +163,8 @@ CREATE TABLE
         `user_id` int (11) NOT NULL, -- Usuario que publica el anuncio
         `price` decimal(10, 2) NOT NULL,
         `action` ENUM (
-            'Compra',
-            'Alquiler',
-            'Alquiler vacacional',
-            'Compartir piso'
+            'Venta',
+            'Alquiler'
         ) NOT NULL, -- Tipo de acción
         `description` text NOT NULL, -- Descripción del anuncio
         `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
