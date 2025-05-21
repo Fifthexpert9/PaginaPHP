@@ -192,6 +192,7 @@ class PropertyService {
             $params[] = $filters['immediate_availability'];
         }
 
+        /*
         // Filtros específicos por habitación
         if (isset($filters['room']['private_bathroom'])) {
             $wheres[] = "r.private_bathroom = ?";
@@ -337,6 +338,7 @@ class PropertyService {
             $wheres[] = "h.pets_allowed = ?";
             $params[] = $filters['house']['pets_allowed'];
         }
+        */
 
         $sql .= " WHERE " . implode(' AND ', $wheres);
 
