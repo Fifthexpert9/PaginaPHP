@@ -48,7 +48,7 @@ class ApartmentDto {
     public $elevator;
     public $air_conditioning;
     public $garage;
-    public $pool;
+    //public $pool;
     public $pets_allowed;
 
     /**
@@ -92,7 +92,7 @@ class ApartmentDto {
         $elevator,
         $air_conditioning,
         $garage,
-        $pool,
+        //$pool,
         $pets_allowed
     ) {
         $this->property_id = $property_id;
@@ -112,7 +112,7 @@ class ApartmentDto {
         $this->elevator = $elevator;
         $this->air_conditioning = $air_conditioning;
         $this->garage = $garage;
-        $this->pool = $pool;
+        //$this->pool = $pool;
         $this->pets_allowed = $pets_allowed;
     }
 
@@ -140,7 +140,7 @@ class ApartmentDto {
             'elevator' => $this->elevator,
             'air_conditioning' => $this->air_conditioning,
             'garage' => $this->garage,
-            'pool' => $this->pool,
+            //'pool' => $this->pool,
             'pets_allowed' => $this->pets_allowed
         ];
     }

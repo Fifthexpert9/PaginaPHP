@@ -38,12 +38,12 @@ class RoomDto {
 
     // Datos específicos de la habitación
     public $private_bathroom;
-    public $room_size;
+    //public $room_size;
     public $max_roommates;
-    public $includes_expenses;
+    //public $includes_expenses;
     public $pets_allowed;
     public $furnished;
-    public $common_areas;
+    //public $common_areas;
     public $students_only;
     public $gender_restriction;
 
@@ -78,12 +78,12 @@ class RoomDto {
         $user_id,
         $address, // AddressDto
         $private_bathroom,
-        $room_size,
+        //$room_size,
         $max_roommates,
-        $includes_expenses,
+        //$includes_expenses,
         $pets_allowed,
         $furnished,
-        $common_areas,
+        //$common_areas,
         $students_only,
         $gender_restriction
     ) {
@@ -96,12 +96,12 @@ class RoomDto {
         $this->user_id = $user_id;
         $this->address = $address;
         $this->private_bathroom = $private_bathroom;
-        $this->room_size = $room_size;
+        //$this->room_size = $room_size;
         $this->max_roommates = $max_roommates;
-        $this->includes_expenses = $includes_expenses;
+        //$this->includes_expenses = $includes_expenses;
         $this->pets_allowed = $pets_allowed;
         $this->furnished = $furnished;
-        $this->common_areas = $common_areas;
+        //$this->common_areas = $common_areas;
         $this->students_only = $students_only;
         $this->gender_restriction = $gender_restriction;
     }
@@ -122,12 +122,12 @@ class RoomDto {
             'user_id' => $this->user_id,
             'address' => $this->address ? $this->address->toArray() : null,
             'private_bathroom' => $this->private_bathroom,
-            'room_size' => $this->room_size,
+            //'room_size' => $this->room_size,
             'max_roommates' => $this->max_roommates,
-            'includes_expenses' => $this->includes_expenses,
+            //'includes_expenses' => $this->includes_expenses,
             'pets_allowed' => $this->pets_allowed,
             'furnished' => $this->furnished,
-            'common_areas' => $this->common_areas,
+            //'common_areas' => $this->common_areas,
             'students_only' => $this->students_only,
             'gender_restriction' => $this->gender_restriction
         ];

@@ -82,7 +82,7 @@ class ApartmentModel {
         $elevator,
         $air_conditioning,
         $garage,
-        $pool,
+        //$pool,
         $pets_allowed
     ) {
         $this->property_id = $property_id;
@@ -95,7 +95,7 @@ class ApartmentModel {
         $this->elevator = $elevator;
         $this->air_conditioning = $air_conditioning;
         $this->garage = $garage;
-        $this->pool = $pool;
+        //$this->pool = $pool;
         $this->pets_allowed = $pets_allowed;
     }
 
@@ -110,7 +110,7 @@ class ApartmentModel {
     public function hasElevator() { return $this->elevator; }
     public function hasAirConditioning() { return $this->air_conditioning; }
     public function hasGarage() { return $this->garage; }
-    public function hasPool() { return $this->pool; }
+    //public function hasPool() { return $this->pool; }
     public function arePetsAllowed() { return $this->pets_allowed; }
 
     // Setters
@@ -124,6 +124,6 @@ class ApartmentModel {
     public function setElevator($elevator) { $this->elevator = $elevator; }
     public function setAirConditioning($air_conditioning) { $this->air_conditioning = $air_conditioning; }
     public function setGarage($garage) { $this->garage = $garage; }
-    public function setPool($pool) { $this->pool = $pool; }
+    //public function setPool($pool) { $this->pool = $pool; }
     public function setPetsAllowed($pets_allowed) { $this->pets_allowed = $pets_allowed; }
 }

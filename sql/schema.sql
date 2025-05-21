@@ -71,12 +71,12 @@ CREATE TABLE
     `property_room` (
         `property_id` int (11) NOT NULL,
         `private_bathroom` BOOLEAN DEFAULT NULL, -- ¿Baño privado? (Sí/No)
-        `room_size` int (11) DEFAULT NULL, -- Tamaño de la habitación (m²)
+        -- `room_size` int (11) DEFAULT NULL, -- Tamaño de la habitación (m²)
         `max_roommates` int (11) DEFAULT NULL, -- Número máximo de compañeros de piso
-        `includes_expenses` BOOLEAN DEFAULT NULL, -- ¿Incluye gastos en el precio? (Sí/No)
+        -- `includes_expenses` BOOLEAN DEFAULT NULL, -- ¿Incluye gastos en el precio? (Sí/No)
         `pets_allowed` BOOLEAN DEFAULT NULL, -- ¿Se permiten mascotas? (Sí/No)
         `furnished` BOOLEAN DEFAULT NULL, -- ¿Está amueblada? (Sí/No)
-        `common_areas` BOOLEAN DEFAULT NULL, -- ¿Uso de zonas comunes? (Sí/No)
+        -- `common_areas` BOOLEAN DEFAULT NULL, -- ¿Uso de zonas comunes? (Sí/No)
         `students_only` BOOLEAN DEFAULT NULL, -- ¿Estudiantes únicamente? (Sí/No)
         `gender_restriction` ENUM ('None', 'Only males', 'Only females') DEFAULT 'None', -- ¿Solo chicas/chicos?
         PRIMARY KEY (`property_id`),
@@ -106,7 +106,7 @@ CREATE TABLE
         `elevator` BOOLEAN DEFAULT NULL, -- ¿Ascensor? (Sí/No)
         `air_conditioning` BOOLEAN DEFAULT NULL, -- ¿Aire acondicionado? (Sí/No)
         `garage` BOOLEAN DEFAULT NULL, -- ¿Garaje? (Sí/No)
-        `pool` BOOLEAN DEFAULT NULL, -- ¿Piscina comunitaria? (Sí/No)
+        -- `pool` BOOLEAN DEFAULT NULL, -- ¿Piscina comunitaria? (Sí/No)
         `pets_allowed` BOOLEAN DEFAULT NULL, -- ¿Se permiten mascotas? (Sí/No)
         PRIMARY KEY (`property_id`),
         FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE

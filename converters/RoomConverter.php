@@ -34,12 +34,12 @@ class RoomConverter {
             $property->getUserId(),
             $ac->modelToDto($as->getAddressById($property->getAddressId())),
             $room->getPrivateBathroom(),
-            $room->getRoomSize(),
+            //$room->getRoomSize(),
             $room->getMaxRoommates(),
-            $room->getIncludesExpenses(),
+            //$room->getIncludesExpenses(),
             $room->getPetsAllowed(),
             $room->getFurnished(),
-            $room->getCommonAreas(),
+            //$room->getCommonAreas(),
             $room->getStudentsOnly(),
             $room->getGenderRestriction()
         );
@@ -74,12 +74,12 @@ class RoomConverter {
         return new RoomModel(
             $dto->property_id,
             $dto->private_bathroom,
-            $dto->room_size,
+            //$dto->room_size,
             $dto->max_roommates,
-            $dto->includes_expenses,
+            //$dto->includes_expenses,
             $dto->pets_allowed,
             $dto->furnished,
-            $dto->common_areas,
+            //$dto->common_areas,
             $dto->students_only,
             $dto->gender_restriction
         );
