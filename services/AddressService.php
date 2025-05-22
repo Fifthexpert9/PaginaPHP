@@ -74,13 +74,26 @@ class AddressService {
     }
 
     /**
+     * Obtiene la dirección asociada a una propiedad.
+     *
+     * @param \models\PropertyModel $propertyModel Modelo de la propiedad.
+     * @return AddressModel|null Modelo de la dirección o null si no existe.
+     */
+    public function getAddressByPropertyId($propertyModel) {
+        if (!$propertyModel || !method_exists($propertyModel, 'getAddressId')) {
+            return null;
+        }
+        $addressId = $propertyModel->getAddressId();
+        return $this->getAddressById($addressId);
+    }
+
+    /**
      * Actualiza los campos de una dirección existente.
      *
      * @param int $id ID de la dirección a actualizar.
      * @param array $fields Campos a actualizar (clave => valor).
      * @return bool True si la actualización fue exitosa, false en caso contrario.
      */
-    /*
     public function updateAddress($id, $fields) {
         try {
             $setClause = [];
@@ -98,7 +111,6 @@ class AddressService {
             return false;
         }
     }
-    */
 
     /**
      * Elimina una dirección por su ID.

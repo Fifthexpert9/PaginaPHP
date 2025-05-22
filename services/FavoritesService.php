@@ -3,8 +3,8 @@
 namespace services;
 
 use models\DatabaseModel;
+use models\FavoritesModel;
 use PDO;
-use PDOException;
 
 /**
  * Servicio para gestionar operaciones relacionadas con favoritos (relación usuario-anuncio) en la base de datos.
@@ -44,26 +44,44 @@ class FavoritesService {
      * Obtiene un favorito por su ID.
      *
      * @param int $id ID del favorito.
-     * @return array|null Datos del favorito o null si no existe.
+     * @return FavoritesModel|null Modelo del favorito o null si no existe.
      */
     public function getFavoriteById($id) {
         $sql = "SELECT * FROM favorites WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            return new FavoritesModel(
+                $row['id'],
+                $row['user_id'],
+                $row['advert_id'],
+                isset($row['created_at']) ? $row['created_at'] : null
+            );
+        }
+        return null;
     }
 
     /**
      * Obtiene todos los favoritos de un usuario.
      *
      * @param int $userId ID del usuario.
-     * @return array Array de favoritos del usuario.
+     * @return FavoritesModel[] Array de modelos de favoritos del usuario.
      */
     public function getFavoritesByUserId($userId) {
         $sql = "SELECT * FROM favorites WHERE user_id = :user_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':user_id' => $userId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return array_map(function($row) {
+            return new FavoritesModel(
+                $row['id'],
+                $row['user_id'],
+                $row['advert_id'],
+                isset($row['created_at']) ? $row['created_at'] : null
+            );
+        }, $rows);
     }
 
     /**

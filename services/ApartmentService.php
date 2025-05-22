@@ -46,7 +46,7 @@ class ApartmentService {
             ':elevator' => $apartment->hasElevator(),
             ':air_conditioning' => $apartment->hasAirConditioning(),
             ':garage' => $apartment->hasGarage(),
-            ':pool' => $apartment->hasPool(),
+            //':pool' => $apartment->hasPool(),
             ':pets_allowed' => $apartment->arePetsAllowed()
         ]);
     }
@@ -74,7 +74,7 @@ class ApartmentService {
                 $row['elevator'],
                 $row['air_conditioning'],
                 $row['garage'],
-                $row['pool'],
+                //$row['pool'],
                 $row['pets_allowed']
             );
         }

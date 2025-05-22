@@ -102,7 +102,8 @@ class MessageService {
      * @param array $fields Campos a actualizar (clave => valor).
      * @return bool True si la actualización fue exitosa, false en caso contrario.
      */
-    public function updateMessage($id, $fields) {
+    /*
+     public function updateMessage($id, $fields) {
         try {
             $setClause = [];
             foreach ($fields as $key => $value) {
@@ -119,6 +120,7 @@ class MessageService {
             return false;
         }
     }
+    */
 
     /**
      * Elimina un mensaje por su ID.

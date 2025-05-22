@@ -38,12 +38,12 @@ class RoomService {
         return $stmt->execute([
             ':property_id' => $room->getPropertyId(),
             ':private_bathroom' => $room->getPrivateBathroom(),
-            ':room_size' => $room->getRoomSize(),
+            //':room_size' => $room->getRoomSize(),
             ':max_roommates' => $room->getMaxRoommates(),
-            ':includes_expenses' => $room->getIncludesExpenses(),
+            //':includes_expenses' => $room->getIncludesExpenses(),
             ':pets_allowed' => $room->getPetsAllowed(),
             ':furnished' => $room->getFurnished(),
-            ':common_areas' => $room->getCommonAreas(),
+            //':common_areas' => $room->getCommonAreas(),
             ':students_only' => $room->getStudentsOnly(),
             ':gender_restriction' => $room->getGenderRestriction()
         ]);
@@ -64,12 +64,12 @@ class RoomService {
             return new RoomModel(
                 $row['property_id'],
                 $row['private_bathroom'],
-                $row['room_size'],
+                //$row['room_size'],
                 $row['max_roommates'],
-                $row['includes_expenses'],
+                //$row['includes_expenses'],
                 $row['pets_allowed'],
                 $row['furnished'],
-                $row['common_areas'],
+                //$row['common_areas'],
                 $row['students_only'],
                 $row['gender_restriction']
             );

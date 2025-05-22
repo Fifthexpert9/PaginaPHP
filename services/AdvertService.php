@@ -96,6 +96,80 @@ class AdvertService {
     }
 
     /**
+     * Obtiene un anuncio a partir del ID de la propiedad asociada.
+     *
+     * @param int $propertyId ID de la propiedad.
+     * @return AdvertModel|null El anuncio encontrado o null si no existe.
+     */
+    public function getAdvertByPropertyId($propertyId) {
+        $sql = "SELECT * FROM advert WHERE property_id = :property_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':property_id' => $propertyId]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            return new AdvertModel(
+                $row['id'],
+                $row['property_id'],
+                $row['user_id'],
+                $row['price'],
+                $row['action'],
+                $row['description'],
+                $row['created_at']
+            );
+        }
+        return null;
+    }
+
+    
+    /**
+     * Obtiene todos los anuncios asociados a una propiedad.
+     *
+     * @param int $propertyId ID de la propiedad.
+     * @return AdvertModel[] Array de modelos de anuncios asociados a la propiedad.
+     */
+    public function getAdvertsByPropertyId($propertyId) {
+        $sql = "SELECT * FROM advert WHERE property_id = :property_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':property_id' => $propertyId]);
+        $adverts = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $adverts[] = new AdvertModel(
+                $row['id'],
+                $row['property_id'],
+                $row['user_id'],
+                $row['price'],
+                $row['action'],
+                $row['description'],
+                $row['created_at']
+            );
+        }
+        return $adverts;
+    }
+
+    /**
+     * Obtiene todos los anuncios de la base de datos.
+     *
+     * @return AdvertModel[] Array de modelos de anuncios.
+     */
+    public function getAllAdverts() {
+        $sql = "SELECT * FROM advert";
+        $stmt = $this->db->query($sql);
+        $adverts = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $adverts[] = new AdvertModel(
+                $row['id'],
+                $row['property_id'],
+                $row['user_id'],
+                $row['price'],
+                $row['action'],
+                $row['description'],
+                $row['created_at']
+            );
+        }
+        return $adverts;
+    }
+
+    /**
      * Actualiza los campos de un anuncio existente.
      *
      * @param int $id ID del anuncio a actualizar.

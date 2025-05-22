@@ -63,7 +63,7 @@ class UserService {
             $username = $this->createUsername($user->getName(), $user->getLastName());
             $user->setUsername($username);
 
-            $sql = "INSERT INTO `user` (`name`, `last_name`, `username`, `email`, `password`, `registration_date`) 
+            $sql = "INSERT INTO `user` (`name`, `last_name`, `username`, `email`, `password`, `role`, `registration_date`) 
                     VALUES (:name, :last_name, :username, :email, :password, :registration_date)";
             $stmt = $this->db->prepare($sql);
 
@@ -73,6 +73,7 @@ class UserService {
                 ':username' => $user->getUsername(),
                 ':email' => $user->getEmail(),
                 ':password' => $user->getPassword(),
+                ':role' => $user->getRole(),
                 ':registration_date' => $user->getRegistrationDate()
             ];
 
@@ -104,6 +105,7 @@ class UserService {
                     $row['username'],
                     $row['email'],
                     $row['password'],
+                    $row['role'],
                     $row['registration_date']
                 );
             }
@@ -136,6 +138,7 @@ class UserService {
                     $row['username'],
                     $row['email'],
                     $row['password'],
+                    $row['role'],
                     $row['registration_date']
                 );
             }
@@ -168,6 +171,7 @@ class UserService {
                     $row['username'],
                     $row['email'],
                     $row['password'],
+                    $row['role'],
                     $row['registration_date']
                 );
             }
@@ -200,6 +204,7 @@ class UserService {
                     $row['username'],
                     $row['email'],
                     $row['password'],
+                    $row['role'],
                     $row['registration_date']
                 );
             }
@@ -287,6 +292,7 @@ class UserService {
                 $row['username'],
                 $row['email'],
                 $row['password'],
+                $row['role'],
                 $row['registration_date']
             );
         }

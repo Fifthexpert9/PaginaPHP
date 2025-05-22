@@ -3,7 +3,6 @@
 namespace services;
 
 use models\PropertyModel;
-use models\AddressModel;
 use models\DatabaseModel;
 use PDO;
 use PDOException;
@@ -60,7 +59,7 @@ class PropertyService {
      * Obtiene una propiedad por su ID.
      *
      * @param int $id ID de la propiedad.
-     * @return array|null Datos de la propiedad o null si no existe.
+     * @return PropertyModel|null Modelo de la propiedad o null si no existe.
      */
     public function getPropertyById($id) {
         $sql = "SELECT * FROM property WHERE id = :id";
@@ -69,20 +68,42 @@ class PropertyService {
         $property = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$property) return null;
-        return $property;
+        return new PropertyModel(
+            $property['id'],
+            $property['property_type'],
+            $property['address_id'],
+            $property['built_size'],
+            $property['price'],
+            $property['status'],
+            $property['immediate_availability'],
+            $property['user_id']
+        );
     }
 
     /**
      * Obtiene todas las propiedades de un usuario.
      *
      * @param int $userId ID del usuario.
-     * @return array Array de propiedades del usuario.
+     * @return PropertyModel[] Array de modelos de propiedades del usuario.
      */
     public function getPropertiesByUserId($userId) {
         $sql = "SELECT * FROM property WHERE user_id = :user_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':user_id' => $userId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return array_map(function($property) {
+            return new PropertyModel(
+                $property['id'],
+                $property['property_type'],
+                $property['address_id'],
+                $property['built_size'],
+                $property['price'],
+                $property['status'],
+                $property['immediate_availability'],
+                $property['user_id']
+            );
+        }, $rows);
     }
 
     /**
@@ -127,17 +148,8 @@ class PropertyService {
      * Solo devuelve las propiedades (no los datos específicos de tablas hijas).
      * El resultado se ordena por tipo de propiedad.
      *
-     * Ejemplo de filtros:
-     * [
-     *   'property_types' => ['Piso', 'Casa'],
-     *   'built_size_min' => 50,
-     *   'price_max' => 1000,
-     *   'apartment' => ['num_rooms' => 3, 'furnished' => 1],
-     *   'house' => ['house_type' => ['Adosado', 'Chalet']]
-     * ]
-     *
      * @param array $filters Filtros generales y específicos.
-     * @return array Propiedades que cumplen los filtros, ordenadas por tipo (orden: casa, estudio, habitación, piso).
+     * @return PropertyModel[] Propiedades que cumplen los filtros, ordenadas por tipo.
      */
     public function searchProperties($filters = []) {
         $sql = "SELECT DISTINCT p.*";
@@ -238,12 +250,12 @@ class PropertyService {
         }
 
         // Filtros específicos por piso
-        if (!empty($filters['apartment']['apartment_type']) && is_array($filters['apartment']['apartment_type'])) { // si son varios valores
+        if (!empty($filters['apartment']['apartment_type']) && is_array($filters['apartment']['apartment_type'])) {
             $apartmentTypes = $filters['apartment']['apartment_type'];
             $in = implode(',', array_fill(0, count($apartmentTypes), '?'));
             $wheres[] = "a.apartment_type IN ($in)";
             $params = array_merge($params, $apartmentTypes);
-        } elseif (!empty($filters['apartment']['apartment_type'])) { // si es un solo valor
+        } elseif (!empty($filters['apartment']['apartment_type'])) {
             $wheres[] = "a.apartment_type = ?";
             $params[] = $filters['apartment']['apartment_type'];
         }
@@ -285,12 +297,12 @@ class PropertyService {
         }
 
         // Filtros específicos por casa
-        if (!empty($filters['house']['house_type']) && is_array($filters['house']['house_type'])) { // si son varios valores
+        if (!empty($filters['house']['house_type']) && is_array($filters['house']['house_type'])) {
             $houseTypes = $filters['house']['house_type'];
             $in = implode(',', array_fill(0, count($houseTypes), '?'));
             $wheres[] = "h.house_type IN ($in)";
             $params = array_merge($params, $houseTypes);
-        } elseif (!empty($filters['house']['house_type'])) { // si es un solo valor
+        } elseif (!empty($filters['house']['house_type'])) {
             $wheres[] = "h.house_type = ?";
             $params[] = $filters['house']['house_type'];
         }
@@ -350,6 +362,18 @@ class PropertyService {
             return strcmp($a['property_type'], $b['property_type']);
         });
 
-        return $result;
+        // Convertir cada resultado en un PropertyModel
+        return array_map(function($property) {
+            return new PropertyModel(
+                $property['id'],
+                $property['property_type'],
+                $property['address_id'],
+                $property['built_size'],
+                $property['price'],
+                $property['status'],
+                $property['immediate_availability'],
+                $property['user_id']
+            );
+        }, $result);
     }
 }

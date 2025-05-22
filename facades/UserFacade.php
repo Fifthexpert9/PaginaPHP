@@ -5,13 +5,14 @@ namespace facades;
 use services\UserService;
 use converters\UserConverter;
 use dtos\UserDto;
-use models\UserModel;
 
-class UserFacade {
+class UserFacade
+{
     private $userService;
     private $userConverter;
 
-    public function __construct(UserService $userService, UserConverter $userConverter) {
+    public function __construct(UserService $userService, UserConverter $userConverter)
+    {
         $this->userService = $userService;
         $this->userConverter = $userConverter;
     }
@@ -23,7 +24,8 @@ class UserFacade {
      * @param string $plainPassword Contraseña en texto plano introducida por el usuario.
      * @return array Resultado del registro (success, message).
      */
-    public function register(UserDto $userDto, string $plainPassword) {
+    public function register(UserDto $userDto, string $plainPassword)
+    {
         if (empty($userDto->name) || empty($userDto->last_name) || empty($userDto->email) || empty($userDto->password)) {
             return ['success' => false, 'message' => 'Todos los campos son obligatorios.'];
         }
@@ -47,7 +49,8 @@ class UserFacade {
      * @param int $id ID del usuario.
      * @return UserDto|null DTO del usuario o null si no existe.
      */
-    public function getUserById($id) {
+    public function getUserById($id)
+    {
         $userModel = $this->userService->getUserById($id);
         if (!$userModel) return null;
         return $this->userConverter->modelToDto($userModel);
@@ -60,7 +63,8 @@ class UserFacade {
      * @param string $password Contraseña en texto plano.
      * @return array Resultado del login (success, message, user).
      */
-    public function login($email, $password) {
+    public function login($email, $password)
+    {
         if (empty($email) || empty($password)) {
             return ['success' => false, 'message' => 'El correo y la contraseña son obligatorios.'];
         }
@@ -79,14 +83,30 @@ class UserFacade {
     }
 
     /**
+     * Indica si el usuario con el ID dado es un usuario regular (no administrador).
+     *
+     * @param int $id ID del usuario a comprobar.
+     * @return bool|null Devuelve true si es usuario regular, false si es admin, o null si no existe el usuario.
+     */
+    public function isRegularUser($id)
+    {
+        $userModel = $this->userService->getUserById($id);
+        if (!$userModel) return null;
+        if ($userModel->getRole() === 'admin') {
+            return false;
+        } else return true;
+    }
+
+    /**
      * Actualiza los datos de un usuario.
      *
      * @param int $id ID del usuario a actualizar.
      * @param array $fields Campos a actualizar (clave => valor).
      * @return array Resultado de la actualización (success, message).
      */
-    public function updateUser($id, $fields) {
-        if(empty($fields)) {
+    public function updateUser($id, $fields)
+    {
+        if (empty($fields)) {
             return ['success' => false, 'message' => 'No se han proporcionado campos para actualizar.'];
         }
         if ($this->userService->updateUser($id, $fields)) {
@@ -102,7 +122,8 @@ class UserFacade {
      * @param int $id ID del usuario a eliminar.
      * @return array Resultado de la eliminación (success, message).
      */
-    public function deleteUser($id) {
+    public function deleteUser($id)
+    {
         if ($this->userService->deleteUser($id)) {
             return ['success' => true, 'message' => 'Usuario eliminado correctamente.'];
         } else {
