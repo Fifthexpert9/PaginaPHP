@@ -45,31 +45,6 @@ class ImageService
     }
 
     /**
-     * Obtiene todas las imágenes asociadas a una propiedad.
-     *
-     * @param int $propertyId ID de la propiedad.
-     * @return ImageModel[] Array de objetos ImageModel.
-     */
-    public function getImagesByProperty($propertyId)
-    {
-        $stmt = $this->db->prepare("SELECT * FROM property_image WHERE property_id = ?");
-        $stmt->execute([$propertyId]);
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $images = [];
-        foreach ($rows as $row) {
-            $images[] = new ImageModel(
-                $row['id'],
-                $row['property_id'],
-                $row['image_path'],
-                $row['is_main'],
-                $row['uploaded_at']
-            );
-        }
-        return $images;
-    }
-
-    /**
      * Obtiene una imagen por su ID.
      *
      * @param int $id ID de la imagen.
@@ -91,6 +66,59 @@ class ImageService
             );
         }
         return null;
+    }
+
+    /**
+     * Obtiene la imagen principal de una propiedad.
+     *
+     * Realiza una consulta a la base de datos para buscar la imagen marcada como principal (is_main = 1)
+     * asociada a la propiedad indicada por su ID. Si existe, devuelve una instancia de ImageModel con los datos
+     * de la imagen principal. Si no existe ninguna imagen principal, devuelve null.
+     *
+     * @param int $propertyId ID de la propiedad.
+     * @return ImageModel|null Instancia de ImageModel si existe imagen principal, null si no existe.
+     */
+    public function getMainImageByPropertyId($propertyId)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM property_image WHERE property_id = ? AND is_main = 1");
+        $stmt->execute([$propertyId]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row) {
+            return new ImageModel(
+                $row['id'],
+                $row['property_id'],
+                $row['image_path'],
+                $row['is_main'],
+                $row['uploaded_at']
+            );
+        }
+        return null;
+    }
+
+    /**
+     * Obtiene todas las imágenes asociadas a una propiedad.
+     *
+     * @param int $propertyId ID de la propiedad.
+     * @return ImageModel[] Array de objetos ImageModel.
+     */
+    public function getImagesByPropertyId($propertyId)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM property_image WHERE property_id = ?");
+        $stmt->execute([$propertyId]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $images = [];
+        foreach ($rows as $row) {
+            $images[] = new ImageModel(
+                $row['id'],
+                $row['property_id'],
+                $row['image_path'],
+                $row['is_main'],
+                $row['uploaded_at']
+            );
+        }
+        return $images;
     }
 
     /**

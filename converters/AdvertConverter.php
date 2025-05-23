@@ -4,6 +4,7 @@ namespace converters;
 
 use models\AdvertModel;
 use dtos\AdvertDto;
+use dtos\ImageDto;
 
 /**
  * Clase encargada de convertir entre AdvertModel y AdvertDto
@@ -11,12 +12,13 @@ use dtos\AdvertDto;
  */
 class AdvertConverter {
     /**
-     * Convierte un AdvertModel en AdvertDto.
+     * Convierte un AdvertModel y opcionalmente una imagen principal (ImageDto) en un AdvertDto.
      *
      * @param AdvertModel $model Modelo de dominio con los datos del anuncio.
+     * @param ImageDto|null $mainImage Imagen principal asociada al anuncio (puede ser null).
      * @return AdvertDto DTO resultante con la información del anuncio.
      */
-    public static function modelToDto(AdvertModel $model): AdvertDto {        
+    public static function modelToDto(AdvertModel $model): AdvertDto {
         return new AdvertDto(
             $model->getId(),
             $model->getPropertyId(),
@@ -24,12 +26,16 @@ class AdvertConverter {
             $model->getPrice(),
             $model->getAction(),
             $model->getDescription(),
-            $model->getCreatedAt()
+            $model->getCreatedAt(),
+            $mainImage = null
         );
     }
 
     /**
-     * Convierte un AdvertDto en AdvertModel.
+     * Convierte un AdvertDto en un AdvertModel.
+     *
+     * Nota: La imagen principal (main_image) no se utiliza para crear el modelo de dominio,
+     * ya que sólo es relevante para la capa de presentación.
      *
      * @param AdvertDto $dto DTO con los datos del anuncio.
      * @return AdvertModel Modelo de dominio con los datos del anuncio.

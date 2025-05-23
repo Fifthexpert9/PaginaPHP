@@ -5,6 +5,10 @@ namespace dtos;
 /**
  * DTO para exponer información de una habitación junto con los datos de la propiedad y la dirección.
  *
+ * Este DTO agrupa toda la información relevante de una habitación ofertada, incluyendo los datos generales de la propiedad,
+ * la dirección (AddressDto) y los datos específicos de la habitación.
+ * Se utiliza para transferir datos entre la capa de dominio y la capa de presentación o API.
+ *
  * @property int $property_id ID de la propiedad.
  * @property string $property_type Tipo de propiedad.
  * @property int $built_size Superficie construida (m²).

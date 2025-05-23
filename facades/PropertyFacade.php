@@ -7,11 +7,15 @@ use services\RoomService;
 use services\StudioService;
 use services\ApartmentService;
 use services\HouseService;
+use services\AddressService;
+use services\ImageService;
 use converters\PropertyConverter;
 use converters\RoomConverter;
 use converters\StudioConverter;
 use converters\ApartmentConverter;
 use converters\HouseConverter;
+use converters\AddressConverter;
+use converters\ImageConverter;
 use dtos\PropertyDto;
 
 /**
@@ -25,11 +29,15 @@ class PropertyFacade
     private $studioService;
     private $apartmentService;
     private $houseService;
+    private $addressService;
+    private $imageService;
     private $propertyConverter;
     private $roomConverter;
     private $studioConverter;
     private $apartmentConverter;
     private $houseConverter;
+    private $addressConverter;
+    private $imageConverter;
 
     /**
      * Constructor de PropertyFacade.
@@ -53,33 +61,54 @@ class PropertyFacade
         StudioService $studioService,
         ApartmentService $apartmentService,
         HouseService $houseService,
+        AddressService $addressService,
+        ImageService $imageService,
         PropertyConverter $propertyConverter,
         RoomConverter $roomConverter,
         StudioConverter $studioConverter,
         ApartmentConverter $apartmentConverter,
         HouseConverter $houseConverter,
+        AddressConverter $addressConverter,
+        ImageConverter $imageConverter
     ) {
         $this->propertyService = $propertyService;
         $this->roomService = $roomService;
         $this->studioService = $studioService;
         $this->apartmentService = $apartmentService;
         $this->houseService = $houseService;
+        $this->addressService = $addressService;
+        $this->imageService = $imageService;
         $this->propertyConverter = $propertyConverter;
         $this->roomConverter = $roomConverter;
         $this->studioConverter = $studioConverter;
         $this->apartmentConverter = $apartmentConverter;
         $this->houseConverter = $houseConverter;
+        $this->addressConverter = $addressConverter;
+        $this->imageConverter = $imageConverter;
     }
 
     /**
      * Crea una nueva propiedad.
      *
      * @param mixed $propertyDto DTO con los datos de la propiedad (RoomDto, StudioDto, ApartmentDto o HouseDto).
+     * @param array $imagesDtos Array de ImageDto con las imágenes asociadas.
      * @return int|string Devuelve el ID de la propiedad creada si tiene éxito, o un mensaje de error si falla.
      */
-    public function createProperty($propertyDto)
+    public function createProperty($propertyDto, $imagesDtos = [])
     {
         try {
+            if (isset($propertyDto->address)) {
+                $addressModel = $this->addressConverter->dtoToModel($propertyDto->address);
+                $addressId = $this->addressService->createAddress($addressModel);
+                if (is_numeric($addressId) && $addressId > 0) {
+                    $propertyDto->address->id = $addressId;
+                } else {
+                    return "Ha ocurrido un error al crear la dirección.";
+                }
+            } else {
+                return "La dirección es obligatoria para crear la propiedad.";
+            }
+
             if ($propertyDto instanceof \dtos\RoomDto) {
                 $propertyModel = $this->roomConverter->dtoToPropertyModel($propertyDto);
             } elseif ($propertyDto instanceof \dtos\StudioDto) {
@@ -91,13 +120,34 @@ class PropertyFacade
             } else {
                 return "Ha ocurrido un error al crear la propiedad.";
             }
+            $propertyModel->setAddressId($addressId);
 
-            $result = $this->propertyService->createProperty($propertyModel);
-            if (is_numeric($result) && $result > 0) {
-                return $result;
-            } else {
+            $propertyId = $this->propertyService->createProperty($propertyModel);
+            if (!is_numeric($propertyId) || $propertyId <= 0) {
                 return "Ha ocurrido un error al crear la propiedad.";
             }
+            $propertyDto->property_id = $propertyId;
+
+            if ($propertyDto instanceof \dtos\RoomDto) {
+                $roomModel = $this->roomConverter->dtoToRoomModel($propertyDto);
+                $this->roomService->createRoom($roomModel);
+            } elseif ($propertyDto instanceof \dtos\StudioDto) {
+                $studioModel = $this->studioConverter->dtoToStudioModel($propertyDto);
+                $this->studioService->createStudio($studioModel);
+            } elseif ($propertyDto instanceof \dtos\ApartmentDto) {
+                $apartmentModel = $this->apartmentConverter->dtoToApartmentModel($propertyDto);
+                $this->apartmentService->createApartment($apartmentModel);
+            } elseif ($propertyDto instanceof \dtos\HouseDto) {
+                $houseModel = $this->houseConverter->dtoToHouseModel($propertyDto);
+                $this->houseService->createHouse($houseModel);
+            }
+
+            foreach ($imagesDtos as $imageDto) {
+                $imageModel = $this->imageConverter->dtoToModel($imageDto, $propertyId);
+                $this->imageService->addImage($imageModel);
+            }
+
+            return $propertyId;
         } catch (\Throwable $e) {
             return "Ha ocurrido un error al crear la propiedad.";
         }

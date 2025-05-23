@@ -52,4 +52,13 @@ class ImageDto
         $this->isMain = $isMain;
         $this->uploadedAt = $uploadedAt;
     }
+
+    /**
+     * Devuelve la imagen como un array asociativo.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray() {
+        return get_object_vars($this);
+    }
 }

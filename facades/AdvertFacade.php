@@ -5,7 +5,9 @@ namespace facades;
 use services\AdvertService;
 use services\PropertyService;
 use services\AddressService;
+use services\ImageService;
 use converters\AdvertConverter;
+use converters\ImageConverter;
 use dtos\AdvertDto;
 use facades\PropertyFacade;
 
@@ -16,9 +18,11 @@ use facades\PropertyFacade;
 class AdvertFacade
 {
     private $advertService;
-    private $advertConverter;
     private $propertyService;
     private $addressService;
+    private $imageService;
+    private $advertConverter;
+    private $imageConverter;
     private $propertyFacade;
 
     /**
@@ -27,12 +31,14 @@ class AdvertFacade
      * @param AdvertService $advertService Servicio de anuncios.
      * @param AdvertConverter $advertConverter Conversor de anuncios.
      */
-    public function __construct(AdvertService $advertService, AdvertConverter $advertConverter, PropertyService $propertyService, AddressService $addressService, PropertyFacade $propertyFacade)
+    public function __construct(AdvertService $advertService, PropertyService $propertyService, AddressService $addressService, ImageService $imageService, AdvertConverter $advertConverter, ImageConverter $imageConverter, PropertyFacade $propertyFacade)
     {
         $this->advertService = $advertService;
-        $this->advertConverter = $advertConverter;
         $this->propertyService = $propertyService;
         $this->addressService = $addressService;
+        $this->imageService = $imageService;
+        $this->advertConverter = $advertConverter;
+        $this->imageConverter = $imageConverter;
         $this->propertyFacade = $propertyFacade;
     }
 
@@ -232,10 +238,18 @@ class AdvertFacade
 
         foreach ($advertModels as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
+            if (!$propertyModel) continue;
             $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
+            $advertDto = $this->advertConverter->modelToDto($advertModel);
+
+            $mainImageModel = $this->imageService->getMainImageByPropertyId($propertyModel->getId());
+            if ($mainImageModel) {
+                $advertDto->main_image = $this->imageConverter->modelToDto($mainImageModel);
+            }
+
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-                'advert' => $this->advertConverter->modelToDto($advertModel)
+                'advert' => $advertDto
             ];
         }
 

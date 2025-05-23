@@ -5,6 +5,10 @@ namespace dtos;
 /**
  * DTO para exponer información de un apartamento junto con los datos de la propiedad y la dirección.
  *
+ * Este DTO agrupa toda la información relevante de un apartamento ofertado, incluyendo los datos generales de la propiedad,
+ * la dirección (AddressDto) y los datos específicos del apartamento.
+ * Se utiliza para transferir datos entre la capa de dominio y la capa de presentación o API.
+ *
  * @property int $property_id ID de la propiedad.
  * @property string $property_type Tipo de propiedad.
  * @property int $built_size Superficie construida (m²).
@@ -130,7 +134,7 @@ class ApartmentDto {
             'status' => $this->status,
             'immediate_availability' => $this->immediate_availability,
             'user_id' => $this->user_id,
-            'address' => $this->address ? $this->address->toArray() : null,
+            'address' => $this->address ? (method_exists($this->address, 'toArray') ? $this->address->toArray() : (array)$this->address) : null,
             'apartment_type' => $this->apartment_type,
             'num_rooms' => $this->num_rooms,
             'num_bathrooms' => $this->num_bathrooms,

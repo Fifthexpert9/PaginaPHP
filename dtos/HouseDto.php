@@ -3,7 +3,11 @@
 namespace dtos;
 
 /**
- * DTO para exponer información de una casa junto con los datos de la propiedad y la dirección.
+ * DTO para exponer información de una casa junto con los datos de la propiedad, la dirección y las imágenes.
+ *
+ * Este DTO agrupa toda la información relevante de una casa ofertada, incluyendo los datos generales de la propiedad,
+ * la dirección (AddressDto), los datos específicos de la casa y un array de imágenes (ImageDto).
+ * Se utiliza para transferir datos entre la capa de dominio y la capa de presentación o API.
  *
  * @property int $property_id ID de la propiedad.
  * @property string $property_type Tipo de propiedad.
@@ -135,7 +139,7 @@ class HouseDto {
             'status' => $this->status,
             'immediate_availability' => $this->immediate_availability,
             'user_id' => $this->user_id,
-            'address' => $this->address ? $this->address->toArray() : null,
+            'address' => $this->address ? (method_exists($this->address, 'toArray') ? $this->address->toArray() : (array)$this->address) : null,
             'house_type' => $this->house_type,
             'garden_size' => $this->garden_size,
             'num_floors' => $this->num_floors,
