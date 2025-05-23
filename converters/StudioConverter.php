@@ -28,7 +28,7 @@ class StudioConverter {
             $property->getId(),
             $property->getPropertyType(),
             $property->getBuiltSize(),
-            $property->getPrice(),
+            //$property->getPrice(),
             $property->getStatus(),
             $property->getImmediateAvailability(),
             $property->getUserId(),
@@ -46,13 +46,13 @@ class StudioConverter {
      * @param StudioDto $dto DTO con los datos del estudio y la propiedad.
      * @return PropertyModel Modelo de dominio con los datos generales de la propiedad.
      */
-    public static function studioDtoToPropertyModel(StudioDto $dto): PropertyModel {
+    public static function dtoToPropertyModel(StudioDto $dto): PropertyModel {
         return new PropertyModel(
             $dto->property_id,
             $dto->property_type,
             $dto->address->id,
             $dto->built_size,
-            $dto->price,
+            //$dto->price,
             $dto->status,
             $dto->immediate_availability,
             $dto->user_id            
@@ -65,7 +65,7 @@ class StudioConverter {
      * @param StudioDto $dto DTO con los datos del estudio.
      * @return StudioModel Modelo de dominio con los datos específicos del estudio.
      */
-    public static function studioDtoToStudioModel(StudioDto $dto): StudioModel {
+    public static function dtoToStudioModel(StudioDto $dto): StudioModel {
         return new StudioModel(
             $dto->property_id,
             $dto->furnished,

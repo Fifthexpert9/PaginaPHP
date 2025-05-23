@@ -28,7 +28,7 @@ class HouseConverter {
             $property->getId(),
             $property->getPropertyType(),
             $property->getBuiltSize(),
-            $property->getPrice(),
+            //$property->getPrice(),
             $property->getStatus(),
             $property->getImmediateAvailability(),
             $property->getUserId(),
@@ -54,13 +54,13 @@ class HouseConverter {
      * @param HouseDto $dto DTO con los datos de la casa y la propiedad.
      * @return PropertyModel Modelo de dominio con los datos generales de la propiedad.
      */
-    public static function houseDtoToPropertyModel(HouseDto $dto): PropertyModel {
+    public static function dtoToPropertyModel(HouseDto $dto): PropertyModel {
         return new PropertyModel(
             $dto->property_id,
             $dto->property_type,
             $dto->address->id,
             $dto->built_size,
-            $dto->price,
+            //$dto->price,
             $dto->status,
             $dto->immediate_availability,
             $dto->user_id            
@@ -73,7 +73,7 @@ class HouseConverter {
      * @param HouseDto $dto DTO con los datos de la casa.
      * @return HouseModel Modelo de dominio con los datos específicos de la casa.
      */
-    public static function houseDtoToHouseModel(HouseDto $dto): HouseModel {
+    public static function dtoToHouseModel(HouseDto $dto): HouseModel {
         return new HouseModel(
             $dto->property_id,
             $dto->house_type,

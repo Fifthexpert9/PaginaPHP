@@ -7,6 +7,7 @@ use services\PropertyService;
 use services\AddressService;
 use converters\AdvertConverter;
 use dtos\AdvertDto;
+use facades\PropertyFacade;
 
 /**
  * Facade para la gestión de anuncios (advert).
@@ -18,6 +19,7 @@ class AdvertFacade
     private $advertConverter;
     private $propertyService;
     private $addressService;
+    private $propertyFacade;
 
     /**
      * Constructor de AdvertFacade.
@@ -25,12 +27,13 @@ class AdvertFacade
      * @param AdvertService $advertService Servicio de anuncios.
      * @param AdvertConverter $advertConverter Conversor de anuncios.
      */
-    public function __construct(AdvertService $advertService, AdvertConverter $advertConverter, PropertyService $propertyService, AddressService $addressService)
+    public function __construct(AdvertService $advertService, AdvertConverter $advertConverter, PropertyService $propertyService, AddressService $addressService, PropertyFacade $propertyFacade)
     {
         $this->advertService = $advertService;
         $this->advertConverter = $advertConverter;
         $this->propertyService = $propertyService;
         $this->addressService = $addressService;
+        $this->propertyFacade = $propertyFacade;
     }
 
     /**
@@ -193,5 +196,49 @@ class AdvertFacade
         } else {
             return ['success' => false, 'message' => 'Error al eliminar el anuncio.'];
         }
+    }
+
+    /**
+     * Busca anuncios cuyas propiedades cumplen los filtros dados.
+     *
+     * Este método permite buscar anuncios aplicando filtros generales y específicos sobre las propiedades,
+     * como tipo de propiedad, precio, ubicación, número de habitaciones, baños, etc.
+     * Utiliza el servicio de anuncios para obtener los modelos que cumplen los filtros y, para cada anuncio,
+     * obtiene la información de la propiedad y la dirección asociada.
+     * Devuelve un array con el título generado para cada anuncio y su DTO correspondiente.
+     * Si no se encuentran anuncios que cumplan los filtros, devuelve un mensaje de texto informativo.
+     *
+     * @param array $filters Filtros de búsqueda para las propiedades. Puede incluir filtros generales
+     *                       (precio, acción, ciudad, provincia, país, tamaño, estado, disponibilidad)
+     *                       y filtros específicos por tipo de propiedad (habitaciones, estudios, pisos, casas).
+     *                       Ejemplo:
+     *                       [
+     *                         'property_types' => ['Piso', 'Casa'],
+     *                         'apartment' => ['num_bathrooms' => 2],
+     *                         'house' => ['num_bathrooms_min' => 2]
+     *                       ]
+     * @return array[]|string Array de arrays con 'title' y 'advert' (AdvertDto) de cada anuncio,
+     *                        o un string con un mensaje si no hay resultados.
+     */
+    public function searchAdverts($filters = [])
+    {
+        $advertModels = $this->advertService->searchAdverts($filters);
+
+        if (empty($advertModels)) {
+            return "No se han encontrado anuncios que cumplan con los filtros.";
+        }
+
+        $result = [];
+
+        foreach ($advertModels as $advertModel) {
+            $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
+            $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
+            $result[] = [
+                'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
+                'advert' => $this->advertConverter->modelToDto($advertModel)
+            ];
+        }
+
+        return $result;
     }
 }

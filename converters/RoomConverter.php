@@ -28,7 +28,7 @@ class RoomConverter {
             $property->getId(),
             $property->getPropertyType(),
             $property->getBuiltSize(),
-            $property->getPrice(),
+            //$property->getPrice(),
             $property->getStatus(),
             $property->getImmediateAvailability(),
             $property->getUserId(),
@@ -51,13 +51,13 @@ class RoomConverter {
      * @param RoomDto $dto DTO con los datos de la habitación y la propiedad.
      * @return PropertyModel Modelo de dominio con los datos generales de la propiedad.
      */
-    public static function roomDtoToPropertyModel(RoomDto $dto): PropertyModel {
+    public static function dtoToPropertyModel(RoomDto $dto): PropertyModel {
         return new PropertyModel(
             $dto->property_id,
             $dto->property_type,
             $dto->address->id,
             $dto->built_size,
-            $dto->price,
+            //$dto->price,
             $dto->status,
             $dto->immediate_availability,
             $dto->user_id            
@@ -70,7 +70,7 @@ class RoomConverter {
      * @param RoomDto $dto DTO con los datos de la habitación.
      * @return RoomModel Modelo de dominio con los datos específicos de la habitación.
      */
-    public static function roomDtoToRoomModel(RoomDto $dto): RoomModel {
+    public static function dtoToRoomModel(RoomDto $dto): RoomModel {
         return new RoomModel(
             $dto->property_id,
             $dto->private_bathroom,

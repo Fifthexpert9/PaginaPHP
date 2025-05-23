@@ -28,7 +28,7 @@ class ApartmentConverter {
             $property->getId(),
             $property->getPropertyType(),
             $property->getBuiltSize(),
-            $property->getPrice(),
+            //$property->getPrice(),
             $property->getStatus(),
             $property->getImmediateAvailability(),
             $property->getUserId(),
@@ -53,13 +53,13 @@ class ApartmentConverter {
      * @param ApartmentDto $dto DTO con los datos del piso y la propiedad.
      * @return PropertyModel Modelo de dominio con los datos generales de la propiedad.
      */
-    public static function apartmentDtoToPropertyModel(ApartmentDto $dto): PropertyModel {
+    public static function dtoToPropertyModel(ApartmentDto $dto): PropertyModel {
         return new PropertyModel(
             $dto->property_id,
             $dto->property_type,
             $dto->address->id,
             $dto->built_size,
-            $dto->price,
+            //$dto->price,
             $dto->status,
             $dto->immediate_availability,
             $dto->user_id            
@@ -72,7 +72,7 @@ class ApartmentConverter {
      * @param ApartmentDto $dto DTO con los datos del piso.
      * @return ApartmentModel Modelo de dominio con los datos específicos del piso.
      */
-    public static function apartmentDtoToApartmentModel(ApartmentDto $dto): ApartmentModel {
+    public static function dtoToApartmentModel(ApartmentDto $dto): ApartmentModel {
         return new ApartmentModel(
             $dto->property_id,
             $dto->apartment_type,

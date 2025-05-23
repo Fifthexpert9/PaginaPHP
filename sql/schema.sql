@@ -42,7 +42,7 @@ CREATE TABLE
         ) NOT NULL, -- Tipo de propiedad
         `address_id` int (11) NOT NULL, -- Relación con la tabla address
         `built_size` int (11) DEFAULT NULL, -- Superficie construida (m²)
-        `price` decimal(10, 2) NOT NULL, -- Precio
+        -- `price` decimal(10, 2) NOT NULL, -- Precio
         `status` ENUM (
             'Obra nueva',
             'Reformado',
