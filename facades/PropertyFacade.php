@@ -56,13 +56,6 @@ class PropertyFacade
      * @param HouseConverter $houseConverter Conversor para casas.
      */
     public function __construct(
-        PropertyService $propertyService,
-        RoomService $roomService,
-        StudioService $studioService,
-        ApartmentService $apartmentService,
-        HouseService $houseService,
-        AddressService $addressService,
-        ImageService $imageService,
         PropertyConverter $propertyConverter,
         RoomConverter $roomConverter,
         StudioConverter $studioConverter,
@@ -71,13 +64,13 @@ class PropertyFacade
         AddressConverter $addressConverter,
         ImageConverter $imageConverter
     ) {
-        $this->propertyService = $propertyService;
-        $this->roomService = $roomService;
-        $this->studioService = $studioService;
-        $this->apartmentService = $apartmentService;
-        $this->houseService = $houseService;
-        $this->addressService = $addressService;
-        $this->imageService = $imageService;
+        $this->propertyService = PropertyService::getInstance();
+        $this->roomService = RoomService::getInstance();
+        $this->studioService = StudioService::getInstance();
+        $this->apartmentService = ApartmentService::getInstance();
+        $this->houseService = HouseService::getInstance();
+        $this->addressService = AddressService::getInstance();
+        $this->imageService = ImageService::getInstance();
         $this->propertyConverter = $propertyConverter;
         $this->roomConverter = $roomConverter;
         $this->studioConverter = $studioConverter;

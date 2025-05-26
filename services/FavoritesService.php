@@ -9,19 +9,37 @@ use PDO;
 /**
  * Servicio para gestionar operaciones relacionadas con favoritos (relación usuario-anuncio) en la base de datos.
  */
-class FavoritesService {
+class FavoritesService 
+{
+    /**
+     * @var FavoritesService Instancia única de la clase.
+     */
+    private static $instance = null;
+
     /**
      * @var PDO Conexión a la base de datos.
      */
     private $db;
 
     /**
-     * Constructor de FavoritesService.
-     *
-     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     * Constructor privado para evitar instanciación directa.
      */
-    public function __construct(DatabaseModel $databaseModel) {
-        $this->db = $databaseModel->db;
+    private function __construct()
+    {
+        $this->db = DatabaseModel::getInstance()->getConnection();
+    }
+
+    /**
+     * Método estático para obtener la instancia única de la clase.
+     *
+     * @return FavoritesService Instancia única de FavoritesService.
+     */
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new FavoritesService();
+        }
+        return self::$instance;
     }
 
     /**

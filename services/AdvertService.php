@@ -13,18 +13,34 @@ use PDOException;
 class AdvertService
 {
     /**
+     * @var AdvertService Instancia única de la clase.
+     */
+    private static $instance = null;
+
+    /**
      * @var PDO Conexión a la base de datos.
      */
     private $db;
 
     /**
-     * Constructor de AdvertService.
-     *
-     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     * Constructor privado para evitar instanciación directa.
      */
-    public function __construct(DatabaseModel $databaseModel)
+    private function __construct()
     {
-        $this->db = $databaseModel->db;
+        $this->db = DatabaseModel::getInstance()->getConnection();
+    }
+
+    /**
+     * Método estático para obtener la instancia única de la clase.
+     *
+     * @return AdvertService Instancia única de AdvertService.
+     */
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new AdvertService();
+        }
+        return self::$instance;
     }
 
     /**
@@ -154,13 +170,13 @@ class AdvertService
     }
 
     /**
-     * Obtiene todos los anuncios de la base de datos.
+     * Obtiene todos los anuncios de la base de datos, ordenados por los más recientes.
      *
      * @return AdvertModel[] Array de modelos de anuncios.
      */
     public function getAllAdverts()
     {
-        $sql = "SELECT * FROM advert";
+        $sql = "SELECT * FROM advert ORDER BY created_at DESC";
         $stmt = $this->db->query($sql);
         $adverts = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

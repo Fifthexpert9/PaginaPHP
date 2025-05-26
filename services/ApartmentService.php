@@ -10,19 +10,37 @@ use PDOException;
 /**
  * Servicio para gestionar operaciones relacionadas con apartamentos en la base de datos.
  */
-class ApartmentService {
+class ApartmentService
+{
+    /**
+     * @var ApartmentService Instancia única de la clase.
+     */
+    private static $instance = null;
+
     /**
      * @var PDO Conexión a la base de datos.
      */
     private $db;
 
     /**
-     * Constructor de ApartmentService.
-     *
-     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     * Constructor privado para evitar instanciación directa.
      */
-    public function __construct(DatabaseModel $databaseModel) {
-        $this->db = $databaseModel->db;
+    private function __construct()
+    {
+        $this->db = DatabaseModel::getInstance()->getConnection();
+    }
+
+    /**
+     * Método estático para obtener la instancia única de la clase.
+     *
+     * @return ApartmentService Instancia única de ApartmentService.
+     */
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new ApartmentService();
+        }
+        return self::$instance;
     }
 
     /**

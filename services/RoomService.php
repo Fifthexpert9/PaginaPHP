@@ -10,19 +10,37 @@ use PDOException;
 /**
  * Servicio para gestionar operaciones relacionadas con habitaciones en la base de datos.
  */
-class RoomService {
+class RoomService
+{
+    /**
+     * @var RoomService Instancia única de la clase.
+     */
+    private static $instance = null;
+
     /**
      * @var PDO Conexión a la base de datos.
      */
     private $db;
 
     /**
-     * Constructor de RoomService.
-     *
-     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     * Constructor privado para evitar instanciación directa.
      */
-    public function __construct(DatabaseModel $databaseModel) {
-        $this->db = $databaseModel->db;
+    private function __construct()
+    {
+        $this->db = DatabaseModel::getInstance()->getConnection();
+    }
+
+    /**
+     * Método estático para obtener la instancia única de la clase.
+     *
+     * @return RoomService Instancia única de RoomService.
+     */
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new RoomService();
+        }
+        return self::$instance;
     }
 
     /**
@@ -31,7 +49,8 @@ class RoomService {
      * @param RoomModel $room Modelo con los datos de la habitación.
      * @return bool True si la inserción fue exitosa, false en caso contrario.
      */
-    public function createRoom(RoomModel $room) {
+    public function createRoom(RoomModel $room)
+    {
         $sql = "INSERT INTO property_room (property_id, private_bathroom, room_size, max_roommates, includes_expenses, pets_allowed, furnished, common_areas, students_only, gender_restriction)
                 VALUES (:property_id, :private_bathroom, :room_size, :max_roommates, :includes_expenses, :pets_allowed, :furnished, :common_areas, :students_only, :gender_restriction)";
         $stmt = $this->db->prepare($sql);
@@ -55,7 +74,8 @@ class RoomService {
      * @param int $propertyId ID de la propiedad.
      * @return RoomModel|null Modelo de la habitación o null si no existe.
      */
-    public function getRoomByPropertyId($propertyId) {
+    public function getRoomByPropertyId($propertyId)
+    {
         $sql = "SELECT * FROM property_room WHERE property_id = :property_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':property_id' => $propertyId]);
@@ -84,7 +104,8 @@ class RoomService {
      * @param array $fields Campos a actualizar (clave => valor).
      * @return bool True si la actualización fue exitosa, false en caso contrario.
      */
-    public function updateRoom($propertyId, $fields) {
+    public function updateRoom($propertyId, $fields)
+    {
         try {
             $setClause = [];
             foreach ($fields as $key => $value) {
@@ -108,7 +129,8 @@ class RoomService {
      * @param int $propertyId ID de la propiedad asociada a la habitación.
      * @return bool True si la eliminación fue exitosa, false en caso contrario.
      */
-    public function deleteRoom($propertyId) {
+    public function deleteRoom($propertyId)
+    {
         try {
             $sql = "DELETE FROM property_room WHERE property_id = :property_id";
             $stmt = $this->db->prepare($sql);

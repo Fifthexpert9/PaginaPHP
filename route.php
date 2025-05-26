@@ -7,8 +7,6 @@ $method = $_SERVER["REQUEST_METHOD"];
 // Obtener la URL solicitada
 $request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-// Ejemplo de enrutamiento básico con switch
-
 try{
     switch ($method) {
         case 'GET':

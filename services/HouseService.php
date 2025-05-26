@@ -10,19 +10,37 @@ use PDOException;
 /**
  * Servicio para gestionar operaciones relacionadas con casas en la base de datos.
  */
-class HouseService {
+class HouseService
+{
+    /**
+     * @var HouseService Instancia única de la clase.
+     */
+    private static $instance = null;
+
     /**
      * @var PDO Conexión a la base de datos.
      */
     private $db;
 
     /**
-     * Constructor de HouseService.
-     *
-     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     * Constructor privado para evitar instanciación directa.
      */
-    public function __construct(DatabaseModel $databaseModel) {
-        $this->db = $databaseModel->db;
+    private function __construct()
+    {
+        $this->db = DatabaseModel::getInstance()->getConnection();
+    }
+
+    /**
+     * Método estático para obtener la instancia única de la clase.
+     *
+     * @return HouseService Instancia única de HouseService.
+     */
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new HouseService();
+        }
+        return self::$instance;
     }
 
     /**
@@ -31,7 +49,8 @@ class HouseService {
      * @param HouseModel $house Modelo con los datos de la casa.
      * @return bool True si la inserción fue exitosa, false en caso contrario.
      */
-    public function createHouse(HouseModel $house) {
+    public function createHouse(HouseModel $house)
+    {
         $sql = "INSERT INTO property_house (property_id, house_type, garden_size, num_floors, num_rooms, num_bathrooms, private_garage, private_pool, furnished, terrace, storage_room, air_conditioning, pets_allowed)
                 VALUES (:property_id, :house_type, :garden_size, :num_floors, :num_rooms, :num_bathrooms, :private_garage, :private_pool, :furnished, :terrace, :storage_room, :air_conditioning, :pets_allowed)";
         $stmt = $this->db->prepare($sql);
@@ -58,7 +77,8 @@ class HouseService {
      * @param int $propertyId ID de la propiedad.
      * @return HouseModel|null Modelo de la casa o null si no existe.
      */
-    public function getHouseByPropertyId($propertyId) {
+    public function getHouseByPropertyId($propertyId)
+    {
         $sql = "SELECT * FROM property_house WHERE property_id = :property_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':property_id' => $propertyId]);
@@ -90,7 +110,8 @@ class HouseService {
      * @param array $fields Campos a actualizar (clave => valor).
      * @return bool True si la actualización fue exitosa, false en caso contrario.
      */
-    public function updateHouse($propertyId, $fields) {
+    public function updateHouse($propertyId, $fields)
+    {
         try {
             $setClause = [];
             foreach ($fields as $key => $value) {
@@ -114,7 +135,8 @@ class HouseService {
      * @param int $propertyId ID de la propiedad asociada a la casa.
      * @return bool True si la eliminación fue exitosa, false en caso contrario.
      */
-    public function deleteHouse($propertyId) {
+    public function deleteHouse($propertyId)
+    {
         try {
             $sql = "DELETE FROM property_house WHERE property_id = :property_id";
             $stmt = $this->db->prepare($sql);

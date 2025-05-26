@@ -11,6 +11,15 @@ INSERT INTO
         `registration_date`
     )
 VALUES
+(
+        'Admin',
+        'Admin',
+        'admin@example.com',
+        'admin',
+        'hashed_password_admin',
+        'admin',
+        NOW ()
+    ), -- id 1
     (
         'Juan',
         'Pérez',
@@ -19,7 +28,7 @@ VALUES
         'hashed_password_juan',
         'user',
         NOW ()
-    ),
+    ), -- id 2
     (
         'María',
         'Gómez',
@@ -28,7 +37,7 @@ VALUES
         'hashed_password_maria',
         'user',
         NOW ()
-    ),
+    ), -- id 3
     (
         'Carlos',
         'López',
@@ -37,7 +46,7 @@ VALUES
         'hashed_password_carlos',
         'user',
         NOW ()
-    ),
+    ), -- id 4
     (
         'Ana',
         'Martínez',
@@ -46,13 +55,4 @@ VALUES
         'hashed_password_ana',
         'user',
         NOW ()
-    ),
-    (
-        'Admin',
-        'Admin',
-        'admin@example.com',
-        'admin',
-        'hashed_password_admin',
-        'admin',
-        NOW ()
-    );
+    ); -- id 5

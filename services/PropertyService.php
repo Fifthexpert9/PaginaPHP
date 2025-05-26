@@ -18,19 +18,37 @@ use PDOException;
  * - deleteProperty: Elimina una propiedad por su ID.
  * - searchProperties: Busca propiedades aplicando filtros generales y específicos, devolviendo solo las propiedades que cumplen los criterios.
  */
-class PropertyService {
+class PropertyService
+{
+    /**
+     * @var PropertyService Instancia única de la clase.
+     */
+    private static $instance = null;
+
     /**
      * @var PDO Conexión a la base de datos.
      */
     private $db;
 
     /**
-     * Constructor de PropertyService.
-     *
-     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     * Constructor privado para evitar instanciación directa.
      */
-    public function __construct(DatabaseModel $databaseModel) {
-        $this->db = $databaseModel->db;
+    private function __construct()
+    {
+        $this->db = DatabaseModel::getInstance()->getConnection();
+    }
+
+    /**
+     * Método estático para obtener la instancia única de la clase.
+     *
+     * @return PropertyService Instancia única de PropertyService.
+     */
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new PropertyService();
+        }
+        return self::$instance;
     }
 
     /**
@@ -39,7 +57,8 @@ class PropertyService {
      * @param PropertyModel $property Modelo con los datos de la propiedad.
      * @return int ID de la propiedad creada.
      */
-    public function createProperty(PropertyModel $property) {
+    public function createProperty(PropertyModel $property)
+    {
         $sql = "INSERT INTO property (property_type, address_id, built_size, /*price,*/ status, immediate_availability, user_id)
                 VALUES (:property_type, :address_id, :built_size, /*:price,*/ :status, :immediate_availability, :user_id)";
         $stmt = $this->db->prepare($sql);
@@ -54,14 +73,15 @@ class PropertyService {
         ]);
         return $this->db->lastInsertId();
     }
-    
+
     /**
      * Obtiene una propiedad por su ID.
      *
      * @param int $id ID de la propiedad.
      * @return PropertyModel|null Modelo de la propiedad o null si no existe.
      */
-    public function getPropertyById($id) {
+    public function getPropertyById($id)
+    {
         $sql = "SELECT * FROM property WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $id]);
@@ -86,13 +106,14 @@ class PropertyService {
      * @param int $userId ID del usuario.
      * @return PropertyModel[] Array de modelos de propiedades del usuario.
      */
-    public function getPropertiesByUserId($userId) {
+    public function getPropertiesByUserId($userId)
+    {
         $sql = "SELECT * FROM property WHERE user_id = :user_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':user_id' => $userId]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        return array_map(function($property) {
+        return array_map(function ($property) {
             return new PropertyModel(
                 $property['id'],
                 $property['property_type'],
@@ -113,7 +134,8 @@ class PropertyService {
      * @param array $fields Campos a actualizar (clave => valor).
      * @return bool True si la actualización fue exitosa, false en caso contrario.
      */
-    public function updateProperty($id, $fields) {
+    public function updateProperty($id, $fields)
+    {
         try {
             $setClause = [];
             foreach ($fields as $key => $value) {
@@ -137,7 +159,8 @@ class PropertyService {
      * @param int $id ID de la propiedad a eliminar.
      * @return bool True si la eliminación fue exitosa, false en caso contrario.
      */
-    public function deleteProperty($id) {
+    public function deleteProperty($id)
+    {
         $sql = "DELETE FROM property WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([':id' => $id]);

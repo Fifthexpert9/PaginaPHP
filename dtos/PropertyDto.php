@@ -9,43 +9,43 @@ namespace dtos;
 class PropertyDto
 {
     public $id;
-    public $propertyType;
-    public $addressId;
-    public $builtSize;
+    public $property_type;
+    public $address_td;
+    public $built_size;
     //public $price;
     public $status;
-    public $immediateAvailability;
+    public $immediate_availability;
     public $userId;
 
     /**
      * Constructor de PropertyDto.
      *
      * @param int|null $id ID de la propiedad.
-     * @param string $propertyType Tipo de propiedad ('Habitación', 'Estudio', 'Piso', 'Casa').
-     * @param int $addressId ID de la dirección asociada.
-     * @param int|null $builtSize Superficie construida (m²).
+     * @param string $property_type Tipo de propiedad ('Habitación', 'Estudio', 'Piso', 'Casa').
+     * @param int $address_td ID de la dirección asociada.
+     * @param int|null $built_size Superficie construida (m²).
      * @param float $price Precio de la propiedad.
      * @param string $status Estado de la propiedad.
-     * @param bool $immediateAvailability Disponibilidad inmediata.
+     * @param bool $immediate_availability Disponibilidad inmediata.
      * @param int $userId ID del usuario propietario.
      */
     public function __construct(
         $id,
-        $propertyType,
-        $addressId,
-        $builtSize,
+        $property_type,
+        $address_td,
+        $built_size,
         //$price,
         $status,
-        $immediateAvailability,
+        $immediate_availability,
         $userId
     ) {
         $this->id = $id;
-        $this->propertyType = $propertyType;
-        $this->addressId = $addressId;
-        $this->builtSize = $builtSize;
+        $this->property_type = $property_type;
+        $this->address_td = $address_td;
+        $this->built_size = $built_size;
         //$this->price = $price;
         $this->status = $status;
-        $this->immediateAvailability = $immediateAvailability;
+        $this->immediate_availability = $immediate_availability;
         $this->userId = $userId;
     }
 }

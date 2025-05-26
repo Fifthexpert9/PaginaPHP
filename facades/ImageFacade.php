@@ -18,12 +18,11 @@ class ImageFacade
     /**
      * Constructor de ImageFacade.
      *
-     * @param ImageService $imageService Servicio de imágenes.
      * @param ImageConverter $imageConverter Conversor de imágenes.
      */
-    public function __construct(ImageService $imageService, ImageConverter $imageConverter)
+    public function __construct(ImageConverter $imageConverter)
     {
-        $this->imageService = $imageService;
+        $this->imageService = ImageService::getInstance();
         $this->imageConverter = $imageConverter;
     }
 

@@ -10,19 +10,37 @@ use PDOException;
 /**
  * Servicio para gestionar operaciones relacionadas con usuarios en la base de datos.
  */
-class UserService {
+class UserService
+{
+    /**
+     * @var UserService Instancia única de la clase.
+     */
+    private static $instance = null;
+
     /**
      * @var PDO Conexión a la base de datos.
      */
     private $db;
 
     /**
-     * Constructor de UserService.
-     *
-     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     * Constructor privado para evitar instanciación directa.
      */
-    public function __construct(DatabaseModel $databaseModel) {
-        $this->db = $databaseModel->db;
+    private function __construct()
+    {
+        $this->db = DatabaseModel::getInstance()->getConnection();
+    }
+
+    /**
+     * Método estático para obtener la instancia única de la clase.
+     *
+     * @return UserService Instancia única de UserService.
+     */
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new UserService();
+        }
+        return self::$instance;
     }
 
     /**
@@ -32,7 +50,8 @@ class UserService {
      * @param string $last_name Apellido del usuario.
      * @return string Nombre de usuario generado.
      */
-    public function createUsername($name, $last_name) {
+    public function createUsername($name, $last_name)
+    {
         $namePart = substr(strtolower($name), 0, 3);
         $lastNamePart = substr(strtolower($last_name), 0, 3);
 
@@ -58,7 +77,8 @@ class UserService {
      * @param UserModel $user Modelo con los datos del usuario.
      * @return bool True si la inserción fue exitosa, false en caso contrario.
      */
-    public function addUser(UserModel $user) {
+    public function addUser(UserModel $user)
+    {
         try {
             $username = $this->createUsername($user->getName(), $user->getLastName());
             $user->setUsername($username);
@@ -90,7 +110,8 @@ class UserService {
      * @param int $id ID del usuario.
      * @return UserModel|null Modelo del usuario o null si no existe.
      */
-    public function getUserById($id) {
+    public function getUserById($id)
+    {
         try {
             $sql = "SELECT * FROM `user` WHERE `id` = :id";
             $stmt = $this->db->prepare($sql);
@@ -123,7 +144,8 @@ class UserService {
      * @param string $email Email del usuario.
      * @return UserModel|null Modelo del usuario o null si no existe.
      */
-    public function getUserByEmail($email) {
+    public function getUserByEmail($email)
+    {
         try {
             $sql = "SELECT * FROM `user` WHERE `email` = :email";
             $stmt = $this->db->prepare($sql);
@@ -156,7 +178,8 @@ class UserService {
      * @param string $username Nombre de usuario.
      * @return UserModel|null Modelo del usuario o null si no existe.
      */
-    public function getUserByUsername($username) {
+    public function getUserByUsername($username)
+    {
         try {
             $sql = "SELECT * FROM `user` WHERE `username` = :username";
             $stmt = $this->db->prepare($sql);
@@ -188,7 +211,8 @@ class UserService {
      *
      * @return UserModel[] Array de modelos de usuario.
      */
-    public function getAllUsers() {
+    public function getAllUsers()
+    {
         try {
             $sql = "SELECT * FROM `user`";
             $stmt = $this->db->prepare($sql);
@@ -223,7 +247,8 @@ class UserService {
      * @param array $fields Campos a actualizar (clave => valor).
      * @return bool True si la actualización fue exitosa, false en caso contrario.
      */
-    public function updateUser($id, $fields) {
+    public function updateUser($id, $fields)
+    {
         try {
             $setClause = [];
             foreach ($fields as $key => $value) {
@@ -241,14 +266,15 @@ class UserService {
             return false;
         }
     }
-    
+
     /**
      * Elimina un usuario por su ID.
      *
      * @param int $id ID del usuario a eliminar.
      * @return bool True si la eliminación fue exitosa, false en caso contrario.
      */
-    public function deleteUser($id) {
+    public function deleteUser($id)
+    {
         try {
             $sql = "DELETE FROM `user` WHERE `id` = :id";
             $stmt = $this->db->prepare($sql);
@@ -265,7 +291,8 @@ class UserService {
      * @param string $email Email a verificar.
      * @return bool True si el email existe, false en caso contrario.
      */
-    public function emailExists($email) {
+    public function emailExists($email)
+    {
         $sql = "SELECT COUNT(*) FROM `user` WHERE `email` = :email";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':email' => $email]);
@@ -279,7 +306,8 @@ class UserService {
      * @param string $password Contraseña en texto plano.
      * @return UserModel|null Modelo del usuario si la autenticación es correcta, null en caso contrario.
      */
-    public function authenticate($email, $password) {
+    public function authenticate($email, $password)
+    {
         $sql = "SELECT * FROM `user` WHERE `email` = :email";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':email' => $email]);

@@ -14,13 +14,34 @@ use PDO;
 class ImageService
 {
     /**
+     * @var ImageService Instancia única de la clase.
+     */
+    private static $instance = null;
+
+    /**
      * @var PDO Conexión a la base de datos.
      */
     private $db;
 
-    public function __construct()
+    /**
+     * Constructor privado para evitar instanciación directa.
+     */
+    private function __construct()
     {
         $this->db = DatabaseModel::getInstance()->getConnection();
+    }
+
+    /**
+     * Método estático para obtener la instancia única de la clase.
+     *
+     * @return ImageService Instancia única de ImageService.
+     */
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new ImageService();
+        }
+        return self::$instance;
     }
 
     /**

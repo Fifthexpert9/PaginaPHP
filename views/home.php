@@ -1,67 +1,65 @@
 <?php
-require_once 'controllers/productoController.php';
-$productoController = new ProductoController();
+require_once __DIR__ . '/../vendor/autoload.php';
 
-// Obtener filtros desde GET
-$nombre = $_GET['nombre'] ?? '';
-$categoria = $_GET['categoria'] ?? '';
-$precioMax = $_GET['precio_max'] ?? '';
+use facades\AdvertFacade;
+use converters\AdvertConverter;
+use converters\ImageConverter;
+use converters\PropertyConverter;
 
-// Obtener productos y categorías
-$productos = $productoController->getProductosFiltrados($nombre, $categoria, $precioMax);
-$categorias = $productoController->getCategoriasDisponibles();
+// Crear las dependencias necesarias
+$advertFacade = new AdvertFacade(new AdvertConverter(), new PropertyConverter(), new ImageConverter());
 
-require_once __DIR__ . '/header.php';
+// Obtener los anuncios desde la facade
+$adverts = $advertFacade->getAllAdverts();
 ?>
 
-<main>
-    <h1>Bienvenido a Tienda Online</h1>
-    <p>Encuentra los mejores productos a los mejores precios.</p>
-    <br><br>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Houspecial</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-left">
+                <h1 class="app-name">Houspecial</h1>
+            </div>
+            <div class="nav-right">
+                <a href="/addAdvert" class="nav-icon" title="Añadir anuncio">+</a>
+                <a href="/favorites" class="nav-icon" title="Favoritos">❤️</a>
+                <a href="/userMenu" class="nav-icon" title="Menú de usuario">👤</a>
+            </div>
+        </nav>
+    </header>
 
-    <div class="shop-layout">
-        <form method="GET" class="filter-form">
-            <h3>Filtrar productos</h3>
-
-            <label for="nombre">Nombre</label>
-            <input type="text" name="nombre" id="nombre" value="<?= htmlspecialchars($_GET['nombre'] ?? '') ?>">
-
-            <label for="categoria">Categoría</label>
-            <select name="categoria" id="categoria">
-                <option value="">Todas</option>
-                <?php foreach ($categorias as $cat): ?>
-                    <option value="<?= htmlspecialchars($cat) ?>" <?= (($_GET['categoria'] ?? '') === $cat) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($cat) ?>
-                    </option>
+    <!-- Anuncios -->
+    <main class="properties">
+        <h2>Propiedades disponibles</h2>
+        <div class="properties-grid">
+            <?php if (empty($adverts)): ?>
+                <p>No se encontraron propiedades disponibles.</p>
+            <?php else: ?>
+                <?php foreach ($adverts as $advert): ?>
+                    <div class="property-card">
+                        <h3><?= htmlspecialchars($advert['title']) ?></h3>
+                        <p><?= htmlspecialchars($advert['property']->built_size) ?> m²</p>
+                        <p class="price">€<?= htmlspecialchars($advert['advert']->price) ?></p>
+                        <p><?= htmlspecialchars($advert['property']->status) ?></p>
+                        <p><?= htmlspecialchars($advert['advert']->description) ?></p>
+                        <div class="card-actions">
+                            <button class="btn-favorite" title="Añadir a favoritos">❤️</button>
+                            <a href="/detallePropiedad?id=<?= urlencode($advert['id']) ?>" class="btn-detalle">Ver detalles</a>
+                        </div>
+                    </div>
                 <?php endforeach; ?>
-            </select>
-
-            <label for="precioMax">Precio máximo</label>
-            <input type="number" step="0.01" name="precio_max" id="precioMax" value="<?= htmlspecialchars($_GET['precioMax'] ?? '') ?>">
-
-            <button type="submit">Aplicar filtros</button>
-        </form>
-
-        <div class="productos-grid grid">
-            <?php if (empty($productos)): ?>
-                <p>No se encontraron productos.</p>
             <?php endif; ?>
-            <?php foreach($productos as $producto):?>
-                <div class="card">
-                    <h2><?= htmlspecialchars($producto->getNombre()) ?></h2>
-                    <img src="<?= htmlspecialchars($producto->getImagen()) ?>" alt="<?= htmlspecialchars($producto->getNombre()) ?>">
-                    <?php if (isset($_SESSION['usuario'])): ?>
-                        <button type="submit">Añadir al carrito</button>
-                    <?php else: ?>
-                        <!-- <a href="#" class="login-card-btn" onclick="document.getElementById('loginBtn').click();">
-                            <i class="material-icons">login</i> Iniciar Sesión
-                        </a> -->
-                    <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
         </div>
-    </div>
-</main>
+    </main>
+</body>
+</html>
 
-
-<?php require_once __DIR__ . '/footer.php'; ?>
+<?php require_once __DIR__ . '/partials/footer.php'; ?>

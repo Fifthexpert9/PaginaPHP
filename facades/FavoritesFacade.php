@@ -21,9 +21,9 @@ class FavoritesFacade
      * @param FavoritesService $favoritesService Servicio de favoritos.
      * @param FavoritesConverter $favoritesConverter Conversor de favoritos.
      */
-    public function __construct(FavoritesService $favoritesService, FavoritesConverter $favoritesConverter)
+    public function __construct(FavoritesConverter $favoritesConverter)
     {
-        $this->favoritesService = $favoritesService;
+        $this->favoritesService = FavoritesService::getInstance();
         $this->favoritesConverter = $favoritesConverter;
     }
 

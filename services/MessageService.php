@@ -10,19 +10,37 @@ use PDOException;
 /**
  * Servicio para gestionar operaciones relacionadas con mensajes entre usuarios en la base de datos.
  */
-class MessageService {
+class MessageService
+{
+    /**
+     * @var MessageService Instancia única de la clase.
+     */
+    private static $instance = null;
+
     /**
      * @var PDO Conexión a la base de datos.
      */
     private $db;
 
     /**
-     * Constructor de MessageService.
-     *
-     * @param DatabaseModel $databaseModel Modelo de base de datos con la conexión activa.
+     * Constructor privado para evitar instanciación directa.
      */
-    public function __construct(DatabaseModel $databaseModel) {
-        $this->db = $databaseModel->db;
+    private function __construct()
+    {
+        $this->db = DatabaseModel::getInstance()->getConnection();
+    }
+
+    /**
+     * Método estático para obtener la instancia única de la clase.
+     *
+     * @return MessageService Instancia única de MessageService.
+     */
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new MessageService();
+        }
+        return self::$instance;
     }
 
     /**
@@ -31,7 +49,8 @@ class MessageService {
      * @param MessageModel $message Modelo con los datos del mensaje.
      * @return bool True si la inserción fue exitosa, false en caso contrario.
      */
-    public function createMessage(MessageModel $message) {
+    public function createMessage(MessageModel $message)
+    {
         $sql = "INSERT INTO message (sender_id, receiver_id, advert_id, subject, content, sent_at)
                 VALUES (:sender_id, :receiver_id, :advert_id, :subject, :content, :sent_at)";
         $stmt = $this->db->prepare($sql);
@@ -51,7 +70,8 @@ class MessageService {
      * @param int $id ID del mensaje.
      * @return MessageModel|null Modelo del mensaje o null si no existe.
      */
-    public function getMessageById($id) {
+    public function getMessageById($id)
+    {
         $sql = "SELECT * FROM message WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':id' => $id]);
@@ -76,7 +96,8 @@ class MessageService {
      * @param int $userId ID del usuario que envía el mensaje.
      * @return MessageModel[] Array de mensajes enviados por el usuario.
      */
-    public function getMessagesSentByUser($userId) {
+    public function getMessagesSentByUser($userId)
+    {
         $sql = "SELECT * FROM message WHERE sender_id = :user_id ORDER BY sent_at DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':user_id' => $userId]);
@@ -100,7 +121,8 @@ class MessageService {
      * @param int $userId ID del usuario que recibe el mensaje.
      * @return MessageModel[] Array de mensajes recibidos por el usuario.
      */
-    public function getMessagesReceivedByUser($userId) {
+    public function getMessagesReceivedByUser($userId)
+    {
         $sql = "SELECT * FROM message WHERE receiver_id = :user_id ORDER BY sent_at DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':user_id' => $userId]);
@@ -151,7 +173,8 @@ class MessageService {
      * @param int $id ID del mensaje a eliminar.
      * @return bool True si la eliminación fue exitosa, false en caso contrario.
      */
-    public function deleteMessageById($id) {
+    public function deleteMessageById($id)
+    {
         try {
             $sql = "DELETE FROM message WHERE id = :id";
             $stmt = $this->db->prepare($sql);

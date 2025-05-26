@@ -18,12 +18,11 @@ class AddressFacade
     /**
      * Constructor de AddressFacade.
      *
-     * @param AddressService $addressService Servicio de direcciones.
      * @param AddressConverter $addressConverter Conversor de direcciones.
      */
-    public function __construct(AddressService $addressService, AddressConverter $addressConverter)
+    public function __construct(AddressConverter $addressConverter)
     {
-        $this->addressService = $addressService;
+        $this->addressService = AddressService::getInstance();
         $this->addressConverter = $addressConverter;
     }
 

@@ -26,10 +26,10 @@ class MessageFacade
      * @param MailService $mailService Servicio de envío de mensajes mediante PHPMailer.
      * @param MessageConverter $messageConverter Conversor de mensajes.
      */
-    public function __construct(MessageService $messageService, UserService $userService, MailService $mailService, MessageConverter $messageConverter)
+    public function __construct(MailService $mailService, MessageConverter $messageConverter)
     {
-        $this->messageService = $messageService;
-        $this->userService = $userService;
+        $this->messageService = MessageService::getInstance();
+        $this->userService = UserService::getInstance();
         $this->mailService = $mailService;
         $this->messageConverter = $messageConverter;
     }

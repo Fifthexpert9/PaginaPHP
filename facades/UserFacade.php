@@ -11,9 +11,9 @@ class UserFacade
     private $userService;
     private $userConverter;
 
-    public function __construct(UserService $userService, UserConverter $userConverter)
+    public function __construct(UserConverter $userConverter)
     {
-        $this->userService = $userService;
+        $this->userService = UserService::getInstance();
         $this->userConverter = $userConverter;
     }
 

@@ -7,9 +7,10 @@ use services\PropertyService;
 use services\AddressService;
 use services\ImageService;
 use converters\AdvertConverter;
+use converters\PropertyConverter;
 use converters\ImageConverter;
 use dtos\AdvertDto;
-use facades\PropertyFacade;
+use dtos\ImageDto;
 
 /**
  * Facade para la gestión de anuncios (advert).
@@ -22,24 +23,28 @@ class AdvertFacade
     private $addressService;
     private $imageService;
     private $advertConverter;
+    private $propertyConverter;
     private $imageConverter;
-    private $propertyFacade;
 
     /**
      * Constructor de AdvertFacade.
      *
-     * @param AdvertService $advertService Servicio de anuncios.
      * @param AdvertConverter $advertConverter Conversor de anuncios.
+     * @param PropertyConverter $propertyConverter Conversor de propiedades.
+     * @param ImageConverter $imageConverter Conversor de anuncios.
      */
-    public function __construct(AdvertService $advertService, PropertyService $propertyService, AddressService $addressService, ImageService $imageService, AdvertConverter $advertConverter, ImageConverter $imageConverter, PropertyFacade $propertyFacade)
-    {
-        $this->advertService = $advertService;
-        $this->propertyService = $propertyService;
-        $this->addressService = $addressService;
-        $this->imageService = $imageService;
+    public function __construct(
+        AdvertConverter $advertConverter,
+        PropertyConverter $propertyConverter,
+        ImageConverter $imageConverter
+    ) {
+        $this->advertService = AdvertService::getInstance();
+        $this->propertyService = PropertyService::getInstance();
+        $this->addressService = AddressService::getInstance();
+        $this->imageService = ImageService::getInstance();
         $this->advertConverter = $advertConverter;
+        $this->propertyConverter = $propertyConverter;
         $this->imageConverter = $imageConverter;
-        $this->propertyFacade = $propertyFacade;
     }
 
     /**
@@ -56,6 +61,7 @@ class AdvertFacade
     private function generateAdvertTitle($propertyModel, $action, $addressModel)
     {
         $propertyType = $propertyModel->getPropertyType() ?? '';
+        $action = strtolower($action);
         $street = $addressModel ? $addressModel->getStreet() : '';
         $city = $addressModel ? $addressModel->getCity() : '';
 
@@ -129,7 +135,7 @@ class AdvertFacade
      * Obtiene los anuncios asociados a una propiedad.
      *
      * @param int $propertyId ID de la propiedad.
-     * @return array[] Array de arrays con 'title' y 'advert' (AdvertDto) de cada anuncio.
+     * @return array[] Array de arrays con 'title', 'advert' (AdvertDto) de cada anuncio, y 'property' (PropertyDto).
      */
     public function getAdvertsByPropertyId($propertyId)
     {
@@ -142,7 +148,8 @@ class AdvertFacade
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-                'advert' => $this->advertConverter->modelToDto($advertModel)
+                'advert' => $this->advertConverter->modelToDto($advertModel),
+                'property' => $this->propertyConverter->modelToDto($propertyModel)
             ];
         }
         return $result;
@@ -151,7 +158,7 @@ class AdvertFacade
     /**
      * Obtiene todos los anuncios.
      *
-     * @return array[] Array de arrays con 'title' y 'advert' (AdvertDto) de cada anuncio.
+     * @return array[] Array de arrays con 'title', 'advert' (AdvertDto) de cada anuncio y 'property' (PropertyDto).
      */
     public function getAllAdverts()
     {
@@ -160,11 +167,12 @@ class AdvertFacade
         $result = [];
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
-            $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
+            $addressModel = $this->addressService->getAddressById($propertyModel->getAddressId());
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-                'advert' => $this->advertConverter->modelToDto($advertModel)
+                'advert' => $this->advertConverter->modelToDto($advertModel),
+                'property' => $this->propertyConverter->modelToDto($propertyModel)
             ];
         }
         return $result;
@@ -249,7 +257,8 @@ class AdvertFacade
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-                'advert' => $advertDto
+                'advert' => $advertDto,
+                'property' => $this->propertyConverter->modelToDto($propertyModel)
             ];
         }
 
