@@ -127,7 +127,7 @@ class ImageService
      * @param int $id ID de la imagen.
      * @return bool True si se eliminó correctamente, false en caso contrario.
      */
-    public function deleteImage($id)
+    public function deleteImageById($id)
     {
         $stmt = $this->db->prepare("DELETE FROM property_image WHERE id = ?");
         return $stmt->execute([$id]);
