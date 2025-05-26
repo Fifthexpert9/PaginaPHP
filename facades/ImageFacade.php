@@ -44,7 +44,7 @@ class ImageFacade
      * @param int $id ID de la imagen.
      * @return ImagenDto|null DTO de la imagen o null si no existe.
      */
-    public function getFavoriteById($id)
+    public function getImageById($id)
     {
         $imageModel = $this->imageService->getImageById($id);
         if (!$imageModel) {
@@ -69,7 +69,7 @@ class ImageFacade
      * Obtiene la imagen principal (la que se mostrará en el anuncio) de una propiedad.
      *
      * @param int $propertyId ID de la propiedad.
-     * @return ImagenDto|null DTO de la imagen o null si no existe.
+     * @return ImageDto|null DTO de la imagen o null si no existe.
      */
     public function getMainImageByPropertyId($propertyId)
     {

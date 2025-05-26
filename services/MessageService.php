@@ -71,18 +71,17 @@ class MessageService {
     }
 
     /**
-     * Obtiene todos los mensajes enviados o recibidos por un usuario.
+     * Obtiene todos los mensajes enviados por un usuario.
      *
-     * @param int $userId ID del usuario.
-     * @return MessageModel[] Array de mensajes del usuario.
+     * @param int $userId ID del usuario que envía el mensaje.
+     * @return MessageModel[] Array de mensajes enviados por el usuario.
      */
-    public function getMessagesByUserId($userId) {
-        $sql = "SELECT * FROM message WHERE sender_id = :user_id OR receiver_id = :user_id ORDER BY sent_at DESC";
+    public function getMessagesSentByUser($userId) {
+        $sql = "SELECT * FROM message WHERE sender_id = :user_id ORDER BY sent_at DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':user_id' => $userId]);
-        $messages = [];
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $messages[] = new MessageModel(
+        $messages = array_map(function ($row) {
+            return new MessageModel(
                 $row['id'],
                 $row['sender_id'],
                 $row['receiver_id'],
@@ -91,7 +90,31 @@ class MessageService {
                 $row['content'],
                 $row['sent_at']
             );
-        }
+        }, $stmt->fetchAll(PDO::FETCH_ASSOC));
+        return $messages;
+    }
+
+    /**
+     * Obtiene todos los mensajes recibidos por un usuario.
+     *
+     * @param int $userId ID del usuario que recibe el mensaje.
+     * @return MessageModel[] Array de mensajes recibidos por el usuario.
+     */
+    public function getMessagesReceivedByUser($userId) {
+        $sql = "SELECT * FROM message WHERE receiver_id = :user_id ORDER BY sent_at DESC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':user_id' => $userId]);
+        $messages = array_map(function ($row) {
+            return new MessageModel(
+                $row['id'],
+                $row['sender_id'],
+                $row['receiver_id'],
+                $row['advert_id'],
+                $row['subject'],
+                $row['content'],
+                $row['sent_at']
+            );
+        }, $stmt->fetchAll(PDO::FETCH_ASSOC));
         return $messages;
     }
 
@@ -128,7 +151,7 @@ class MessageService {
      * @param int $id ID del mensaje a eliminar.
      * @return bool True si la eliminación fue exitosa, false en caso contrario.
      */
-    public function deleteMessage($id) {
+    public function deleteMessageById($id) {
         try {
             $sql = "DELETE FROM message WHERE id = :id";
             $stmt = $this->db->prepare($sql);
