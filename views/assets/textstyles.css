@@ -1,0 +1,68 @@
+@font-face {
+  font-family: 'FirstSchool';
+  src: url('/views/assets/fonts/FirstSchool.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'HappyToSchool';
+    src: url('/views/assets/fonts/HappyToSchool.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'SchoolTeacher';
+    src: url('/views/assets/fonts/SchoolTeacher.ttf') format('truetype');
+}
+
+
+* {
+  font-size: small;
+}
+
+body {
+  height: 100%;
+  background-color: #ffffff;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    #ffffff 0px,
+    #ffffff 35px,
+    #e4e4e4 36px,
+    #ffffff 37px
+  );
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.body-ody-ody {
+  margin-top: 27px;
+}
+
+.logo {
+  font-family: 'SchoolTeacher';
+  font-weight: 600;
+  font-size: 3.5em;
+}
+
+.logo-footer {
+  font-family: 'SchoolTeacher';
+  font-weight: 600;
+  font-size: 1.5em;
+}
+
+.btn-font {
+  font-family: 'SchoolTeacher';
+  font-weight: 600;
+  font-size: 1.6em;
+}
+
+.icon{
+  font-size: 2.5em;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+footer {
+  flex-shrink: 0;
+}

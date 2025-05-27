@@ -64,8 +64,9 @@ class AdvertFacade
         $action = strtolower($action);
         $street = $addressModel ? $addressModel->getStreet() : '';
         $city = $addressModel ? $addressModel->getCity() : '';
+        $province = $addressModel ? $addressModel->getProvince() : '';
 
-        return "{$propertyType} en {$action} en {$street}, {$city}";
+        return "{$propertyType} en {$action} en {$street}, {$city}, {$province}";
     }
 
     /**
