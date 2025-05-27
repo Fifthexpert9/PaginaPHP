@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
+session_start();
+
 use facades\AdvertFacade;
 use converters\AdvertConverter;
 use converters\ImageConverter;
@@ -23,25 +25,7 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
 ?>
 
 <?php require_once __DIR__ . '/partials/head.php'; ?>
-<!-- Header -->
-<header>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary py-1">
-        <div class="container d-flex align-items-center">
-            <a class="navbar-brand logo" href="#">houspecial</a>
-            <ul class="navbar-nav mb-2 mb-lg-0 flex-row gap-4">
-                <li class="nav-item">
-                    <a class="nav-link text-black" href="#"><i class="bi bi-plus-lg icon"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-black" href="#"><i class="bi bi-house-heart icon"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-black" href="#"><i class="bi bi-person-fill icon"></i></a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
+<?php require_once __DIR__ . '/partials/header.php'; ?>
 <main>
     <!-- Anuncios y Filtros -->
     <div class="container body-ody-ody">
@@ -92,11 +76,17 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                             <div class="col-12 col-lg-6">
                                 <div class="card h-100 shadow-sm">
                                     <div class="row g-0 h-100">
-                                        <div class="col-6 d-flex align-items-left">
+                                        <div class="col-6 d-flex align-items-stretch" style="overflow: hidden;">
                                             <?php if ($advert['advert']->main_image): ?>
-                                                <img src="<?= htmlspecialchars($advert['advert']->main_image) ?>" class="img-fluid rounded-start" alt="Imagen propiedad" style="object-fit: cover;">
+                                                <img src="<?= htmlspecialchars($advert['advert']->main_image) ?>"
+                                                     class="img-fluid rounded-start w-100 h-100"
+                                                     alt="Imagen propiedad"
+                                                     style="object-fit: cover; min-height: 200px;">
                                             <?php else: ?>
-                                                <img src="" class="img-fluid rounded-start" alt="Sin imagen" style="object-fit: cover;">
+                                                <img src="/ruta/a/imagen-default.jpg"
+                                                     class="img-fluid rounded-start w-100 h-100"
+                                                     alt="Sin imagen"
+                                                     style="object-fit: cover; min-height: 200px;">
                                             <?php endif; ?>
                                         </div>
                                         <div class="col-6">

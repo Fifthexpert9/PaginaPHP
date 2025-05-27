@@ -13,8 +13,8 @@ class UserConverter {
      * Convierte un UserModel en UserDto.
      */
     public static function modelToDto(UserModel $model): UserDto {
-        $as = new AdvertService(DatabaseModel::getInstance());
-        $fs = new FavoritesService(DatabaseModel::getInstance());
+        $as = AdvertService::getInstance();
+        $fs = FavoritesService::getInstance();
         
         return new UserDto(
             $model->getId(),

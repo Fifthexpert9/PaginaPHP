@@ -15,26 +15,26 @@ try{
                 case '/':
                     require 'views/home.php';
                     break;
-                case '/productos':
-                    require 'views/productos.php';
+                case '/message':
+                    require 'views/message.php';
                     break;
                 case '/login':
-                    require 'views/inicioSesion.php';
+                    require 'views/login.php';
                     break;
                 case '/register':
-                    require 'views/registro.php';
+                    require 'views/register.php';
                     break;
-                case '/agregarProducto':
-                    require 'views/agregarProducto.php';
+                case '/new-advert':
+                    require 'views/new-advert.php';
                     break;
-                case '/editarProducto':
-                    require 'views/editarProducto.php';
+                case '/favorites':
+                    require 'views/favorites.php';
                     break;
                 case '/about':
                     require 'views/about.php';
                     break;
-                case '/contact':
-                    require 'views/contact.php';
+                case '/logout':
+                    require 'controllers/logout.php';
                     break;
                 default:
                     http_response_code(404);

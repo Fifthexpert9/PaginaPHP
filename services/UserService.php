@@ -9,6 +9,21 @@ use PDOException;
 
 /**
  * Servicio para gestionar operaciones relacionadas con usuarios en la base de datos.
+ * 
+ * Métodos principales:
+ * - getInstance(): Devuelve la instancia única de UserService (singleton).
+ * - createUsername($name, $last_name): Genera un nombre de usuario único a partir del nombre y apellido.
+ * - addUser(UserModel $user): Agrega un nuevo usuario a la base de datos.
+ * - getUserById($id): Obtiene un usuario por su ID.
+ * - getUserByEmail($email): Obtiene un usuario por su email.
+ * - getUserByUsername($username): Obtiene un usuario por su nombre de usuario.
+ * - getAllUsers(): Devuelve todos los usuarios de la base de datos.
+ * - updateUser($id, $fields): Actualiza los campos de un usuario existente.
+ * - deleteUser($id): Elimina un usuario por su ID.
+ * - emailExists($email): Verifica si un email ya existe en la base de datos.
+ * - authenticate($email, $password): Autentica un usuario por email y contraseña.
+ *
+ * Cada método está documentado individualmente en el código.
  */
 class UserService
 {
