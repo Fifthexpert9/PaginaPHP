@@ -169,7 +169,7 @@ CREATE TABLE
         `description` text NOT NULL, -- Descripción del anuncio
         `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
         PRIMARY KEY (`id`),
-        FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE,
+        -- FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE,
         FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 

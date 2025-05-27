@@ -41,12 +41,12 @@ class PropertyConverter
     {
         return new PropertyModel(
             $propertyDto->id,
-            $propertyDto->propertyType,
-            $propertyDto->addressId,
-            $propertyDto->builtSize,
+            $propertyDto->property_type,
+            $propertyDto->address_id,
+            $propertyDto->built_size,
             //$propertyDto->price,
             $propertyDto->status,
-            $propertyDto->immediateAvailability,
+            $propertyDto->immediate_availability,
             $propertyDto->userId
         );
     }

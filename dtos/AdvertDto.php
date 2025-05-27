@@ -6,7 +6,7 @@ namespace dtos;
  * DTO para exponer información de un anuncio.
  *
  * Este DTO agrupa toda la información relevante de un anuncio publicado en la plataforma,
- * incluyendo los datos básicos del anuncio y la imagen principal de la propiedad asociada.
+ * incluyendo los datos básicos del anuncio y la ruta de la imagen principal de la propiedad asociada.
  * Se utiliza para transferir datos entre la capa de dominio y la capa de presentación o API.
  *
  * @property int $id ID del anuncio.
@@ -16,7 +16,7 @@ namespace dtos;
  * @property string $action Acción del anuncio (por ejemplo, 'alquiler', 'venta').
  * @property string $description Descripción del anuncio.
  * @property string $created_at Fecha de creación del anuncio.
- * @property ImageDto|null $main_image Imagen principal asociada al anuncio (puede ser null si no hay imagen).
+ * @property string $main_image Ruta de la imagen principal asociada al anuncio.
  */
 class AdvertDto {
     /**
@@ -55,7 +55,7 @@ class AdvertDto {
     public $created_at;
 
     /**
-     * @var ImageDto|null Imagen principal asociada al anuncio.
+     * @var string Ruta de la imagen principal asociada al anuncio.
      */
     public $main_image;
 
@@ -69,7 +69,7 @@ class AdvertDto {
      * @param string $action Acción del anuncio (por ejemplo, 'alquiler', 'venta').
      * @param string $description Descripción del anuncio.
      * @param string $created_at Fecha de creación del anuncio.
-     * @param ImageDto|null $main_image Imagen principal asociada al anuncio.
+     * @param string $main_image Ruta de la imagen principal asociada al anuncio.
      */
     public function __construct(
         $id,
@@ -106,8 +106,6 @@ class AdvertDto {
             'description' => $this->description,
             'created_at' => $this->created_at,
             'main_image' => $this->main_image
-                ? (method_exists($this->main_image, 'toArray') ? $this->main_image->toArray() : (array)$this->main_image)
-                : null
         ];
     }
 }

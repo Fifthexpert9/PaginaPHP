@@ -1,5 +1,5 @@
-<footer>
-  <div class="container d-flex flex-column justify-content-center align-items-center mb-2">
+<footer class="container-fluid align-items-end bg-body-tertiary mt-2 mb-2 py-3">
+  <div class="d-flex flex-column justify-content-center align-items-center">
     <span class="logo-footer">houspecial</span>
     <p>&copy; 2025. Todos los derechos reservados.</p>
   </div>

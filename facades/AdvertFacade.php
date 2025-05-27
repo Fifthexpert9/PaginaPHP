@@ -103,9 +103,10 @@ class AdvertFacade
 
         $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
 
+
         return [
             'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-            'advert' => $this->advertConverter->modelToDto($advertModel)
+            'advert' => $this->advertConverter->modelToDto($advertModel, $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath())
         ];
     }
 
@@ -126,7 +127,7 @@ class AdvertFacade
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-                'advert' => $this->advertConverter->modelToDto($advertModel)
+                'advert' => $this->advertConverter->modelToDto($advertModel, $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath())
             ];
         }
         return $result;
@@ -146,10 +147,11 @@ class AdvertFacade
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
             $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
+            $imgUrl = $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath();
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-                'advert' => $this->advertConverter->modelToDto($advertModel),
+                'advert' => $this->advertConverter->modelToDto($advertModel, $imgUrl),
                 'property' => $this->propertyConverter->modelToDto($propertyModel)
             ];
         }
@@ -169,10 +171,11 @@ class AdvertFacade
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
             $addressModel = $this->addressService->getAddressById($propertyModel->getAddressId());
+            $imgUrl = $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath();
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-                'advert' => $this->advertConverter->modelToDto($advertModel),
+                'advert' => $this->advertConverter->modelToDto($advertModel, $imgUrl),
                 'property' => $this->propertyConverter->modelToDto($propertyModel)
             ];
         }
@@ -249,12 +252,8 @@ class AdvertFacade
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
             if (!$propertyModel) continue;
             $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
-            $advertDto = $this->advertConverter->modelToDto($advertModel);
-
-            $mainImageModel = $this->imageService->getMainImageByPropertyId($propertyModel->getId());
-            if ($mainImageModel) {
-                $advertDto->main_image = $this->imageConverter->modelToDto($mainImageModel);
-            }
+            $imgUrl = $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath();
+            $advertDto = $this->advertConverter->modelToDto($advertModel, $imgUrl);
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),

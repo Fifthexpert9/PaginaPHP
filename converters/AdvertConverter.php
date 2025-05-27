@@ -15,10 +15,10 @@ class AdvertConverter {
      * Convierte un AdvertModel y opcionalmente una imagen principal (ImageDto) en un AdvertDto.
      *
      * @param AdvertModel $model Modelo de dominio con los datos del anuncio.
-     * @param ImageDto|null $mainImage Imagen principal asociada al anuncio (puede ser null).
+     * @param string $main_image Imagen principal asociada al anuncio.
      * @return AdvertDto DTO resultante con la información del anuncio.
      */
-    public static function modelToDto(AdvertModel $model): AdvertDto {
+    public static function modelToDto(AdvertModel $model, $main_image): AdvertDto {
         return new AdvertDto(
             $model->getId(),
             $model->getPropertyId(),
@@ -27,7 +27,7 @@ class AdvertConverter {
             $model->getAction(),
             $model->getDescription(),
             $model->getCreatedAt(),
-            $mainImage = null
+            $main_image
         );
     }
 

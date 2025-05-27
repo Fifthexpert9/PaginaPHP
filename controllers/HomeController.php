@@ -2,6 +2,7 @@
 
 use facades\AdvertFacade;
 use converters\AdvertConverter;
+use converters\PropertyConverter;
 use converters\ImageConverter;
 
 class HomeController
@@ -24,5 +25,5 @@ class HomeController
 
 
 
-$homeController = new HomeController(new AdvertFacade(new AdvertConverter(), new ImageConverter()));
+$homeController = new HomeController(new AdvertFacade(new AdvertConverter(), new PropertyConverter(), new ImageConverter()));
 $homeController->index();

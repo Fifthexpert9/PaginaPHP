@@ -12,6 +12,14 @@ $advertFacade = new AdvertFacade(new AdvertConverter(), new PropertyConverter(),
 // Obtener los anuncios desde la facade
 $adverts = $advertFacade->getAllAdverts();
 //$adverts = [];
+
+// Parámetros de paginación
+$advertsPerPage = 6; // Cambia este valor según cuántos anuncios quieras por página
+$totalAdverts = count($adverts);
+$totalPages = ceil($totalAdverts / $advertsPerPage);
+$page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$start = ($page - 1) * $advertsPerPage;
+$advertsToShow = array_slice($adverts, $start, $advertsPerPage);
 ?>
 
 <?php require_once __DIR__ . '/partials/head.php'; ?>
@@ -22,13 +30,13 @@ $adverts = $advertFacade->getAllAdverts();
             <a class="navbar-brand logo" href="#">houspecial</a>
             <ul class="navbar-nav mb-2 mb-lg-0 flex-row gap-4">
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-plus-lg icon"></i></a>
+                    <a class="nav-link text-black" href="#"><i class="bi bi-plus-lg icon"></i></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-house-heart icon"></i></a>
+                    <a class="nav-link text-black" href="#"><i class="bi bi-house-heart icon"></i></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-person-fill icon"></i></a>
+                    <a class="nav-link text-black" href="#"><i class="bi bi-person-fill icon"></i></a>
                 </li>
             </ul>
         </div>
@@ -80,28 +88,39 @@ $adverts = $advertFacade->getAllAdverts();
                             </div>
                         </div>
                     <?php else: ?>
-                        <?php foreach ($adverts as $advert): ?>
-                            <div class="col-12 col-sm-6 col-lg-4">
+                        <?php foreach ($advertsToShow as $advert): ?>
+                            <div class="col-12 col-lg-6">
                                 <div class="card h-100 shadow-sm">
-                                    <div class="card-body d-flex flex-column">
-                                        <h5 class="card-title">
-                                            <?= htmlspecialchars($advert['title']) ?>
-                                        </h5>
-                                        <p class="card-text mb-1">
-                                            <?= htmlspecialchars($advert['property']->built_size) ?> m²
-                                        </p>
-                                        <p class="card-text mb-1">
-                                            <span class="badge bg-success fs-6"><?= htmlspecialchars($advert['advert']->price) ?> €</span>
-                                        </p>
-                                        <p class="card-text mb-1">
-                                            <span class="badge bg-secondary"><?= htmlspecialchars($advert['property']->status) ?></span>
-                                        </p>
-                                        <p class="card-text flex-grow-1 d-flex align-items-end">
-                                            <?= htmlspecialchars($advert['advert']->description) ?>
-                                        </p>
-                                        <div class="mt-2 d-flex justify-content-evenly align-items-center">
-                                            <button class="btn btn-outline-danger btn-sm" title="Añadir a favoritos"><i class="bi bi-heart-fill"></i></button>
-                                            <a href="/detallePropiedad?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-primary btn-sm">Ver detalles</a>
+                                    <div class="row g-0 h-100">
+                                        <div class="col-6 d-flex align-items-left">
+                                            <?php if ($advert['advert']->main_image): ?>
+                                                <img src="<?= htmlspecialchars($advert['advert']->main_image) ?>" class="img-fluid rounded-start" alt="Imagen propiedad" style="object-fit: cover;">
+                                            <?php else: ?>
+                                                <img src="" class="img-fluid rounded-start" alt="Sin imagen" style="object-fit: cover;">
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="card-body d-flex flex-column h-100">
+                                                <h5 class="card-title">
+                                                    <?= htmlspecialchars($advert['title']) ?>
+                                                </h5>
+                                                <p class="card-text mb-1">
+                                                    <?= htmlspecialchars($advert['property']->built_size) ?> m²
+                                                </p>
+                                                <p class="card-text mb-1">
+                                                    <span class="badge text-bg-success fs-6"><?= htmlspecialchars($advert['advert']->price) ?> €</span>
+                                                </p>
+                                                <p class="card-text mb-1">
+                                                    <span class="badge text-bg-secondary"><?= htmlspecialchars($advert['property']->status) ?></span>
+                                                </p>
+                                                <p class="card-text flex-grow-1 d-flex align-items-end">
+                                                    <?= htmlspecialchars($advert['advert']->description) ?>
+                                                </p>
+                                                <div class="mt-2 d-flex justify-content-evenly align-items-center">
+                                                    <button class="btn btn-outline-danger btn-sm" title="Añadir a favoritos"><i class="bi bi-heart-fill"></i></button>
+                                                    <a href="/detallePropiedad?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-primary btn-sm">Ver detalles</a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -109,6 +128,22 @@ $adverts = $advertFacade->getAllAdverts();
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </div>
+                <!-- Paginación -->
+                <nav aria-label="Página de navegación" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item <?= $page === 1 ? 'disabled' : '' ?>">
+                            <a class="page-link" href="?page=<?= $page - 1 ?>" tabindex="-1">&laquo;</a>
+                        </li>
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <li class="page-item <?= $page === $i ? 'active' : '' ?>">
+                                <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                            </li>
+                        <?php endfor; ?>
+                        <li class="page-item <?= $page === $totalPages ? 'disabled' : '' ?>">
+                            <a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>

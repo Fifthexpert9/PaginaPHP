@@ -10,7 +10,7 @@ class PropertyDto
 {
     public $id;
     public $property_type;
-    public $address_td;
+    public $address_id;
     public $built_size;
     //public $price;
     public $status;
@@ -32,7 +32,7 @@ class PropertyDto
     public function __construct(
         $id,
         $property_type,
-        $address_td,
+        $address_id,
         $built_size,
         //$price,
         $status,
@@ -41,7 +41,7 @@ class PropertyDto
     ) {
         $this->id = $id;
         $this->property_type = $property_type;
-        $this->address_td = $address_td;
+        $this->address_id = $address_id;
         $this->built_size = $built_size;
         //$this->price = $price;
         $this->status = $status;
