@@ -1,16 +1,12 @@
 <?php
 
-// index.php
-
 $method = $_SERVER["REQUEST_METHOD"];
 
-// Obtener la URL solicitada
 $request = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-try{
+try {
     switch ($method) {
         case 'GET':
-
             switch ($request) {
                 case '/':
                     require 'views/home.php';
@@ -34,7 +30,10 @@ try{
                     require 'views/about.php';
                     break;
                 case '/logout':
-                    require 'controllers/logout.php';
+                    session_start();
+                    session_unset();
+                    session_destroy();
+                    header("Location: /");
                     break;
                 default:
                     http_response_code(404);
@@ -45,8 +44,8 @@ try{
             break;
 
         case 'POST':
-            case '/editarProductoControl':
-                require 'controllers/controlEditar.php';
+        case '/editarProductoControl':
+            require 'controllers/controlEditar.php';
             break;
 
         default:

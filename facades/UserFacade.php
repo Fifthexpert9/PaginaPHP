@@ -73,7 +73,7 @@ class UserFacade
     {
         $userModel = $this->userService->authenticate($email, $password);
 
-        if ($userModel) {
+        if (!is_null($userModel)) {
             return [
                 'success' => true,
                 'message' => 'Inicio de sesión exitoso.',
