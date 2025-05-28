@@ -29,7 +29,8 @@ namespace dtos;
  * @property bool $pool Indica si tiene piscina.
  * @property bool $pets_allowed Indica si se permiten mascotas.
  */
-class ApartmentDto {
+class ApartmentDto
+{
     // Datos de la propiedad
     public $property_id;
     public $property_type;
@@ -125,7 +126,8 @@ class ApartmentDto {
      *
      * @return array<string, mixed> Datos del apartamento.
      */
-    public function toArray() {
+    public function toArray()
+    {
         return [
             'property_id' => $this->property_id,
             'property_type' => $this->property_type,

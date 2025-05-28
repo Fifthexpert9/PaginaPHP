@@ -45,11 +45,11 @@ class UserFacade
      */
     public function userRegister(UserDto $userDto, string $plainPassword)
     {
-        if (empty($userDto->name) || empty($userDto->last_name) || empty($userDto->email) || empty($userDto->password)) {
+        if (empty($userDto->name) || empty($userDto->last_name) || empty($userDto->email) || empty($plainPassword)) {
             return ['success' => false, 'message' => 'Todos los campos son obligatorios.'];
         }
         if ($this->userService->emailExists($userDto->email)) {
-            return ['success' => false, 'message' => 'El correo ya está registrado.'];
+            return ['success' => false, 'message' => 'El correo ya está registrado. <br> Si tienes problemas para iniciar sesión, por favor, contacta con el messaging.houspecial@gmail.com.'];
         }
 
         $userModel = $this->userConverter->dtoToModel($userDto);

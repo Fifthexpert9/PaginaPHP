@@ -14,7 +14,8 @@ namespace dtos;
  * @property float|null $latitude Latitud geográfica (opcional).
  * @property float|null $longitude Longitud geográfica (opcional).
  */
-class AddressDto {
+class AddressDto
+{
     public $id;
     public $street;
     public $city;
@@ -36,7 +37,8 @@ class AddressDto {
      * @param float|null $latitude Latitud geográfica (opcional).
      * @param float|null $longitude Longitud geográfica (opcional).
      */
-    public function __construct($id, $street, $city, $province, $postal_code, $country, $latitude = null, $longitude = null) {
+    public function __construct($id, $street, $city, $province, $postal_code, $country, $latitude = null, $longitude = null)
+    {
         $this->id = $id;
         $this->street = $street;
         $this->city = $city;
@@ -52,7 +54,8 @@ class AddressDto {
      *
      * @return array<string, mixed> Datos de la dirección.
      */
-    public function toArray() {
+    public function toArray()
+    {
         return [
             'id' => $this->id,
             'street' => $this->street,

@@ -30,7 +30,8 @@ namespace dtos;
  * @property bool $air_conditioning Indica si tiene aire acondicionado.
  * @property bool $pets_allowed Indica si se permiten mascotas.
  */
-class HouseDto {
+class HouseDto
+{
     // Datos de la propiedad
     public $property_id;
     public $property_type;
@@ -130,7 +131,8 @@ class HouseDto {
      *
      * @return array<string, mixed> Datos de la casa.
      */
-    public function toArray() {
+    public function toArray()
+    {
         return [
             'property_id' => $this->property_id,
             'property_type' => $this->property_type,

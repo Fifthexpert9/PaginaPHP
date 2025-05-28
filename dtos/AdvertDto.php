@@ -18,7 +18,8 @@ namespace dtos;
  * @property string $created_at Fecha de creación del anuncio.
  * @property string $main_image Ruta de la imagen principal asociada al anuncio.
  */
-class AdvertDto {
+class AdvertDto
+{
     /**
      * @var int ID del anuncio.
      */
@@ -96,7 +97,8 @@ class AdvertDto {
      *
      * @return array<string, mixed> Datos del anuncio.
      */
-    public function toArray() {
+    public function toArray()
+    {
         return [
             'id' => $this->id,
             'property_id' => $this->property_id,

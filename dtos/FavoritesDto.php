@@ -10,7 +10,8 @@ namespace dtos;
  * @property int $advert_id ID del anuncio marcado como favorito.
  * @property string|null $created_at Fecha en la que se marcó como favorito.
  */
-class FavoritesDto {
+class FavoritesDto
+{
     public $id;
     public $user_id;
     public $advert_id;
@@ -24,7 +25,8 @@ class FavoritesDto {
      * @param int $advert_id ID del anuncio.
      * @param string|null $created_at Fecha de creación (opcional).
      */
-    public function __construct($id, $user_id, $advert_id, $created_at = null) {
+    public function __construct($id, $user_id, $advert_id, $created_at = null)
+    {
         $this->id = $id;
         $this->user_id = $user_id;
         $this->advert_id = $advert_id;
@@ -36,7 +38,8 @@ class FavoritesDto {
      *
      * @return array<string, mixed> Datos del favorito.
      */
-    public function toArray() {
+    public function toArray()
+    {
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,

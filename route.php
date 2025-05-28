@@ -20,6 +20,12 @@ try {
                 case '/register':
                     require 'views/register.php';
                     break;
+                case '/manager':
+                    require 'views/manager.php';
+                    break;
+                case '/new-property':
+                    require 'views/new-property.php';
+                    break;
                 case '/new-advert':
                     require 'views/new-advert.php';
                     break;
@@ -29,11 +35,19 @@ try {
                 case '/about':
                     require 'views/about.php';
                     break;
+                case '/terms-of-use':
+                    require 'views/terms-of-use.php';
+                    break;
+                case '/privacy-policy':
+                    require 'views/privacy-policy.php';
+                    break;
                 case '/logout':
                     session_start();
                     session_unset();
                     session_destroy();
-                    header("Location: /");
+                    session_start();
+                    $_SESSION['message'] = "Has cerrado sesión correctamente.";
+                    header("Location: /message");
                     break;
                 default:
                     http_response_code(404);

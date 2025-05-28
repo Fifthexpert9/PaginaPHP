@@ -13,7 +13,8 @@ namespace dtos;
  * @property string $content Contenido del mensaje.
  * @property string $sent_at Fecha y hora de envío del mensaje.
  */
-class MessageDto {
+class MessageDto
+{
     public $id;
     public $sender_id;
     public $receiver_id;
@@ -33,7 +34,8 @@ class MessageDto {
      * @param string $content Contenido del mensaje.
      * @param string $sent_at Fecha y hora de envío del mensaje.
      */
-    public function __construct($id, $sender_id, $receiver_id, $advert_id, $subject, $content, $sent_at) {
+    public function __construct($id, $sender_id, $receiver_id, $advert_id, $subject, $content, $sent_at)
+    {
         $this->id = $id;
         $this->sender_id = $sender_id;
         $this->receiver_id = $receiver_id;
@@ -48,7 +50,8 @@ class MessageDto {
      *
      * @return array<string, mixed> Datos del mensaje.
      */
-    public function toArray() {
+    public function toArray()
+    {
         return [
             'id' => $this->id,
             'sender_id' => $this->sender_id,

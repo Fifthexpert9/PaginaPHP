@@ -27,7 +27,8 @@ namespace dtos;
  * @property bool $students_only Indica si es solo para estudiantes.
  * @property string $gender_restriction Restricción de género.
  */
-class RoomDto {
+class RoomDto
+{
     // Datos de la propiedad
     public $property_id;
     public $property_type;
@@ -115,7 +116,8 @@ class RoomDto {
      *
      * @return array<string, mixed> Datos de la habitación.
      */
-    public function toArray() {
+    public function toArray()
+    {
         return [
             'property_id' => $this->property_id,
             'property_type' => $this->property_type,

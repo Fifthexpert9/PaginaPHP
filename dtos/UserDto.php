@@ -15,7 +15,8 @@ namespace dtos;
  * @property array $advert_ids IDs de los anuncios publicados por el usuario.
  * @property array $favorite_advert_ids IDs de los anuncios marcados como favoritos por el usuario.
  */
-class UserDto {
+class UserDto
+{
     public $id;
     public $name;
     public $last_name;
@@ -25,7 +26,7 @@ class UserDto {
     public $registration_date;
     public $advert_ids;
     public $favorite_advert_ids;
-    
+
     /**
      * Constructor de UserDto.
      *
@@ -39,7 +40,8 @@ class UserDto {
      * @param array $advert_ids IDs de los anuncios publicados por el usuario.
      * @param array $favorite_advert_ids IDs de los anuncios favoritos del usuario.
      */
-    public function __construct($id, $name, $last_name, $username, $email, $role, $registration_date, $advert_ids = [], $favorite_advert_ids = []) {
+    public function __construct($id, $name, $last_name, $username, $email, $role, $registration_date, $advert_ids = [], $favorite_advert_ids = [])
+    {
         $this->id = $id;
         $this->name = $name;
         $this->last_name = $last_name;
@@ -56,7 +58,8 @@ class UserDto {
      *
      * @return array<string, mixed> Datos del usuario.
      */
-    public function toArray() {
+    public function toArray()
+    {
         return [
             'id' => $this->id,
             'name' => $this->name,

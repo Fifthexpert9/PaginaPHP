@@ -67,8 +67,8 @@ class UserService
      */
     public function createUsername($name, $last_name)
     {
-        $namePart = substr(strtolower($name), 0, 3);
-        $lastNamePart = substr(strtolower($last_name), 0, 3);
+        $namePart = substr(strtolower(trim(preg_replace('/\s+/', '', $name))), 0, 3);
+        $lastNamePart = substr(strtolower(trim(preg_replace('/\s+/', '', $last_name))), 0, 3);
 
         $randomNumber = str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
 
@@ -98,7 +98,7 @@ class UserService
             $username = $this->createUsername($user->getName(), $user->getLastName());
             $user->setUsername($username);
 
-            $sql = "INSERT INTO `user` (`name`, `last_name`, `username`, `email`, `password`, `role`, `registration_date`) 
+            $sql = "INSERT INTO `user` (`name`, `last_name`, `username`, `email`, `password`, `registration_date`) 
                     VALUES (:name, :last_name, :username, :email, :password, :registration_date)";
             $stmt = $this->db->prepare($sql);
 
@@ -108,7 +108,6 @@ class UserService
                 ':username' => $user->getUsername(),
                 ':email' => $user->getEmail(),
                 ':password' => $user->getPassword(),
-                ':role' => $user->getRole(),
                 ':registration_date' => $user->getRegistrationDate()
             ];
 
@@ -317,9 +316,12 @@ class UserService
     /**
      * Autentica un usuario por email y contraseña.
      *
+     * Busca el usuario por su email en la base de datos y verifica si la contraseña proporcionada
+     * coincide con el hash almacenado usando password_verify().
+     *
      * @param string $email Email del usuario.
      * @param string $password Contraseña en texto plano.
-     * @return UserModel|null Modelo del usuario si la autenticación es correcta, null en caso contrario.
+     * @return UserModel|null Devuelve el modelo del usuario si la autenticación es correcta, o null si el email no existe o la contraseña es incorrecta.
      */
     public function authenticate($email, $password)
     {

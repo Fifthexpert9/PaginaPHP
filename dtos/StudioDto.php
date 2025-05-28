@@ -22,7 +22,8 @@ namespace dtos;
  * @property bool $air_conditioning Indica si tiene aire acondicionado.
  * @property bool $pets_allowed Indica si se permiten mascotas.
  */
-class StudioDto {
+class StudioDto
+{
     // Datos de la propiedad
     public $property_id;
     public $property_type;
@@ -90,7 +91,8 @@ class StudioDto {
      *
      * @return array<string, mixed> Datos del estudio.
      */
-    public function toArray() {
+    public function toArray()
+    {
         return [
             'property_id' => $this->property_id,
             'property_type' => $this->property_type,

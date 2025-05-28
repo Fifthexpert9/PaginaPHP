@@ -39,7 +39,7 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                     <div class="card-body">
                         <form>
                             <div class="mb-3">
-                                <label for="tipo" class="form-label">Tipo</label>
+                                <label for="property_type" class="form-label">Tipo</label>
                                 <select class="form-select" id="tipo" name="tipo">
                                     <option value="">Todos</option>
                                     <option value="Habitación">Habitación</option>
@@ -53,8 +53,8 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                 <input type="number" class="form-control" id="precio" name="precio" placeholder="Ej: 1000">
                             </div>
                             <div class="mb-3">
-                                <label for="ciudad" class="form-label">Ciudad</label>
-                                <input type="text" class="form-control" id="ciudad" name="ciudad" placeholder="Ej: Madrid">
+                                <label for="city" class="form-label">Ciudad</label>
+                                <input type="text" class="form-control" id="city" name="city" placeholder="Ej: Madrid">
                             </div>
                             <button type="submit" class="btn btn-secondary w-100 btn-font">ver propiedades</button>
                         </form>
