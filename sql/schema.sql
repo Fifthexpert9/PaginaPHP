@@ -38,19 +38,17 @@ CREATE TABLE
             'Estudio',
             'Piso',
             'Casa'
-            --,'Mansión'
         ) NOT NULL, -- Tipo de propiedad
-        `address_id` int (11) NOT NULL, -- Relación con la tabla address
-        `built_size` int (11) DEFAULT NULL, -- Superficie construida (m²)
-        -- `price` decimal(10, 2) NOT NULL, -- Precio
+        `address_id` int (11) NOT NULL,
+        `built_size` int (11) NOT NULL,
         `status` ENUM (
             'Obra nueva',
             'Reformado',
             'A reformar',
             'Buen estado'
-        ) NOT NULL, -- Estado del inmueble
-        `immediate_availability` BOOLEAN NOT NULL DEFAULT 0, -- Disponibilidad inmediata (Sí/No)
-        `user_id` int (11) NOT NULL, -- Usuario que registró la propiedad
+        ) NOT NULL DEFAULT 'Buen estado',
+        `immediate_availability` BOOLEAN NOT NULL DEFAULT 0,
+        `user_id` int (11) NOT NULL,
         PRIMARY KEY (`id`),
         FOREIGN KEY (`address_id`) REFERENCES `address` (`id`) ON DELETE CASCADE,
         FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
@@ -70,15 +68,12 @@ CREATE TABLE
 CREATE TABLE
     `property_room` (
         `property_id` int (11) NOT NULL,
-        `private_bathroom` BOOLEAN DEFAULT NULL, -- ¿Baño privado? (Sí/No)
-        -- `room_size` int (11) DEFAULT NULL, -- Tamaño de la habitación (m²)
-        `max_roommates` int (11) DEFAULT NULL, -- Número máximo de compañeros de piso
-        -- `includes_expenses` BOOLEAN DEFAULT NULL, -- ¿Incluye gastos en el precio? (Sí/No)
-        `pets_allowed` BOOLEAN DEFAULT NULL, -- ¿Se permiten mascotas? (Sí/No)
-        `furnished` BOOLEAN DEFAULT NULL, -- ¿Está amueblada? (Sí/No)
-        -- `common_areas` BOOLEAN DEFAULT NULL, -- ¿Uso de zonas comunes? (Sí/No)
-        `students_only` BOOLEAN DEFAULT NULL, -- ¿Estudiantes únicamente? (Sí/No)
-        `gender_restriction` ENUM ('None', 'Only males', 'Only females') DEFAULT 'None', -- ¿Solo chicas/chicos?
+        `private_bathroom` BOOLEAN NOT NULL DEFAULT 0,
+        `max_roommates` int (11) NOT NULL,
+        `pets_allowed` BOOLEAN NOT NULL DEFAULT 0,
+        `furnished` BOOLEAN NOT NULL DEFAULT 0,
+        `students_only` BOOLEAN NOT NULL DEFAULT 0,
+        `gender_restriction` ENUM ('Sin restricciones', 'Sólo chicos', 'Sólo chicas') NOT NULL DEFAULT 'Sin restricciones',
         PRIMARY KEY (`property_id`),
         FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
@@ -86,10 +81,10 @@ CREATE TABLE
 CREATE TABLE
     `property_studio` (
         `property_id` int (11) NOT NULL,
-        `furnished` BOOLEAN DEFAULT NULL, -- ¿Amueblado? (Sí/No)
-        `balcony` BOOLEAN DEFAULT NULL, -- ¿Tiene balcón o terraza? (Sí/No)
-        `air_conditioning` BOOLEAN DEFAULT NULL, -- ¿Aire acondicionado? (Sí/No)
-        `pets_allowed` BOOLEAN DEFAULT NULL, -- ¿Se permiten mascotas? (Sí/No)
+        `furnished` BOOLEAN NOT NULL DEFAULT 0,
+        `balcony` BOOLEAN NOT NULL DEFAULT 0,
+        `air_conditioning` BOOLEAN NOT NULL DEFAULT 0,
+        `pets_allowed` BOOLEAN NOT NULL DEFAULT 0,
         PRIMARY KEY (`property_id`),
         FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
@@ -97,17 +92,16 @@ CREATE TABLE
 CREATE TABLE
     `property_apartment` (
         `property_id` int (11) NOT NULL,
-        `apartment_type` ENUM ('Loft', 'Ático', 'Dúplex', 'Bajo con jardín') NOT NULL, -- Tipo de apartamento
-        `num_rooms` int (11) DEFAULT NULL, -- Número de habitaciones
-        `num_bathrooms` int (11) DEFAULT NULL, -- Número de baños
-        `furnished` BOOLEAN DEFAULT NULL, -- ¿Amueblado? (Sí/No)
-        `balcony` BOOLEAN DEFAULT NULL, -- ¿Tiene balcón o terraza? (Sí/No)
-        `floor` int (11) DEFAULT NULL, -- ¿Planta?
-        `elevator` BOOLEAN DEFAULT NULL, -- ¿Ascensor? (Sí/No)
-        `air_conditioning` BOOLEAN DEFAULT NULL, -- ¿Aire acondicionado? (Sí/No)
-        `garage` BOOLEAN DEFAULT NULL, -- ¿Garaje? (Sí/No)
-        -- `pool` BOOLEAN DEFAULT NULL, -- ¿Piscina comunitaria? (Sí/No)
-        `pets_allowed` BOOLEAN DEFAULT NULL, -- ¿Se permiten mascotas? (Sí/No)
+        `apartment_type` ENUM ('Estándar', 'Loft', 'Ático', 'Dúplex', 'Bajo con jardín') NOT NULL DEFAULT 'Estándar',
+        `num_rooms` int (11) NOT NULL,
+        `num_bathrooms` int (11) NOT NULL,
+        `furnished` BOOLEAN NOT NULL DEFAULT 0,
+        `balcony` BOOLEAN NOT NULL DEFAULT 0,
+        `floor` int (11) NOT NULL,
+        `elevator` BOOLEAN NOT NULL DEFAULT 0,
+        `air_conditioning` BOOLEAN NOT NULL DEFAULT 0,
+        `garage` BOOLEAN NOT NULL DEFAULT 0,
+        `pets_allowed` BOOLEAN NOT NULL DEFAULT 0,
         PRIMARY KEY (`property_id`),
         FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
@@ -121,18 +115,18 @@ CREATE TABLE
             'Adosado',
             'Pareado',
             'Casa rural'
-        ) NOT NULL, -- Tipo de casa
-        `garden_size` int (11) DEFAULT NULL, -- Superficie del terreno o jardín (m²)
-        `num_floors` int (11) DEFAULT NULL, -- Número de plantas
-        `num_rooms` int (11) DEFAULT NULL, -- Número de habitaciones
-        `num_bathrooms` int (11) DEFAULT NULL, -- Número de baños
-        `private_garage` BOOLEAN DEFAULT NULL, -- ¿Garaje privado? (Sí/No)
-        `private_pool` BOOLEAN DEFAULT NULL, -- ¿Piscina privada? (Sí/No)
-        `furnished` BOOLEAN DEFAULT NULL, -- ¿Amueblada? (Sí/No)
-        `terrace` BOOLEAN DEFAULT NULL, -- ¿Terraza o porche? (Sí/No)
-        `storage_room` BOOLEAN DEFAULT NULL, -- ¿Trastero? (Sí/No)
-        `air_conditioning` BOOLEAN DEFAULT NULL, -- ¿Aire acondicionado o calefacción? (Sí/No)
-        `pets_allowed` BOOLEAN DEFAULT NULL, -- ¿Se permiten mascotas? (Sí/No)
+        ) NOT NULL,
+        `garden_size` int (11) NOT NULL,
+        `num_floors` int (11) NOT NULL,
+        `num_rooms` int (11) NOT NULL,
+        `num_bathrooms` int (11) NOT NULL,
+        `private_garage` BOOLEAN NOT NULL DEFAULT 0,
+        `private_pool` BOOLEAN NOT NULL DEFAULT 0,
+        `furnished` BOOLEAN NOT NULL DEFAULT 0,
+        `terrace` BOOLEAN NOT NULL DEFAULT 0,
+        `storage_room` BOOLEAN NOT NULL DEFAULT 0,
+        `air_conditioning` BOOLEAN NOT NULL DEFAULT 0,
+        `pets_allowed` BOOLEAN NOT NULL DEFAULT 0,
         PRIMARY KEY (`property_id`),
         FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
@@ -169,7 +163,7 @@ CREATE TABLE
         `description` text NOT NULL, -- Descripción del anuncio
         `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
         PRIMARY KEY (`id`),
-        -- FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE,
         FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 

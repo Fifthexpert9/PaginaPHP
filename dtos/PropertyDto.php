@@ -15,7 +15,7 @@ class PropertyDto
     //public $price;
     public $status;
     public $immediate_availability;
-    public $userId;
+    public $user_id;
 
     /**
      * Constructor de PropertyDto.
@@ -27,7 +27,7 @@ class PropertyDto
      * @param float $price Precio de la propiedad.
      * @param string $status Estado de la propiedad.
      * @param bool $immediate_availability Disponibilidad inmediata.
-     * @param int $userId ID del usuario propietario.
+     * @param int $user_id ID del usuario propietario.
      */
     public function __construct(
         $id,
@@ -37,7 +37,7 @@ class PropertyDto
         //$price,
         $status,
         $immediate_availability,
-        $userId
+        $user_id
     ) {
         $this->id = $id;
         $this->property_type = $property_type;
@@ -46,6 +46,6 @@ class PropertyDto
         //$this->price = $price;
         $this->status = $status;
         $this->immediate_availability = $immediate_availability;
-        $this->userId = $userId;
+        $this->user_id = $user_id;
     }
 }

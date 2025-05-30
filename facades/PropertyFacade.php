@@ -81,11 +81,23 @@ class PropertyFacade
     }
 
     /**
-     * Crea una nueva propiedad.
+     * Crea una nueva propiedad en la base de datos junto con su dirección, datos específicos y, opcionalmente, imágenes.
+     *
+     * Este método orquesta la creación completa de una propiedad:
+     *  - Inserta la dirección asociada a la propiedad (tabla `address`).
+     *  - Inserta los datos generales de la propiedad (tabla `property`).
+     *  - Inserta los datos específicos según el tipo de propiedad:
+     *      - Si es habitación: tabla `property_room`
+     *      - Si es estudio: tabla `property_studio`
+     *      - Si es piso: tabla `property_apartment`
+     *      - Si es casa: tabla `property_house`
+     *  - Inserta las imágenes asociadas (tabla `property_image`), si se proporcionan.
      *
      * @param mixed $propertyDto DTO con los datos de la propiedad (RoomDto, StudioDto, ApartmentDto o HouseDto).
-     * @param array $imagesDtos Array de ImageDto con las imágenes asociadas.
+     * @param array $imagesDtos Array de ImageDto con las imágenes asociadas (opcional).
      * @return int|string Devuelve el ID de la propiedad creada si tiene éxito, o un mensaje de error si falla.
+     *
+     * @throws \Throwable Si ocurre un error inesperado durante el proceso de creación.
      */
     public function createProperty($propertyDto, $imagesDtos = [])
     {

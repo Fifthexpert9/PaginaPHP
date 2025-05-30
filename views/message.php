@@ -19,7 +19,7 @@
 <script>
     setTimeout(function() {
         window.location.href = '/';
-    }, 3000);
+    }, 10000);
 
     document.getElementById('goHome').addEventListener('click', function() {
         window.location.href = '/';
