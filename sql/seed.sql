@@ -1,12 +1,12 @@
 USE `tfg`;
 
-INSERT INTO `user` (`name`, `last_name`, `email`, `password`, `role`)
+INSERT INTO `user` (`name`, `last_name`, `username`, `email`, `password`, `role`)
 VALUES
-    ('Admin', 'Admin', 'admin@example.com', 'hashed_password_admin', 'admin'), -- id 1
-    ('Juan', 'Pérez', 'juan.perez@example.com', 'hashed_password_juan', 'user'), -- id 2
-    ('María', 'Gómez', 'maria.gomez@example.com', 'hashed_password_maria', 'user'), -- id 3
-    ('Carlos', 'López', 'carlos.lopez@example.com', 'hashed_password_carlos', 'user'), -- id 4
-    ('Ana', 'Martínez', 'ana.martinez@example.com', 'hashed_password_ana', 'user'); -- id 5
+    ('Admin', 'Admin', 'admin','admin@example.com', 'hashed_password_admin', 'admin'), -- id 1
+    ('Juan', 'Pérez', 'juan','juan.perez@example.com', 'hashed_password_juan', 'user'), -- id 2
+    ('María', 'Gómez', 'maria','maria.gomez@example.com', 'hashed_password_maria', 'user'), -- id 3
+    ('Carlos', 'López', 'carlos','carlos.lopez@example.com', 'hashed_password_carlos', 'user'), -- id 4
+    ('Ana', 'Martínez', 'ana','ana.martinez@example.com', 'hashed_password_ana', 'user'); -- id 5
 
 INSERT INTO `address` (`street`, `city`, `province`, `postal_code`, `country`, `latitude`, `longitude`)
 VALUES
@@ -121,10 +121,10 @@ VALUES
 
 INSERT INTO `property_apartment` (`property_id`, `apartment_type`, `num_rooms`, `num_bathrooms`, `furnished`, `balcony`, `floor`, `elevator`, `air_conditioning`, `garage`, `pets_allowed`)
 VALUES
-    (5, 'Estándar',  3, 2, 0, 1, 0, 0, 1, 1, 0); -- Piso en A Coruña
+    (5, 'Estándar',  3, 2, 0, 1, 0, 0, 1, 1, 0), -- Piso en A Coruña
     (6, 'Ático', 4, 3, 1, 1, 3, 0, 0, 0, 1), -- Piso en Granada
     (11, 'Dúplex', 3, 3, 0, 0, 2, 1, 1, 0, 1), -- Piso en Zaragoza
-    (13, 'Bajo con jardín', 3, 1, 0, 1, 0, 0, 1, 1, 0), -- Piso en Oviedo
+    (13, 'Bajo con jardín', 3, 1, 0, 1, 0, 0, 1, 1, 0); -- Piso en Oviedo
 
 INSERT INTO `property_house` (`property_id`, `house_type`, `garden_size`, `num_floors`, `num_rooms`, `num_bathrooms`, `private_garage`, `private_pool`, `furnished`, `terrace`, `storage_room`, `air_conditioning`, `pets_allowed`)
 VALUES
