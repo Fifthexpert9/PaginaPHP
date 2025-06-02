@@ -3,8 +3,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 session_start();
 
-use dtos\UserDto;
-
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
 ?>
@@ -16,24 +14,23 @@ $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
         <div class="row justify-content-center">
             <div class="col-12 col-md-8 col-lg-6">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white text-center">
-                        <h2 class="mb-0">Perfil de usuario</h2>
-                    </div>
+                    <h2 class="logo text-center mt-3">perfil de usuario</h2>
                     <div class="card-body text-center">
                         <?php if ($user): ?>
-                            <h4 class="mb-3"><?= htmlspecialchars($user->name ?? $user->email ?? 'Usuario') ?></h4>
-                            <p class="mb-4"><?= htmlspecialchars($user->email ?? '') ?></p>
+                            <h4 class="mb-3">¡Bienvenido, <?= htmlspecialchars($user->username ?? $user->email ?? 'Usuario') ?>!</h4>
                         <?php else: ?>
                             <div class="alert alert-warning">No se ha iniciado sesión.</div>
                         <?php endif; ?>
 
                         <div class="d-grid gap-3">
-                            <a href="/mis-propiedades.php" class="btn btn-outline-primary btn-lg">Ver mis propiedades</a>
-                            <a href="/mis-anuncios.php" class="btn btn-outline-secondary btn-lg">Ver mis anuncios</a>
-                            <a href="/editar-usuario.php" class="btn btn-outline-success btn-lg">Editar mis datos</a>
-                            <form action="/eliminar-cuenta.php" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar tu cuenta? Esta acción no se puede deshacer.');">
-                                <button type="submit" class="btn btn-outline-danger btn-lg w-100">Eliminar cuenta</button>
-                            </form>
+                            <a href="/my-properties" class="btn btn-outline-secondary btn-lg btn-font">ver mis propiedades</a>
+                            <a href="/my-adverts" class="btn btn-outline-secondary btn-lg btn-font">ver mis anuncios</a>
+                            <a href="/edit-profile" class="btn btn-outline-secondary btn-lg btn-font">editar mis datos</a>
+                            <a href="/delete-account"
+                                class="btn btn-outline-danger btn-lg btn-font"
+                                onclick="return confirm('¿Seguro que deseas eliminar tu cuenta? Esta acción no se puede deshacer.');">
+                                eliminar cuenta
+                            </a>
                         </div>
                     </div>
                 </div>

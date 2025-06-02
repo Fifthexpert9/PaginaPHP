@@ -80,7 +80,7 @@ $properties = $propertyFacade->getPropertiesByUserId($_SESSION['user']->id);
                     Descripción
                     <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="¡Añade una pequeña descripción para que los interesados sepan más sobre lo que ofreces!"></i>
                 </label>
-                <textarea class="form-control" id="description" name="description" placeholder="Ej: Vendo mi propiedad porque me mudo... Alquilo mi propiedad a gente que quiera compartir piso..." required></textarea>
+                <textarea class="form-control" id="description" name="description" placeholder="Ej: Vendo mi propiedad porque me mudo... Alquilo mi propiedad a gente que quiera compartir piso..."></textarea>
             </div>
 
             <button type="submit" class="btn btn-secondary btn-font d-flex mx-auto mt-3">crear anuncio</button>

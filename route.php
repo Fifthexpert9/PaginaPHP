@@ -35,14 +35,26 @@ try {
                 case '/user-menu':
                     require 'views/user-menu.php';
                     break;
-                case '/about':
-                    require 'views/about.php';
+                case '/my-properties':
+                    require 'views/my-properties.php';
+                    break;
+                case '/my-adverts':
+                    require 'views/my-adverts.php';
+                    break;
+                case '/edit-profile':
+                    require 'views/edit-profile.php';
+                    break;
+                case '/delete-account':
+                    require 'controllers/DeleteAccount.php';
                     break;
                 case '/terms-of-use':
                     require 'views/terms-of-use.php';
                     break;
                 case '/privacy-policy':
                     require 'views/privacy-policy.php';
+                    break;
+                case '/about':
+                    require 'views/about.php';
                     break;
                 case '/logout':
                     session_start();

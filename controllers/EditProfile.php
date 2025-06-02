@@ -1,0 +1,36 @@
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+session_start();
+
+use facades\UserFacade;
+use converters\UserConverter;
+
+// if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
+//     $_SESSION['message'] = 'Debes iniciar sesión para eliminar tu cuenta.';
+//     header('Location: /user-menu.php');
+//     exit();
+// }
+$userFacade = new UserFacade(new UserConverter());
+
+$user_id = $_SESSION['user']->id;
+$fields = [
+    'name' => $_POST['name'] ?? '',
+    'last_name' => $_POST['last_name'] ?? '',
+    'email' => $_POST['email'] ?? ''
+];
+
+$result = $userFacade->updateUser($user_id, $fields);
+
+if ($result['success']) {
+    session_destroy();
+    session_start();
+    $_SESSION['message'] = $result['message'];
+    header('Location: /message');
+    exit();
+} else {
+    $_SESSION['message'] = $result['message'];
+    header('Location: /user-menu');
+    exit();
+}
