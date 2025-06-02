@@ -28,7 +28,6 @@ class ApartmentConverter {
             $property->getId(),
             $property->getPropertyType(),
             $property->getBuiltSize(),
-            //$property->getPrice(),
             $property->getStatus(),
             $property->getImmediateAvailability(),
             $property->getUserId(),
@@ -42,7 +41,6 @@ class ApartmentConverter {
             $apartment->hasElevator(),
             $apartment->hasAirConditioning(),
             $apartment->hasGarage(),
-            //$apartment->hasPool(),
             $apartment->arePetsAllowed()
         );
     }
@@ -59,7 +57,6 @@ class ApartmentConverter {
             $dto->property_type,
             $dto->address->id,
             $dto->built_size,
-            //$dto->price,
             $dto->status,
             $dto->immediate_availability,
             $dto->user_id            
@@ -84,7 +81,6 @@ class ApartmentConverter {
             $dto->elevator,
             $dto->air_conditioning,
             $dto->garage,
-            //$dto->pool,
             $dto->pets_allowed
         );
     }

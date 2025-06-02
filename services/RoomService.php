@@ -51,18 +51,15 @@ class RoomService
      */
     public function createRoom(RoomModel $room)
     {
-        $sql = "INSERT INTO property_room (property_id, private_bathroom, room_size, max_roommates, includes_expenses, pets_allowed, furnished, common_areas, students_only, gender_restriction)
-                VALUES (:property_id, :private_bathroom, :room_size, :max_roommates, :includes_expenses, :pets_allowed, :furnished, :common_areas, :students_only, :gender_restriction)";
+        $sql = "INSERT INTO property_room (property_id, private_bathroom, max_roommates, pets_allowed, furnished, students_only, gender_restriction)
+                VALUES (:property_id, :private_bathroom, :max_roommates, :pets_allowed, :furnished, :students_only, :gender_restriction)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             ':property_id' => $room->getPropertyId(),
             ':private_bathroom' => $room->getPrivateBathroom(),
-            //':room_size' => $room->getRoomSize(),
             ':max_roommates' => $room->getMaxRoommates(),
-            //':includes_expenses' => $room->getIncludesExpenses(),
             ':pets_allowed' => $room->getPetsAllowed(),
             ':furnished' => $room->getFurnished(),
-            //':common_areas' => $room->getCommonAreas(),
             ':students_only' => $room->getStudentsOnly(),
             ':gender_restriction' => $room->getGenderRestriction()
         ]);
@@ -84,12 +81,9 @@ class RoomService
             return new RoomModel(
                 $row['property_id'],
                 $row['private_bathroom'],
-                //$row['room_size'],
                 $row['max_roommates'],
-                //$row['includes_expenses'],
                 $row['pets_allowed'],
                 $row['furnished'],
-                //$row['common_areas'],
                 $row['students_only'],
                 $row['gender_restriction']
             );

@@ -1,6 +1,4 @@
-CREATE DATABASE IF NOT EXISTS `tfg` DEFAULT CHARACTER
-SET
-    utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS `tfg`;
 
 USE `tfg`;
 
@@ -12,7 +10,7 @@ CREATE TABLE
         `username` varchar(50) NOT NULL UNIQUE,
         `email` varchar(100) NOT NULL UNIQUE,
         `password` varchar(255) NOT NULL,
-        `role` ENUM ('admin', 'user') NOT NULL DEFAULT 'user', -- Rol del usuario
+        `role` ENUM ('admin', 'user') NOT NULL DEFAULT 'user',
         `registration_date` timestamp NOT NULL DEFAULT current_timestamp(),
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
@@ -20,13 +18,13 @@ CREATE TABLE
 CREATE TABLE
     `address` (
         `id` int (11) NOT NULL AUTO_INCREMENT,
-        `street` varchar(255) NOT NULL, -- Calle y número
-        `city` varchar(100) NOT NULL, -- Ciudad
-        `province` varchar(100) DEFAULT NULL, -- Provincia
-        `postal_code` varchar(20) NOT NULL, -- Código postal
-        `country` varchar(100) NOT NULL, -- País
-        `latitude` decimal(10, 8) DEFAULT NULL, -- Coordenadas (opcional)
-        `longitude` decimal(11, 8) DEFAULT NULL, -- Coordenadas (opcional)
+        `street` varchar(255) NOT NULL,
+        `city` varchar(100) NOT NULL,
+        `province` varchar(100) DEFAULT NULL,
+        `postal_code` varchar(20) NOT NULL,
+        `country` varchar(100) NOT NULL,
+        `latitude` decimal(10, 8) DEFAULT NULL,
+        `longitude` decimal(11, 8) DEFAULT NULL,
         PRIMARY KEY (`id`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
@@ -38,7 +36,7 @@ CREATE TABLE
             'Estudio',
             'Piso',
             'Casa'
-        ) NOT NULL, -- Tipo de propiedad
+        ) NOT NULL,
         `address_id` int (11) NOT NULL,
         `built_size` int (11) NOT NULL,
         `status` ENUM (
@@ -56,13 +54,13 @@ CREATE TABLE
 
 CREATE TABLE
     `property_image` (
-        `id` int (11) NOT NULL AUTO_INCREMENT, -- ID único de la imagen
-        `property_id` int (11) NOT NULL, -- Relación con la propiedad
-        `image_path` varchar(255) NOT NULL, -- Ruta o URL de la imagen
-        `is_main` BOOLEAN DEFAULT 0, -- Indica si es la imagen principal (Sí/No)
-        `uploaded_at` timestamp NOT NULL DEFAULT current_timestamp(), -- Fecha de subida
+        `id` int (11) NOT NULL AUTO_INCREMENT,
+        `property_id` int (11) NOT NULL,
+        `image_path` varchar(255) NOT NULL,
+        `is_main` BOOLEAN DEFAULT 0,
+        `uploaded_at` timestamp NOT NULL DEFAULT current_timestamp(),
         PRIMARY KEY (`id`),
-        FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE -- Relación con la tabla property
+        FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 CREATE TABLE
@@ -131,36 +129,17 @@ CREATE TABLE
         FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
-/*
-CREATE TABLE
-    `property_mansion` (
-        `property_id` int (11) NOT NULL,
-        `plot_size` int (11) DEFAULT NULL, -- Superficie de la parcela (m²)
-        `num_rooms` int (11) DEFAULT NULL, -- Número de habitaciones
-        `num_bathrooms` int (11) DEFAULT NULL, -- Número de baños
-        `pool` BOOLEAN DEFAULT NULL, -- ¿Piscina? (Sí/No)
-        `gym` BOOLEAN DEFAULT NULL, -- ¿Gimnasio / Spa? (Sí/No)
-        `cinema_room` BOOLEAN DEFAULT NULL, -- ¿Sala de cine / ocio? (Sí/No)
-        `security` BOOLEAN DEFAULT NULL, -- ¿Seguridad privada? (Sí/No)
-        `home_automation` BOOLEAN DEFAULT NULL, -- ¿Domótica integrada? (Sí/No)
-        `garage_capacity` int (11) DEFAULT NULL, -- Capacidad del garaje
-        `views` ENUM ('Mar', 'Montaña', 'Ciudad', 'Campo') DEFAULT NULL, -- Tipo de vistas
-        PRIMARY KEY (`property_id`),
-        FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
-*/
-
 CREATE TABLE
     `advert` (
         `id` int (11) NOT NULL AUTO_INCREMENT,
-        `property_id` int (11) NOT NULL, -- Relación con la propiedad
-        `user_id` int (11) NOT NULL, -- Usuario que publica el anuncio
+        `property_id` int (11) NOT NULL,
+        `user_id` int (11) NOT NULL,
         `price` decimal(10, 2) NOT NULL,
         `action` ENUM (
             'Venta',
             'Alquiler'
-        ) NOT NULL, -- Tipo de acción
-        `description` text NOT NULL, -- Descripción del anuncio
+        ) NOT NULL,
+        `description` text NOT NULL,
         `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
         PRIMARY KEY (`id`),
         FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE,
@@ -170,9 +149,9 @@ CREATE TABLE
 CREATE TABLE
     `favorites` (
         `id` int (11) NOT NULL AUTO_INCREMENT,
-        `user_id` int (11) NOT NULL, -- Usuario que guarda el anuncio como favorito
-        `advert_id` int (11) NOT NULL, -- Anuncio marcado como favorito
-        `created_at` timestamp NOT NULL DEFAULT current_timestamp(), -- Fecha en que se marcó como favorito
+        `user_id` int (11) NOT NULL,
+        `advert_id` int (11) NOT NULL,
+        `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
         PRIMARY KEY (`id`),
         FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
         FOREIGN KEY (`advert_id`) REFERENCES `advert` (`id`) ON DELETE CASCADE
@@ -180,15 +159,15 @@ CREATE TABLE
 
 CREATE TABLE
     `message` (
-        `id` int (11) NOT NULL AUTO_INCREMENT, -- ID único del mensaje
-        `sender_id` int (11) NOT NULL, -- Usuario que envía el mensaje
-        `receiver_id` int (11) NOT NULL, -- Usuario que recibe el mensaje
-        `advert_id` int (11) DEFAULT NULL, -- Anuncio relacionada (opcional)
-        `subject` varchar(255) NOT NULL, -- Asunto del mensaje
-        `content` text NOT NULL, -- Contenido del mensaje
-        `sent_at` timestamp NOT NULL DEFAULT current_timestamp(), -- Fecha y hora de envío
+        `id` int (11) NOT NULL AUTO_INCREMENT,
+        `sender_id` int (11) NOT NULL,
+        `receiver_id` int (11) NOT NULL,
+        `advert_id` int (11) DEFAULT NULL,
+        `subject` varchar(255) NOT NULL,
+        `content` text NOT NULL,
+        `sent_at` timestamp NOT NULL DEFAULT current_timestamp(),
         PRIMARY KEY (`id`),
-        FOREIGN KEY (`sender_id`) REFERENCES `user` (`id`) ON DELETE CASCADE, -- Relación con el usuario remitente
-        FOREIGN KEY (`receiver_id`) REFERENCES `user` (`id`) ON DELETE CASCADE, -- Relación con el usuario destinatario
-        FOREIGN KEY (`advert_id`) REFERENCES `advert` (`id`) ON DELETE CASCADE -- Relación con el anuncio
+        FOREIGN KEY (`sender_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`receiver_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`advert_id`) REFERENCES `advert` (`id`) ON DELETE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;

@@ -32,6 +32,9 @@ try {
                 case '/favorites':
                     require 'views/favorites.php';
                     break;
+                case '/user-menu':
+                    require 'views/user-menu.php';
+                    break;
                 case '/about':
                     require 'views/about.php';
                     break;

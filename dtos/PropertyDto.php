@@ -24,7 +24,6 @@ class PropertyDto
      * @param string $property_type Tipo de propiedad ('Habitación', 'Estudio', 'Piso', 'Casa').
      * @param int $address_td ID de la dirección asociada.
      * @param int|null $built_size Superficie construida (m²).
-     * @param float $price Precio de la propiedad.
      * @param string $status Estado de la propiedad.
      * @param bool $immediate_availability Disponibilidad inmediata.
      * @param int $user_id ID del usuario propietario.
@@ -34,7 +33,6 @@ class PropertyDto
         $property_type,
         $address_id,
         $built_size,
-        //$price,
         $status,
         $immediate_availability,
         $user_id
@@ -43,7 +41,6 @@ class PropertyDto
         $this->property_type = $property_type;
         $this->address_id = $address_id;
         $this->built_size = $built_size;
-        //$this->price = $price;
         $this->status = $status;
         $this->immediate_availability = $immediate_availability;
         $this->user_id = $user_id;

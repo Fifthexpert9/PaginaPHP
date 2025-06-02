@@ -2,11 +2,11 @@ USE `tfg`;
 
 INSERT INTO `user` (`name`, `last_name`, `username`, `email`, `password`, `role`)
 VALUES
-    ('Admin', 'Admin', 'admin','admin@example.com', 'hashed_password_admin', 'admin'), -- id 1
-    ('Juan', 'Pérez', 'juan','juan.perez@example.com', 'hashed_password_juan', 'user'), -- id 2
-    ('María', 'Gómez', 'maria','maria.gomez@example.com', 'hashed_password_maria', 'user'), -- id 3
-    ('Carlos', 'López', 'carlos','carlos.lopez@example.com', 'hashed_password_carlos', 'user'), -- id 4
-    ('Ana', 'Martínez', 'ana','ana.martinez@example.com', 'hashed_password_ana', 'user'); -- id 5
+    ('Admin', 'Admin', 'admin','admin@example.com', '$2y$10$RRCmyLldhgv.Xuk0JILoMOwSTQVdzUNUXceCUGNBhvCqT7WfbqLYG', 'admin'), -- id 1
+    ('Juan', 'Pérez', 'juaper087','juan.perez@example.com', '$2y$10$3v7yGcM2Os867cPs.SDtIu5ohbN4xMLogBfw4sBJNjdqRe39A2xae', 'user'), -- id 2
+    ('María', 'Gómez', 'margom212','maria.gomez@example.com', '$2y$10$RqBbV2LSzOi0ldpXbjQmsu46wN7qy5iQa.kEeBK04EHm8/E6RoZEm', 'user'), -- id 3
+    ('Carlos', 'López', 'carlop540','carlos.lopez@example.com', '$2y$10$GE2j.hTDlriCXu32Xh6TKeRc9GatfaXYtuXhUHNb7xJPGhYLtD8me', 'user'), -- id 4
+    ('Ana', 'Martínez', 'anamar002','ana.martinez@example.com', '$2y$10$tXBDGVkVyzQD.y37BcZA4eRV9EovhRpsY6jQo/io1yWxJePd4st0K', 'user'); -- id 5
 
 INSERT INTO `address` (`street`, `city`, `province`, `postal_code`, `country`, `latitude`, `longitude`)
 VALUES
@@ -30,23 +30,23 @@ VALUES
 
 INSERT INTO `property` (`property_type`, `address_id`, `built_size`, `status`, `immediate_availability`, `user_id`)
 VALUES
-    ('Estudio', 6, 28, 'Reformado', 1, 3), -- id 1
-    ('Habitación', 1, 12, 'Buen estado', 1, 2), -- id 2
-    ('Casa', 15, 135, 'Buen estado', 0, 4), -- id 3
-    ('Habitación', 4, 11, 'Obra nueva', 1, 5), -- id 4
-    ('Piso', 9, 75, 'Buen estado', 1, 2), -- id 5
+    ('Estudio', 8, 28, 'Reformado', 1, 3), -- id 1
+    ('Habitación', 4, 12, 'Buen estado', 1, 2), -- id 2
+    ('Casa', 13, 135, 'Buen estado', 0, 4), -- id 3
+    ('Habitación', 1, 11, 'Obra nueva', 1, 5), -- id 4
+    ('Piso', 10, 75, 'Buen estado', 1, 2), -- id 5
     ('Piso', 11, 80, 'Buen estado', 0, 4), -- id 6
-    ('Habitación', 2, 10, 'Reformado', 1, 3), -- id 7
-    ('Casa', 16, 140, 'Reformado', 1, 5), -- id 8
-    ('Casa', 14, 150, 'Obra nueva', 1, 3), -- id 9
+    ('Habitación', 5, 10, 'Reformado', 1, 3), -- id 7
+    ('Casa', 17, 140, 'Reformado', 1, 5), -- id 8
+    ('Casa', 15, 150, 'Obra nueva', 1, 3), -- id 9
     ('Habitación', 3, 14, 'Buen estado', 0, 4), -- id 10
-    ('Piso', 10, 90, 'Reformado', 1, 3), -- id 11
-    ('Estudio', 8, 30, 'Buen estado', 0, 5), -- id 12
-    ('Piso', 12, 85, 'A reformar', 0, 5), -- id 13
-    ('Casa', 13, 120, 'Buen estado', 1, 2), -- id 14
+    ('Piso', 12, 90, 'Reformado', 1, 3), -- id 11
+    ('Estudio', 6, 30, 'Buen estado', 0, 5), -- id 12
+    ('Piso', 9, 85, 'A reformar', 0, 5), -- id 13
+    ('Casa', 14, 120, 'Buen estado', 1, 2), -- id 14
     ('Estudio', 7, 25, 'Buen estado', 1, 4), -- id 15
-    ('Casa', 17, 160, 'Buen estado', 0, 2), -- id 16
-    ('Habitación', 5, 13, 'Buen estado', 0, 2); -- id 17
+    ('Casa', 16, 160, 'Buen estado', 0, 2), -- id 16
+    ('Habitación', 2, 13, 'Buen estado', 0, 2); -- id 17
 
 INSERT INTO `property_image` (`property_id`, `image_path`, `is_main`)
 VALUES

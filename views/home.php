@@ -8,15 +8,13 @@ use converters\AdvertConverter;
 use converters\ImageConverter;
 use converters\PropertyConverter;
 
-// Crear las dependencias necesarias
 $advertFacade = new AdvertFacade(new AdvertConverter(), new PropertyConverter(), new ImageConverter());
 
-// Obtener los anuncios desde la facade
 $adverts = $advertFacade->getAllAdverts();
 //$adverts = [];
 
 // Parámetros de paginación
-$advertsPerPage = 6; // Cambia este valor según cuántos anuncios quieras por página
+$advertsPerPage = 6;
 $totalAdverts = count($adverts);
 $totalPages = ceil($totalAdverts / $advertsPerPage);
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
@@ -108,7 +106,7 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                                 </p>
                                                 <div class="mt-2 d-flex justify-content-evenly align-items-center">
                                                     <button class="btn btn-outline-danger btn-sm" title="Añadir a favoritos"><i class="bi bi-heart-fill"></i></button>
-                                                    <a href="/detallePropiedad?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-primary btn-sm">Ver detalles</a>
+                                                    <a href="/detallePropiedad?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-primary btn-sm" title="Ver detalles">Ver detalles</a>
                                                 </div>
                                             </div>
                                         </div>

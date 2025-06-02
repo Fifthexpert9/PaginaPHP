@@ -39,7 +39,7 @@
                 <div class="mb-3">
                     <label for="property_type" class="form-label">Tipo de vivienda</label>
                     <div class="d-flex align-items-center">
-                        <input type="radio" class="me-1" id="property_type_1" name="property_type" value="Habitación" checked />
+                        <input type="radio" class="me-1" id="property_type_1" name="property_type" value="Habitación" />
                         <label for="true" class="me-3">Habitación</label>
                         <input type="radio" class="me-1" id="property_type_2" name="property_type" value="Estudio" />
                         <label for="false" class="me-3">Estudio</label>
@@ -62,13 +62,13 @@
                         <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Estado del inmueble"></i>
                     </label>
                     <div class="d-flex align-items-center">
-                        <input type="radio" class="me-1" id="status_1" name="status" value="Habitación" checked />
+                        <input type="radio" class="me-1" id="status_1" name="status" value="Obra nueva" checked />
                         <label for="Obra nueva" class="me-3">Obra nueva</label>
-                        <input type="radio" class="me-1" id="status_2" name="status" value="Estudio" />
+                        <input type="radio" class="me-1" id="status_2" name="status" value="Reformado" />
                         <label for="Reformado" class="me-3">Reformado</label>
-                        <input type="radio" class="me-1" id="status_3" name="status" value="Piso" />
+                        <input type="radio" class="me-1" id="status_3" name="status" value="A reformar" />
                         <label for="A reformar" class="me-3">A reformar</label>
-                        <input type="radio" class="me-1" id="status_4" name="status" value="Casa" />
+                        <input type="radio" class="me-1" id="status_4" name="status" value="Buen estado" />
                         <label for="Buen estado" class="me-3">Buen estado</label>
                     </div>
                 </div>

@@ -17,6 +17,7 @@ use converters\HouseConverter;
 use converters\AddressConverter;
 use converters\ImageConverter;
 use dtos\PropertyDto;
+use dtos\AddressDto;
 
 /**
  * Facade para la gestión de propiedades.
@@ -93,68 +94,86 @@ class PropertyFacade
      *      - Si es casa: tabla `property_house`
      *  - Inserta las imágenes asociadas (tabla `property_image`), si se proporcionan.
      *
-     * @param mixed $propertyDto DTO con los datos de la propiedad (RoomDto, StudioDto, ApartmentDto o HouseDto).
+     * El método devuelve el ID de la propiedad creada si todo el proceso es exitoso.
+     * Si ocurre cualquier error en alguno de los pasos, devuelve un mensaje de error como string.
+     *
+     * @param AddressDto $addressDto DTO con los datos de la dirección.
+     * @param PropertyDto $propertyDto DTO con los datos generales de la propiedad.
+     * @param mixed $specificDto DTO con los datos específicos de la propiedad (RoomDto, StudioDto, ApartmentDto o HouseDto).
      * @param array $imagesDtos Array de ImageDto con las imágenes asociadas (opcional).
      * @return int|string Devuelve el ID de la propiedad creada si tiene éxito, o un mensaje de error si falla.
      *
      * @throws \Throwable Si ocurre un error inesperado durante el proceso de creación.
      */
-    public function createProperty($propertyDto, $imagesDtos = [])
+    public function createProperty($addressDto, $propertyDto, $specificDto, $imagesDtos = [])
     {
         try {
-            if (isset($propertyDto->address)) {
-                $addressModel = $this->addressConverter->dtoToModel($propertyDto->address);
-                $addressId = $this->addressService->createAddress($addressModel);
-                if (is_numeric($addressId) && $addressId > 0) {
-                    $propertyDto->address->id = $addressId;
+            $property_id = null;
+
+            // Crear la dirección e insertarla en la bbdd
+            if (isset($addressDto)) {
+                $addressModel = $this->addressConverter->dtoToModel($addressDto);
+                $address_id = $this->addressService->createAddress($addressModel);
+                if (is_numeric($address_id) && $address_id > 0) {
+                    $propertyDto->address_id = $address_id;
                 } else {
-                    return "Ha ocurrido un error al crear la dirección.";
+                    return "Ha ocurrido un error al registrar la dirección.";
                 }
             } else {
-                return "La dirección es obligatoria para crear la propiedad.";
+                return "La dirección es obligatoria para registrar la propiedad.";
             }
 
-            if ($propertyDto instanceof \dtos\RoomDto) {
-                $propertyModel = $this->roomConverter->dtoToPropertyModel($propertyDto);
-            } elseif ($propertyDto instanceof \dtos\StudioDto) {
-                $propertyModel = $this->studioConverter->dtoToPropertyModel($propertyDto);
-            } elseif ($propertyDto instanceof \dtos\ApartmentDto) {
-                $propertyModel = $this->apartmentConverter->dtoToPropertyModel($propertyDto);
-            } elseif ($propertyDto instanceof \dtos\HouseDto) {
-                $propertyModel = $this->houseConverter->dtoToPropertyModel($propertyDto);
+            // Crear la propiedad e insertarla en la bbdd
+            if (isset($propertyDto)) {
+                $propertyModel = $this->propertyConverter->dtoToModel($propertyDto);
+                $property_id = $this->propertyService->createProperty($propertyModel);
+                if (!is_numeric($property_id) || $property_id <= 0) {
+                    return "Ha ocurrido un error al registrar los datos generales de la propiedad.";
+                } else {
+                    $specificDto->property_id = $property_id;
+                    $specificDto->address = $this->addressService->getAddressByPropertyId($property_id);
+                }
             } else {
-                return "Ha ocurrido un error al crear la propiedad.";
-            }
-            $propertyModel->setAddressId($addressId);
-
-            $propertyId = $this->propertyService->createProperty($propertyModel);
-            if (!is_numeric($propertyId) || $propertyId <= 0) {
-                return "Ha ocurrido un error al crear la propiedad.";
-            }
-            $propertyDto->property_id = $propertyId;
-
-            if ($propertyDto instanceof \dtos\RoomDto) {
-                $roomModel = $this->roomConverter->dtoToRoomModel($propertyDto);
-                $this->roomService->createRoom($roomModel);
-            } elseif ($propertyDto instanceof \dtos\StudioDto) {
-                $studioModel = $this->studioConverter->dtoToStudioModel($propertyDto);
-                $this->studioService->createStudio($studioModel);
-            } elseif ($propertyDto instanceof \dtos\ApartmentDto) {
-                $apartmentModel = $this->apartmentConverter->dtoToApartmentModel($propertyDto);
-                $this->apartmentService->createApartment($apartmentModel);
-            } elseif ($propertyDto instanceof \dtos\HouseDto) {
-                $houseModel = $this->houseConverter->dtoToHouseModel($propertyDto);
-                $this->houseService->createHouse($houseModel);
+                return "Los datos generales de la propiedad son obligatorios para registrar la propiedad.";
             }
 
-            foreach ($imagesDtos as $imageDto) {
+            // Crear los datos específicos según el tipo de propiedad e insertarlos en la bbdd
+            if ($specificDto instanceof \dtos\RoomDto) {
+                $roomModel = $this->roomConverter->dtoToRoomModel($specificDto);
+                $auxR = $this->roomService->createRoom($roomModel);
+                if (!$auxR) {
+                    return "Ha ocurrido un error al registrar los datos específicos de la habitación.";
+                }
+            } elseif ($specificDto instanceof \dtos\StudioDto) {
+                $studioModel = $this->studioConverter->dtoToStudioModel($specificDto);
+                $auxS = $this->studioService->createStudio($studioModel);
+                if (!$auxS) {
+                    return "Ha ocurrido un error al registrar los datos específicos del estudio.";
+                }
+            } elseif ($specificDto instanceof \dtos\ApartmentDto) {
+                $apartmentModel = $this->apartmentConverter->dtoToApartmentModel($specificDto);
+                $auxA = $this->apartmentService->createApartment($apartmentModel);
+                if (!$auxA) {
+                    return "Ha ocurrido un error al registrar los datos específicos del piso.";
+                }
+            } elseif ($specificDto instanceof \dtos\HouseDto) {
+                $houseModel = $this->houseConverter->dtoToHouseModel($specificDto);
+                $auxH = $this->houseService->createHouse($houseModel);
+                if (!$auxH) {
+                    return "Ha ocurrido un error al registrar los datos específicos de la casa.";
+                }
+            } else {
+                return "El tipo de propiedad no es válido.";
+            }
+
+            /*foreach ($imagesDtos as $imageDto) {
                 $imageModel = $this->imageConverter->dtoToModel($imageDto, $propertyId);
                 $this->imageService->addImage($imageModel);
-            }
+            }*/
 
-            return $propertyId;
+            return $property_id;
         } catch (\Throwable $e) {
-            return "Ha ocurrido un error al crear la propiedad.";
+            return "Ha ocurrido un error al registrar la propiedad.";
         }
     }
 
@@ -209,15 +228,33 @@ class PropertyFacade
     }
 
     /**
-     * Obtiene todas las propiedades de un usuario.
+     * Obtiene todas las propiedades de un usuario, devolviendo su id, tipo y ciudad.
+     *
+     * Este método recupera todas las propiedades asociadas a un usuario concreto,
+     * devolviendo un array donde cada elemento contiene el identificador de la propiedad,
+     * el tipo de propiedad y la ciudad en la que se encuentra.
      *
      * @param int $userId ID del usuario.
-     * @return PropertyDto[] Array de DTOs de propiedades del usuario.
+     * @return array[] Array de arrays con las claves 'id', 'property_type' y 'city' de cada propiedad.
      */
-    public function getPropertiesByUserId($userId)
+    public function getPropertiesByUserId($user_id)
     {
-        $propertyModels = $this->propertyService->getPropertiesByUserId($userId);
-        return array_map([$this->propertyConverter, 'modelToDto'], $propertyModels);
+        $propertyModels = $this->propertyService->getPropertiesByUserId($user_id);
+
+        $properties = [];
+
+        if (!empty($propertyModels)) {
+            foreach ($propertyModels as $propertyModel) {
+                $address = $this->addressService->getAddressByPropertyId($propertyModel->getId());
+                $city = $address ? $address->getCity() : 'Sin ciudad';
+                $properties[] = [
+                    'id' => $propertyModel->getId(),
+                    'text' => $propertyModel->getId() . ' - ' . $propertyModel->getPropertyType() . ' en ' . $city
+                ];
+            }
+        }
+
+        return $properties;
     }
 
     /**

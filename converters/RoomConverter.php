@@ -57,7 +57,6 @@ class RoomConverter {
             $dto->property_type,
             $dto->address->id,
             $dto->built_size,
-            //$dto->price,
             $dto->status,
             $dto->immediate_availability,
             $dto->user_id            
@@ -74,12 +73,9 @@ class RoomConverter {
         return new RoomModel(
             $dto->property_id,
             $dto->private_bathroom,
-            //$dto->room_size,
             $dto->max_roommates,
-            //$dto->includes_expenses,
             $dto->pets_allowed,
             $dto->furnished,
-            //$dto->common_areas,
             $dto->students_only,
             $dto->gender_restriction
         );

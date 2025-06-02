@@ -5,26 +5,26 @@
             <ul class="navbar-nav mb-2 mb-lg-0 flex-row gap-4">
                 <?php if (!empty($_SESSION['logged']) && $_SESSION['logged']): ?>
                     <li class="nav-item">
-                        <a class="nav-link text-black icon-hover" href="/manager"><i class="bi bi-plus-circle icon"></i></a>
+                        <a class="nav-link text-black icon-hover" href="/manager" title="Crear propiedad/anuncio"><i class="bi bi-plus-circle icon"></i></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black icon-hover" href="/favorites"><i class="bi bi-house-heart icon"></i></a>
+                        <a class="nav-link text-black icon-hover" href="/favorites" title="Lista de favoritos"><i class="bi bi-house-heart icon"></i></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black icon-hover" href="/user-menu"><i class="bi bi-person icon"></i></a>
+                        <a class="nav-link text-black icon-hover" href="/user-menu" title="Menú de usuario"><i class="bi bi-person icon"></i></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black icon-hover" href="/logout"><i class="bi bi-door-open icon"></i></a>
+                        <a class="nav-link text-black icon-hover" href="/logout" title="Logout"><i class="bi bi-door-open icon"></i></a>
                     </li>
                 <?php else: ?>
                     <li class="nav-item">
-                        <a class="nav-link text-black icon-hover" href="/login"><i class="bi bi-plus-circle icon"></i></a>
+                        <a class="nav-link text-black icon-hover" href="/login" title="Regístrate o inicia sesión para crear anuncios"><i class="bi bi-plus-circle icon"></i></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black icon-hover" href="/login"><i class="bi bi-house-heart icon"></i></a>
+                        <a class="nav-link text-black icon-hover" href="/login" title="Regístrate o inicia sesión para tener favoritos"><i class="bi bi-house-heart icon"></i></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black icon-hover" href="/login"><i class="bi bi-person icon"></i></a>
+                        <a class="nav-link text-black icon-hover" href="/login" title="Regístrate o inicia sesión"><i class="bi bi-person icon"></i></a>
                     </li>
                 <?php endif; ?>
             </ul>

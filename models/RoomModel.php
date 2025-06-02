@@ -22,19 +22,9 @@ class RoomModel {
     private $private_bathroom;
 
     /**
-     * @var int Tamaño de la habitación (en m²).
-     */
-    //private $room_size;
-
-    /**
      * @var int Número máximo de compañeros de piso.
      */
     private $max_roommates;
-
-    /**
-     * @var bool Indica si incluye gastos.
-     */
-    //private $includes_expenses;
 
     /**
      * @var bool Indica si se permiten mascotas.
@@ -45,11 +35,6 @@ class RoomModel {
      * @var bool Indica si la habitación está amueblada.
      */
     private $furnished;
-
-    /**
-     * @var string Áreas comunes disponibles.
-     */
-    //private $common_areas;
 
     /**
      * @var bool Indica si es solo para estudiantes.
@@ -66,35 +51,26 @@ class RoomModel {
      *
      * @param int    $property_id        ID de la propiedad asociada.
      * @param bool   $private_bathroom   Indica si tiene baño privado.
-     * @param int    $room_size          Tamaño de la habitación (opcional).
      * @param int    $max_roommates      Número máximo de compañeros.
-     * @param bool   $includes_expenses  Indica si incluye gastos (opcional).
      * @param bool   $pets_allowed       Indica si se permiten mascotas.
      * @param bool   $furnished          Indica si está amueblada.
-     * @param string $common_areas       Áreas comunes disponibles (opcional).
      * @param bool   $students_only      Indica si es solo para estudiantes.
      * @param string $gender_restriction Restricción de género.
      */
     public function __construct(
         $property_id,
         $private_bathroom,
-        //$room_size,
         $max_roommates,
-        //$includes_expenses,
         $pets_allowed,
         $furnished,
-        //$common_areas,
         $students_only,
         $gender_restriction
     ) {
         $this->property_id = $property_id;
         $this->private_bathroom = $private_bathroom;
-        //$this->room_size = $room_size;
         $this->max_roommates = $max_roommates;
-        //$this->includes_expenses = $includes_expenses;
         $this->pets_allowed = $pets_allowed;
         $this->furnished = $furnished;
-        //$this->common_areas = $common_areas;
         $this->students_only = $students_only;
         $this->gender_restriction = $gender_restriction;
     }
@@ -114,22 +90,10 @@ class RoomModel {
     public function getPrivateBathroom() { return $this->private_bathroom; }
 
     /**
-     * Obtiene el tamaño de la habitación (en m²).
-     * @return int
-     */
-    //public function getRoomSize() { return $this->room_size; }
-
-    /**
      * Obtiene el número máximo de compañeros de piso.
      * @return int
      */
     public function getMaxRoommates() { return $this->max_roommates; }
-
-    /**
-     * Indica si incluye gastos.
-     * @return bool
-     */
-    //public function getIncludesExpenses() { return $this->includes_expenses; }
 
     /**
      * Indica si se permiten mascotas.
@@ -142,12 +106,6 @@ class RoomModel {
      * @return bool
      */
     public function getFurnished() { return $this->furnished; }
-
-    /**
-     * Obtiene las áreas comunes disponibles.
-     * @return string
-     */
-    //public function getCommonAreas() { return $this->common_areas; }
 
     /**
      * Indica si es solo para estudiantes.
@@ -176,22 +134,10 @@ class RoomModel {
     public function setPrivateBathroom($private_bathroom) { $this->private_bathroom = $private_bathroom; }
 
     /**
-     * Establece el tamaño de la habitación.
-     * @param int $room_size
-     */
-    //public function setRoomSize($room_size) { $this->room_size = $room_size; }
-
-    /**
      * Establece el número máximo de compañeros de piso.
      * @param int $max_roommates
      */
     public function setMaxRoommates($max_roommates) { $this->max_roommates = $max_roommates; }
-
-    /**
-     * Establece si incluye gastos.
-     * @param bool $includes_expenses
-     */
-    //public function setIncludesExpenses($includes_expenses) { $this->includes_expenses = $includes_expenses; }
 
     /**
      * Establece si se permiten mascotas.
@@ -204,12 +150,6 @@ class RoomModel {
      * @param bool $furnished
      */
     public function setFurnished($furnished) { $this->furnished = $furnished; }
-
-    /**
-     * Establece las áreas comunes disponibles.
-     * @param string $common_areas
-     */
-    //public function setCommonAreas($common_areas) { $this->common_areas = $common_areas; }
 
     /**
      * Establece si es solo para estudiantes.

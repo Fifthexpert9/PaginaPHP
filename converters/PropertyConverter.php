@@ -24,7 +24,6 @@ class PropertyConverter
             $propertyModel->getPropertyType(),
             $propertyModel->getAddressId(),
             $propertyModel->getBuiltSize(),
-            //$propertyModel->getPrice(),
             $propertyModel->getStatus(),
             $propertyModel->getImmediateAvailability(),
             $propertyModel->getUserId()
@@ -44,10 +43,9 @@ class PropertyConverter
             $propertyDto->property_type,
             $propertyDto->address_id,
             $propertyDto->built_size,
-            //$propertyDto->price,
             $propertyDto->status,
             $propertyDto->immediate_availability,
-            $propertyDto->userId
+            $propertyDto->user_id
         );
     }
 }

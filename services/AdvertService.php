@@ -51,16 +51,15 @@ class AdvertService
      */
     public function createAdvert(AdvertModel $advert)
     {
-        $sql = "INSERT INTO advert (property_id, user_id, price, action, description, created_at)
-                VALUES (:property_id, :user_id, :price, :action, :description, :created_at)";
+        $sql = "INSERT INTO advert (property_id, user_id, price, action, description)
+                VALUES (:property_id, :user_id, :price, :action, :description)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             ':property_id' => $advert->getPropertyId(),
             ':user_id' => $advert->getUserId(),
             ':price' => $advert->getPrice(),
             ':action' => $advert->getAction(),
-            ':description' => $advert->getDescription(),
-            ':created_at' => $advert->getCreatedAt()
+            ':description' => $advert->getDescription()
         ]);
     }
 

@@ -22,7 +22,6 @@ use dtos\AddressDto;
 session_start();
 
 try {
-    // Instanciar las facades
     $propertyFacade = new PropertyFacade(
         new PropertyConverter(),
         new RoomConverter(),
@@ -33,28 +32,27 @@ try {
         new ImageConverter()
     );
 
-    // Recoger datos de dirección
     $addressDto = new AddressDto(
         null,
         $_POST['street'],
         $_POST['city'],
         $_POST['province'],
         $_POST['postal_code'],
-        $_POST['country']
+        $_POST['country'],
+        null,
+        null
     );
 
-    // Recoger datos generales de la propiedad
     $propertyDto = new PropertyDto(
         null,
         $_POST['property_type'],
-        null, // address_id, se asignará tras crear la dirección
+        null,
         $_POST['built_size'],
         $_POST['status'],
         $_POST['immediate_availability'] === 'true' ? 1 : 0,
-        $_SESSION['user_id'] ?? 1 // Cambia esto por el id real del usuario logueado
+        $_SESSION['user']->id
     );
 
-    // Recoger datos específicos según el tipo de propiedad
     $specificDto = null;
     switch ($_POST['property_type']) {
         case 'Habitación':
@@ -136,9 +134,14 @@ try {
     }
 
     $images = [];
-    $result = $propertyFacade->createProperty($specificDto, $images);
+    $result = $propertyFacade->createProperty($addressDto, $propertyDto, $specificDto, $images);
 
-    $_SESSION['message'] = $result['message'];
+    if (is_numeric($result)) {
+        $_SESSION['message'] = 'Propiedad registrada correctamente. ID de propiedad: ' . $result;
+    } else {
+        $_SESSION['message'] = $result;
+    }
+
     header('Location: /message');
     exit();
 } catch (\Throwable $e) {

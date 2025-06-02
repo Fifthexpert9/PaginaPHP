@@ -171,7 +171,8 @@ class AdvertFacade
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
             $addressModel = $this->addressService->getAddressById($propertyModel->getAddressId());
-            $imgUrl = $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath();
+            $mainImage = $this->imageService->getMainImageByPropertyId($propertyModel->getId());
+            $imgUrl = $mainImage ? $mainImage->getImagePath() : 'no hay imagen';
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),

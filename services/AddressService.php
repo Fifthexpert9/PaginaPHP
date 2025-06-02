@@ -94,18 +94,22 @@ class AddressService
     }
 
     /**
-     * Obtiene la dirección asociada a una propiedad.
+     * Obtiene la dirección asociada a una propiedad a partir del id de la propiedad.
      *
-     * @param \models\PropertyModel $propertyModel Modelo de la propiedad.
+     * @param int $property_id ID de la propiedad.
      * @return AddressModel|null Modelo de la dirección o null si no existe.
      */
-    public function getAddressByPropertyId($propertyModel)
+    public function getAddressByPropertyId($property_id)
     {
-        if (!$propertyModel || !method_exists($propertyModel, 'getAddressId')) {
-            return null;
+        $sql = "SELECT address_id FROM property WHERE id = :property_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([':property_id' => $property_id]);
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if ($row && isset($row['address_id'])) {
+            return $this->getAddressById($row['address_id']);
         }
-        $addressId = $propertyModel->getAddressId();
-        return $this->getAddressById($addressId);
+        return null;
     }
 
     /**

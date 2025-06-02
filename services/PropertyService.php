@@ -59,19 +59,26 @@ class PropertyService
      */
     public function createProperty(PropertyModel $property)
     {
-        $sql = "INSERT INTO property (property_type, address_id, built_size, /*price,*/ status, immediate_availability, user_id)
-                VALUES (:property_type, :address_id, :built_size, /*:price,*/ :status, :immediate_availability, :user_id)";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([
-            ':property_type' => $property->getPropertyType(),
-            ':address_id' => $property->getAddressId(),
-            ':built_size' => $property->getBuiltSize(),
-            //':price' => $property->getPrice(),
-            ':status' => $property->getStatus(),
-            ':immediate_availability' => $property->getImmediateAvailability(),
-            ':user_id' => $property->getUserId()
-        ]);
-        return $this->db->lastInsertId();
+        try {
+            $sql = "INSERT INTO property (property_type, address_id, built_size, status, immediate_availability, user_id)
+                    VALUES (:property_type, :address_id, :built_size, :status, :immediate_availability, :user_id)";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                ':property_type' => $property->getPropertyType(),
+                ':address_id' => $property->getAddressId(),
+                ':built_size' => $property->getBuiltSize(),
+                ':status' => $property->getStatus(),
+                ':immediate_availability' => $property->getImmediateAvailability(),
+                ':user_id' => $property->getUserId()
+            ]);
+            $id = $this->db->lastInsertId();
+            if (!$id) {
+                return "No se pudo crear la propiedad.";
+            }
+            return $id;
+        } catch (\PDOException $e) {
+            return "Error SQL: " . $e->getMessage();
+        }
     }
 
     /**
@@ -93,7 +100,6 @@ class PropertyService
             $property['property_type'],
             $property['address_id'],
             $property['built_size'],
-            //$property['price'],
             $property['status'],
             $property['immediate_availability'],
             $property['user_id']
@@ -103,14 +109,14 @@ class PropertyService
     /**
      * Obtiene todas las propiedades de un usuario.
      *
-     * @param int $userId ID del usuario.
+     * @param int $user_id ID del usuario.
      * @return PropertyModel[] Array de modelos de propiedades del usuario.
      */
-    public function getPropertiesByUserId($userId)
+    public function getPropertiesByUserId($user_id)
     {
         $sql = "SELECT * FROM property WHERE user_id = :user_id";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([':user_id' => $userId]);
+        $stmt->execute([':user_id' => $user_id]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return array_map(function ($property) {
@@ -119,7 +125,6 @@ class PropertyService
                 $property['property_type'],
                 $property['address_id'],
                 $property['built_size'],
-                //$property['price'],
                 $property['status'],
                 $property['immediate_availability'],
                 $property['user_id']

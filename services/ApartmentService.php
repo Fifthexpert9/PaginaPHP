@@ -50,8 +50,8 @@ class ApartmentService
      * @return bool True si la inserción fue exitosa, false en caso contrario.
      */
     public function createApartment(ApartmentModel $apartment) {
-        $sql = "INSERT INTO property_apartment (property_id, apartment_type, num_rooms, num_bathrooms, furnished, balcony, floor, elevator, air_conditioning, garage, pool, pets_allowed)
-                VALUES (:property_id, :apartment_type, :num_rooms, :num_bathrooms, :furnished, :balcony, :floor, :elevator, :air_conditioning, :garage, :pool, :pets_allowed)";
+        $sql = "INSERT INTO property_apartment (property_id, apartment_type, num_rooms, num_bathrooms, furnished, balcony, floor, elevator, air_conditioning, garage, pets_allowed)
+                VALUES (:property_id, :apartment_type, :num_rooms, :num_bathrooms, :furnished, :balcony, :floor, :elevator, :air_conditioning, :garage, :pets_allowed)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             ':property_id' => $apartment->getPropertyId(),
@@ -64,7 +64,6 @@ class ApartmentService
             ':elevator' => $apartment->hasElevator(),
             ':air_conditioning' => $apartment->hasAirConditioning(),
             ':garage' => $apartment->hasGarage(),
-            //':pool' => $apartment->hasPool(),
             ':pets_allowed' => $apartment->arePetsAllowed()
         ]);
     }
@@ -92,7 +91,6 @@ class ApartmentService
                 $row['elevator'],
                 $row['air_conditioning'],
                 $row['garage'],
-                //$row['pool'],
                 $row['pets_allowed']
             );
         }

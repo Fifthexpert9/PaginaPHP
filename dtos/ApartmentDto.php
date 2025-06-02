@@ -83,7 +83,6 @@ class ApartmentDto
         $property_id,
         $property_type,
         $built_size,
-        //$price,
         $status,
         $immediate_availability,
         $user_id,
@@ -97,13 +96,11 @@ class ApartmentDto
         $elevator,
         $air_conditioning,
         $garage,
-        //$pool,
         $pets_allowed
     ) {
         $this->property_id = $property_id;
         $this->property_type = $property_type;
         $this->built_size = $built_size;
-        //$this->price = $price;
         $this->status = $status;
         $this->immediate_availability = $immediate_availability;
         $this->user_id = $user_id;
@@ -117,7 +114,6 @@ class ApartmentDto
         $this->elevator = $elevator;
         $this->air_conditioning = $air_conditioning;
         $this->garage = $garage;
-        //$this->pool = $pool;
         $this->pets_allowed = $pets_allowed;
     }
 
@@ -132,7 +128,6 @@ class ApartmentDto
             'property_id' => $this->property_id,
             'property_type' => $this->property_type,
             'built_size' => $this->built_size,
-            //'price' => $this->price,
             'status' => $this->status,
             'immediate_availability' => $this->immediate_availability,
             'user_id' => $this->user_id,
@@ -146,7 +141,6 @@ class ApartmentDto
             'elevator' => $this->elevator,
             'air_conditioning' => $this->air_conditioning,
             'garage' => $this->garage,
-            //'pool' => $this->pool,
             'pets_allowed' => $this->pets_allowed
         ];
     }
