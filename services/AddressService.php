@@ -99,6 +99,7 @@ class AddressService
      * @param int $property_id ID de la propiedad.
      * @return AddressModel|null Modelo de la dirección o null si no existe.
      */
+<<<<<<< Updated upstream
     public function getAddressByPropertyId($property_id)
     {
         $sql = "SELECT address_id FROM property WHERE id = :property_id";
@@ -109,6 +110,24 @@ class AddressService
         if ($row && isset($row['address_id'])) {
             return $this->getAddressById($row['address_id']);
         }
+=======
+    public function getAddressByPropertyId($propertyId)
+    {
+        // Si recibimos un objeto, extraemos el ID
+        if (is_object($propertyId) && method_exists($propertyId, 'getAddressId')) {
+            $addressId = $propertyId->getAddressId();
+            return $this->getAddressById($addressId);
+        }
+        // Si recibimos un ID, buscamos la propiedad y luego la dirección
+        if (is_int($propertyId)) {
+            $propertyService = \services\PropertyService::getInstance();
+            $propertyModel = $propertyService->getPropertyById($propertyId);
+            if ($propertyModel && method_exists($propertyModel, 'getAddressId')) {
+                $addressId = $propertyModel->getAddressId();
+                return $this->getAddressById($addressId);
+            }
+        }
+>>>>>>> Stashed changes
         return null;
     }
 

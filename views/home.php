@@ -7,23 +7,36 @@ use facades\AdvertFacade;
 use converters\AdvertConverter;
 use converters\ImageConverter;
 use converters\PropertyConverter;
+<<<<<<< Updated upstream
 
 $advertFacade = new AdvertFacade(new AdvertConverter(), new PropertyConverter(), new ImageConverter());
 
+=======
+/*
+// Crear las dependencias necesarias
+$advertFacade = new AdvertFacade(new AdvertConverter(), new PropertyConverter(), new ImageConverter());
+
+// Obtener todos los anuncios
+>>>>>>> Stashed changes
 $adverts = $advertFacade->getAllAdverts();
-//$adverts = [];
 
 // Parámetros de paginación
+<<<<<<< Updated upstream
 $advertsPerPage = 6;
+=======
+
+$advertsPerPage = 6; // Cambia este valor según cuántos anuncios quieras por página
+>>>>>>> Stashed changes
 $totalAdverts = count($adverts);
 $totalPages = ceil($totalAdverts / $advertsPerPage);
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $start = ($page - 1) * $advertsPerPage;
 $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
-?>
 
-<?php require_once __DIR__ . '/partials/head.php'; ?>
-<?php require_once __DIR__ . '/partials/header.php'; ?>
+*/
+require_once __DIR__ . '/partials/head.php';
+require_once __DIR__ . '/partials/header.php';
+?>
 <main>
     <!-- Anuncios y Filtros -->
     <div class="container body-ody-ody">
@@ -35,24 +48,24 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                         <strong>Filtrar propiedades</strong>
                     </div>
                     <div class="card-body">
-                        <form>
+                        <form method="get">
                             <div class="mb-3">
                                 <label for="property_type" class="form-label">Tipo</label>
                                 <select class="form-select" id="tipo" name="tipo">
                                     <option value="">Todos</option>
-                                    <option value="Habitación">Habitación</option>
-                                    <option value="Estudio">Estudio</option>
-                                    <option value="Piso">Piso</option>
-                                    <option value="Casa">Casa</option>
+                                    <option value="Habitación" <?= isset($_GET['tipo']) && $_GET['tipo'] === 'Habitación' ? 'selected' : '' ?>>Habitación</option>
+                                    <option value="Estudio" <?= isset($_GET['tipo']) && $_GET['tipo'] === 'Estudio' ? 'selected' : '' ?>>Estudio</option>
+                                    <option value="Piso" <?= isset($_GET['tipo']) && $_GET['tipo'] === 'Piso' ? 'selected' : '' ?>>Piso</option>
+                                    <option value="Casa" <?= isset($_GET['tipo']) && $_GET['tipo'] === 'Casa' ? 'selected' : '' ?>>Casa</option>
                                 </select>
                             </div>
                             <div class="mb-3">
                                 <label for="precio" class="form-label">Precio máximo</label>
-                                <input type="number" class="form-control" id="precio" name="precio" placeholder="Ej: 1000">
+                                <input type="number" class="form-control" id="precio" name="precio" placeholder="Ej: 1000" value="<?= isset($_GET['precio']) ? htmlspecialchars($_GET['precio']) : '' ?>">
                             </div>
                             <div class="mb-3">
                                 <label for="city" class="form-label">Ciudad</label>
-                                <input type="text" class="form-control" id="city" name="city" placeholder="Ej: Madrid">
+                                <input type="text" class="form-control" id="city" name="city" placeholder="Ej: Madrid" value="<?= isset($_GET['city']) ? htmlspecialchars($_GET['city']) : '' ?>">
                             </div>
                             <button type="submit" class="btn btn-secondary w-100 btn-font">ver propiedades</button>
                         </form>
@@ -63,7 +76,7 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
             <div class="col-12 col-md-9 mb-4">
                 <h2 class="mb-4">Propiedades disponibles</h2>
                 <div class="row g-4">
-                    <?php if (empty($adverts)): ?>
+                    <?php if (empty($advertsToShow)): ?>
                         <div class="col-12">
                             <div class="alert alert-secondary text-center">
                                 No se encontraron propiedades disponibles.
@@ -120,15 +133,15 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                 <nav aria-label="Página de navegación" class="mt-5">
                     <ul class="pagination justify-content-center">
                         <li class="page-item <?= $page === 1 ? 'disabled' : '' ?>">
-                            <a class="page-link" href="?page=<?= $page - 1 ?>" tabindex="-1">&laquo;</a>
+                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>" tabindex="-1">&laquo;</a>
                         </li>
                         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                             <li class="page-item <?= $page === $i ? 'active' : '' ?>">
-                                <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                                <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
                             </li>
                         <?php endfor; ?>
                         <li class="page-item <?= $page === $totalPages ? 'disabled' : '' ?>">
-                            <a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a>
+                            <a class="page-link" href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">&raquo;</a>
                         </li>
                     </ul>
                 </nav>
