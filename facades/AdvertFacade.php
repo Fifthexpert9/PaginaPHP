@@ -101,7 +101,7 @@ class AdvertFacade
 
         if (!$propertyModel) return null;
 
-        $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
+        $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getId());
 
 
         return [
@@ -170,9 +170,14 @@ class AdvertFacade
         $result = [];
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
+<<<<<<< Updated upstream
             $addressModel = $this->addressService->getAddressById($propertyModel->getAddressId());
             $mainImage = $this->imageService->getMainImageByPropertyId($propertyModel->getId());
             $imgUrl = $mainImage ? $mainImage->getImagePath() : 'no hay imagen';
+=======
+            $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getId());
+            $imgUrl = $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath();
+>>>>>>> Stashed changes
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
@@ -252,7 +257,7 @@ class AdvertFacade
         foreach ($advertModels as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
             if (!$propertyModel) continue;
-            $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
+            $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getId());
             $imgUrl = $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath();
             $advertDto = $this->advertConverter->modelToDto($advertModel, $imgUrl);
 
