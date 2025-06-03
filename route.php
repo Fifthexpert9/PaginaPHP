@@ -38,6 +38,9 @@ try {
                 case '/my-properties':
                     require 'views/my-properties.php';
                     break;
+                case '/delete-property':
+                    require 'controllers/DeleteProperty.php';
+                    break;
                 case '/my-adverts':
                     require 'views/my-adverts.php';
                     break;
@@ -73,9 +76,17 @@ try {
             break;
 
         case 'POST':
-        case '/editarProductoControl':
-            require 'controllers/controlEditar.php';
-            break;
+            switch ($request) {
+                case '/delete-property':
+                    require 'controllers/DeleteProperty.php';
+                    break;
+                case '/delete-advert':
+                    require 'controllers/DeleteAdvert.php';
+                    break;
+                default:
+                    echo "Error, ruta POST no permitida";
+                    break;
+            }
 
         default:
             echo "Error, método no permitido";

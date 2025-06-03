@@ -148,6 +148,8 @@ try {
             } else {
                 $_SESSION['message'] = 'Error al registrar las imágenes de la propiedad';
             }
+        } else {
+            $_SESSION['message'] = 'Propiedad sin fotografías registrada correctamente. ID de propiedad: ' . $resultPropertyFacade;
         }
     } else {
         $_SESSION['message'] = $resultPropertyFacade;

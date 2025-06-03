@@ -6,6 +6,7 @@ use services\AdvertService;
 use services\PropertyService;
 use services\AddressService;
 use services\ImageService;
+use converters\AddressConverter;
 use converters\AdvertConverter;
 use converters\PropertyConverter;
 use converters\ImageConverter;
@@ -118,16 +119,21 @@ class AdvertFacade
      */
     public function getAdvertsByUserId($userId)
     {
+        $ac = new AddressConverter();
         $adverts = $this->advertService->getAdvertsByUserId($userId);
 
         $result = [];
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
-            $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
+            $addressModel = $this->addressService->getAddressById($propertyModel->getAddressId());
+            $mainImage = $this->imageService->getMainImageByPropertyId($propertyModel->getId());
+            $imgUrl = $mainImage ? $mainImage->getImagePath() : 'media/no-image.jpg';
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-                'advert' => $this->advertConverter->modelToDto($advertModel, $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath())
+                'advert' => $this->advertConverter->modelToDto($advertModel, $imgUrl),
+                'property' => $this->propertyConverter->modelToDto($propertyModel),
+                'address' => $ac->modelToDto($addressModel)
             ];
         }
         return $result;
@@ -172,7 +178,7 @@ class AdvertFacade
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
             $addressModel = $this->addressService->getAddressById($propertyModel->getAddressId());
             $mainImage = $this->imageService->getMainImageByPropertyId($propertyModel->getId());
-            $imgUrl = $mainImage ? $mainImage->getImagePath() : 'no hay imagen';
+            $imgUrl = $mainImage ? $mainImage->getImagePath() : 'media/no-image.jpg';
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
@@ -206,15 +212,11 @@ class AdvertFacade
      * Elimina un anuncio por su ID.
      *
      * @param int $id ID del anuncio a eliminar.
-     * @return array Resultado de la operación (success, message)
+     * @return bool True si la eliminación fue exitosa, false en caso contrario.
      */
     public function deleteAdvert($id)
     {
-        if ($this->advertService->deleteAdvert($id)) {
-            return ['success' => true, 'message' => 'Anuncio eliminado correctamente.'];
-        } else {
-            return ['success' => false, 'message' => 'Error al eliminar el anuncio.'];
-        }
+        return $this->advertService->deleteAdvert($id);
     }
 
     /**

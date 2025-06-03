@@ -155,4 +155,28 @@ class AddressService
             return false;
         }
     }
+
+    /**
+     * Elimina la dirección asociada a una propiedad a partir del id de la propiedad.
+     *
+     * @param int $property_id ID de la propiedad.
+     * @return bool True si la eliminación fue exitosa, false en caso contrario.
+     */
+    public function deleteAddressByPropertyId($property_id)
+    {
+        try {
+            $sql = "SELECT address_id FROM property WHERE id = :property_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([':property_id' => $property_id]);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if ($row && isset($row['address_id'])) {
+                return $this->deleteAddress($row['address_id']);
+            }
+            return false;
+        } catch (PDOException $e) {
+            error_log('Error al eliminar dirección por property_id: ' . $e->getMessage());
+            return false;
+        }
+    }
 }

@@ -88,12 +88,23 @@ class ImageFacade
         return $imageDtos;
     }
 
+    /**
+     * Inserta varias imágenes en la base de datos asociadas a una propiedad.
+     *
+     * Recorre el array de DTOs de imágenes y las inserta una a una en la base de datos.
+     * Si alguna inserción falla, devuelve un mensaje de error indicando la imagen que falló.
+     * Si el array está vacío, devuelve false.
+     *
+     * @param ImageDto[] $imageDtos Array de objetos ImageDto a insertar.
+     * @return bool|string True si todas las imágenes se insertaron correctamente,
+     *                     o un string con el mensaje de error si alguna falla.
+     */
     public function addImages($imageDtos)
     {
         foreach ($imageDtos as $imageDto) {
             $result = $this->imageService->addImage($this->imageConverter->dtoToModel($imageDto));
             if (!$result) {
-                return "error al insertar la imagen: " . $imageDto->imagePath;
+                return "Error al insertar la imagen: " . $imageDto->imagePath;
             }
         }
 

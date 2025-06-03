@@ -39,20 +39,51 @@ if ($user && isset($user->id)) {
             <div class="alert alert-secondary text-center">No tienes propiedades registradas.</div>
         <?php else: ?>
             <div class="row g-4">
-                <?php foreach ($properties as $property): ?>
-                    <div class="col-12 col-md-6 col-lg-4">
+                <?php foreach ($properties as $property): 
+                    $mainImage = isset($property['main_image']) ? $property['main_image'] : 'media/no-image.png';
+                    $propertyDto = isset($property['property']) ? $property['property'] : null;
+                ?>
+                    <div class="col-12">
                         <div class="card h-100 shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <?= htmlspecialchars($property['text'] ?? ($property['id'] . ' - ' . ($property['property_type'] ?? 'Propiedad'))) ?>
-                                </h5>
-                                <?php if (isset($property['city'])): ?>
-                                    <p class="card-text mb-1"><strong>Ciudad:</strong> <?= htmlspecialchars($property['city']) ?></p>
-                                <?php endif; ?>
-                                <?php if (isset($property['property_type'])): ?>
-                                    <p class="card-text mb-1"><strong>Tipo:</strong> <?= htmlspecialchars($property['property_type']) ?></p>
-                                <?php endif; ?>
-                                <a href="/detallePropiedad?id=<?= urlencode($property['id']) ?>" class="btn btn-primary btn-sm mt-2">Ver detalles</a>
+                            <div class="row g-0 align-items-center">
+                                <!-- Imagen principal a la izquierda -->
+                                <div class="col-lg-3 text-center">
+                                    <img src="/<?= htmlspecialchars($mainImage) ?>" alt="Imagen principal" class="img-fluid rounded-start" style="object-fit: cover;">
+                                </div>
+                                <!-- Información en el centro -->
+                                <div class="col-lg-7">
+                                    <div class="card-body">
+                                        <h4 class="card-title mb-3"><?= htmlspecialchars($property['text']) ?></h4>
+                                        <?php if ($propertyDto && isset($propertyDto->id)): ?>
+                                            <p class="card-text mb-1"><strong>ID de propiedad:</strong> <?= htmlspecialchars($propertyDto->id) ?></p>
+                                        <?php endif; ?>
+                                        <?php if ($propertyDto && isset($propertyDto->property_type)): ?>
+                                            <p class="card-text mb-1"><strong>Tipo:</strong> <?= htmlspecialchars($propertyDto->property_type) ?></p>
+                                        <?php endif; ?>
+                                        <?php if ($propertyDto && isset($propertyDto->built_size)): ?>
+                                            <p class="card-text mb-1"><strong>Tamaño construido:</strong> <?= htmlspecialchars($propertyDto->built_size) ?> m²</p>
+                                        <?php endif; ?>
+                                        <?php if ($propertyDto && isset($propertyDto->status)): ?>
+                                            <p class="card-text mb-1"><strong>Estado:</strong> <?= htmlspecialchars($propertyDto->status) ?></p>
+                                        <?php endif; ?>
+                                        <?php if ($propertyDto && isset($propertyDto->immediate_availability)): ?>
+                                            <?php if ($propertyDto->immediate_availability): ?>
+                                                <p class="card-text mb-1"><strong>Disponibilidad inmediata:</strong> Sí</p>
+                                            <?php else: ?>
+                                                <p class="card-text mb-1"><strong>Disponibilidad inmediata:</strong> No</p>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <!-- Botones a la derecha -->
+                                <div class="col-lg-2 d-flex flex-column align-items-center justify-content-center p-3">
+                                    <a href="/detallePropiedad?id=<?= urlencode($property['id']) ?>" class="btn btn-secondary btn-sm mb-2 w-100 btn-font">ver detalles</a>
+                                    <a href="/editarPropiedad?id=<?= urlencode($property['id']) ?>" class="btn btn-secondary btn-sm mb-2 w-100 btn-font">editar</a>
+                                    <form action="/delete-property" method="post" class="border w-100" style="display:inline;">
+                                        <input type="hidden" name="id" value="<?= htmlspecialchars($property['id']) ?>">
+                                        <button type="submit" class="btn btn-danger btn-sm w-100  btn-font" onclick="return confirm('¿Seguro que quieres borrar esta propiedad? También se borrará la dirección asignada a esta propiedad.')">borrar</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

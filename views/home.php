@@ -77,14 +77,14 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                         <div class="col-6 d-flex align-items-stretch" style="overflow: hidden;">
                                             <?php if ($advert['advert']->main_image): ?>
                                                 <img src="<?= htmlspecialchars($advert['advert']->main_image) ?>"
-                                                     class="img-fluid rounded-start w-100 h-100"
-                                                     alt="Imagen propiedad"
-                                                     style="object-fit: cover; min-height: 200px;">
+                                                    class="img-fluid rounded-start w-100 h-100"
+                                                    alt="Imagen propiedad"
+                                                    style="object-fit: cover; min-height: 200px;">
                                             <?php else: ?>
                                                 <img src="/ruta/a/imagen-default.jpg"
-                                                     class="img-fluid rounded-start w-100 h-100"
-                                                     alt="Sin imagen"
-                                                     style="object-fit: cover; min-height: 200px;">
+                                                    class="img-fluid rounded-start w-100 h-100"
+                                                    alt="Sin imagen"
+                                                    style="object-fit: cover; min-height: 200px;">
                                             <?php endif; ?>
                                         </div>
                                         <div class="col-6">
@@ -96,17 +96,21 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                                     <?= htmlspecialchars($advert['property']->built_size) ?> m²
                                                 </p>
                                                 <p class="card-text mb-1">
-                                                    <span class="badge text-bg-success fs-6"><?= htmlspecialchars($advert['advert']->price) ?> €</span>
+                                                    <?php if ($advert['advert']->action == 'Alquiler'): ?>
+                                                        <span class="badge text-bg-success fs-6"><?= htmlspecialchars($advert['advert']->price) ?> €/mes</span>
+                                                    <?php else: ?>
+                                                        <span class="badge text-bg-success fs-6"><?= htmlspecialchars($advert['advert']->price) ?> €</span>
+                                                    <?php endif; ?>
                                                 </p>
                                                 <p class="card-text mb-1">
-                                                    <span class="badge text-bg-secondary"><?= htmlspecialchars($advert['property']->status) ?></span>
+                                                    <span class="badge text-bg-secondary fs-6"><?= htmlspecialchars($advert['property']->status) ?></span>
                                                 </p>
                                                 <p class="card-text flex-grow-1 d-flex align-items-end">
-                                                    <?= htmlspecialchars($advert['advert']->description) ?>
+                                                    <?= htmlspecialchars(mb_strimwidth($advert['advert']->description, 0, 120, '...')) ?>
                                                 </p>
                                                 <div class="mt-2 d-flex justify-content-evenly align-items-center">
-                                                    <button class="btn btn-outline-danger btn-sm" title="Añadir a favoritos"><i class="bi bi-heart-fill"></i></button>
-                                                    <a href="/detallePropiedad?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-primary btn-sm" title="Ver detalles">Ver detalles</a>
+                                                    <button class="btn btn-outline-danger btn-sm btn-font" title="Añadir a favoritos"><i class="bi bi-heart-fill mx-2"></i></button>
+                                                    <a href="/detallePropiedad?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm btn-font w-50" title="Ver detalles">ver detalles</a>
                                                 </div>
                                             </div>
                                         </div>

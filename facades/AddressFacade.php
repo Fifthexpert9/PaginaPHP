@@ -90,4 +90,18 @@ class AddressFacade
     {
         return $this->addressService->deleteAddress($id);
     }
+
+    /**
+     * Elimina la dirección asociada a una propiedad a partir del ID de la propiedad.
+     *
+     * Busca la dirección vinculada a la propiedad indicada y la elimina de la base de datos.
+     * Si la propiedad no tiene dirección asociada, no realiza ninguna acción.
+     *
+     * @param int $propertyId ID de la propiedad cuya dirección se desea eliminar.
+     * @return bool True si la eliminación fue exitosa, false en caso contrario.
+     */
+    public function deleteAddressByPropertyId($propertyId)
+    {
+        return $this->addressService->deleteAddressByPropertyId($propertyId);
+    }
 }

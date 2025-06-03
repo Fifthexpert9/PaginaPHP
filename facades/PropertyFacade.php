@@ -2,6 +2,7 @@
 
 namespace facades;
 
+use facades\ImageFacade;
 use services\PropertyService;
 use services\RoomService;
 use services\StudioService;
@@ -9,12 +10,14 @@ use services\ApartmentService;
 use services\HouseService;
 use services\AddressService;
 use converters\PropertyConverter;
+use converters\ImageConverter;
 use converters\RoomConverter;
 use converters\StudioConverter;
 use converters\ApartmentConverter;
 use converters\HouseConverter;
 use converters\AddressConverter;
 use dtos\PropertyDto;
+use dtos\ImageDto;
 use dtos\AddressDto;
 
 /**
@@ -215,17 +218,27 @@ class PropertyFacade
     }
 
     /**
-     * Obtiene todas las propiedades de un usuario, devolviendo su id, tipo y ciudad.
+     * Obtiene todas las propiedades de un usuario, devolviendo información básica y la imagen principal.
      *
      * Este método recupera todas las propiedades asociadas a un usuario concreto,
-     * devolviendo un array donde cada elemento contiene el identificador de la propiedad,
-     * el tipo de propiedad y la ciudad en la que se encuentra.
+     * devolviendo un array donde cada elemento contiene:
+     *  - El identificador de la propiedad ('id')
+     *  - Un texto descriptivo ('text') con el id, tipo y ciudad
+     *  - El DTO de la propiedad ('property')
+     *  - La ruta de la imagen principal ('main_image'), o una imagen por defecto si no tiene
      *
-     * @param int $userId ID del usuario.
-     * @return array[] Array de arrays con las claves 'id', 'property_type' y 'city' de cada propiedad.
+     * @param int $user_id ID del usuario cuyas propiedades se desean obtener.
+     * @return array[] Array de arrays con las claves:
+     *                 - 'id' (int): ID de la propiedad
+     *                 - 'text' (string): Descripción breve (ej: "5 - Piso en Madrid")
+     *                 - 'property' (PropertyDto): DTO de la propiedad
+     *                 - 'main_image' (string): Ruta de la imagen principal o imagen por defecto
      */
     public function getPropertiesByUserId($user_id)
     {
+        $if = new ImageFacade(
+            new ImageConverter()
+        );
         $propertyModels = $this->propertyService->getPropertiesByUserId($user_id);
 
         $properties = [];
@@ -234,9 +247,14 @@ class PropertyFacade
             foreach ($propertyModels as $propertyModel) {
                 $address = $this->addressService->getAddressByPropertyId($propertyModel->getId());
                 $city = $address ? $address->getCity() : 'Sin ciudad';
+                $mainImage = $if->getMainImageByPropertyId($propertyModel->getId());
+                $imgUrl = $mainImage ? $mainImage->imagePath : 'media/no-image.jpg';
+                
                 $properties[] = [
                     'id' => $propertyModel->getId(),
-                    'text' => $propertyModel->getId() . ' - ' . $propertyModel->getPropertyType() . ' en ' . $city
+                    'text' => $propertyModel->getId() . ' - ' . $propertyModel->getPropertyType() . ' en ' . $city,
+                    'property' => $this->propertyConverter->modelToDto($propertyModel),
+                    'main_image' => $imgUrl
                 ];
             }
         }

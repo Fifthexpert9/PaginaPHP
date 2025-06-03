@@ -96,7 +96,7 @@
                 <div class="mb-3" id="dynamic-fields"></div>
                 <div class="mb-3">
                     <label for="images" class="form-label">Imágenes de la propiedad (máx. 6)</label>
-                    <input type="file" class="form-control" id="images" name="images[]" accept="image/*" multiple required>
+                    <input type="file" class="form-control" id="images" name="images[]" accept="image/*" multiple>
                     <small class="form-text text-muted">Puedes subir hasta 6 imágenes.</small>
                 </div>
 

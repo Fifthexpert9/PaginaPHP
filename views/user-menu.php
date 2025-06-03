@@ -12,7 +12,7 @@ $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 <main>
     <div class="container my-5">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6">
+            <div class="col-lg-6">
                 <div class="card shadow-sm">
                     <h2 class="logo text-center mt-3">perfil de usuario</h2>
                     <div class="card-body text-center">
@@ -23,11 +23,11 @@ $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
                         <?php endif; ?>
 
                         <div class="d-grid gap-3">
-                            <a href="/my-properties" class="btn btn-outline-secondary btn-lg btn-font">ver mis propiedades</a>
-                            <a href="/my-adverts" class="btn btn-outline-secondary btn-lg btn-font">ver mis anuncios</a>
-                            <a href="/edit-profile" class="btn btn-outline-secondary btn-lg btn-font">editar mis datos</a>
+                            <a href="/my-properties" class="btn btn-secondary btn-lg btn-font">ver mis propiedades</a>
+                            <a href="/my-adverts" class="btn btn-secondary btn-lg btn-font">ver mis anuncios</a>
+                            <a href="/edit-profile" class="btn btn-secondary btn-lg btn-font">editar mis datos</a>
                             <a href="/delete-account"
-                                class="btn btn-outline-danger btn-lg btn-font"
+                                class="btn btn-danger btn-lg btn-font"
                                 onclick="return confirm('¿Seguro que deseas eliminar tu cuenta? Esta acción no se puede deshacer.');">
                                 eliminar cuenta
                             </a>
