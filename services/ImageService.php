@@ -47,22 +47,30 @@ class ImageService
     /**
      * Añade una nueva imagen a una propiedad.
      *
-     * @param ImageModel $image Instancia de ImageModel.
-     * @return int ID de la imagen insertada.
+     * Inserta una nueva fila en la tabla property_image asociando la imagen a la propiedad indicada.
+     * El método recibe una instancia de ImageModel, de la que obtiene el ID de la propiedad,
+     * la ruta de la imagen y si es la imagen principal o no.
+     *
+     * @param ImageModel $image Instancia de ImageModel con los datos de la imagen a guardar.
+     * @return bool True si la inserción fue exitosa, false en caso contrario.
      */
     public function addImage(ImageModel $image)
     {
-        $stmt = $this->db->prepare(
-            "INSERT INTO property_image (property_id, image_path, is_main, uploaded_at)
-             VALUES (?, ?, ?, ?)"
-        );
-        $stmt->execute([
-            $image->getPropertyId(),
-            $image->getImagePath(),
-            $image->isMain(),
-            $image->getUploadedAt()
+        $sql = "INSERT INTO `property_image` (`id`, `property_id`, `image_path`, `is_main`, `uploaded_at`)
+        VALUES (NULL, :property_id, :image_path, :is_main, current_timestamp());";
+
+        $stmt = $this->db->prepare($sql);
+        $result = $stmt->execute([
+            ':property_id' => $image->getPropertyId(),
+            ':image_path' => $image->getImagePath(),
+            ':is_main' => $image->isMain()
         ]);
-        return $this->db->lastInsertId();
+
+        if (!$result) {
+            error_log("Error al insertar imagen: " . print_r($stmt->errorInfo(), true));
+        }
+
+        return $result;
     }
 
     /**

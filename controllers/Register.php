@@ -12,7 +12,15 @@ session_start();
 
 $userFacade = new UserFacade(new UserConverter());
 
-$userDto = new UserDto(1, $_POST['name'], $_POST['last_name'], 'username', $_POST['email'], 'user', date('Y-m-d H:i:s'));
+$userDto = new UserDto(
+    null,
+    $_POST['name'],
+    $_POST['last_name'],
+    'username',
+    $_POST['email'],
+    'user',
+    date('Y-m-d H:i:s')
+);
 
 $result = $userFacade->userRegister($userDto, $_POST['password']);
 

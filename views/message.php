@@ -28,9 +28,9 @@
 </main>
 
 <script>
-    setTimeout(function() {
+    /*setTimeout(function() {
         window.location.href = '/';
-    }, 10000);
+    }, 10000);*/
 
     document.addEventListener('DOMContentLoaded', function() {
         var goBack = document.getElementById('goBack');

@@ -38,6 +38,69 @@ class ImageFacade
     }
 
     /**
+     * Añade varias imágenes a una propiedad.
+     *
+     * Sube hasta 6 imágenes recibidas desde un formulario, las guarda en la carpeta /media,
+     * y registra su información en la base de datos asociándolas a la propiedad indicada.
+     * La primera imagen se marca como principal (is_main = true).
+     *
+     * @param array $images Array de archivos subidos ($_FILES['images']).
+     * @param int $property_id ID de la propiedad a la que asociar las imágenes.
+     * @return bool True si todas las imágenes se insertaron correctamente, false en caso contrario.
+     */
+    public function transformImagesToArrayDto($images, $property_id)
+    {
+        $imageDtos = [];
+        if (!empty($images) && !empty($images['name'][0])) {
+            $max_files = min(count($images['name']), 6);
+            $upload_dir = __DIR__ . '/../media/';
+
+            if (!is_dir($upload_dir)) {
+                mkdir($upload_dir, 0777, true);
+            }
+
+            for ($i = 0; $i < $max_files; $i++) {
+                $is_main = ($i == 0);
+
+                if ($images['error'][$i] === UPLOAD_ERR_OK) {
+                    $file_type = pathinfo($images['name'][$i], PATHINFO_EXTENSION);
+                    $file_name = 'property_' . $property_id . '_' . $i . '.' . $file_type;
+                    $destination = $upload_dir . $file_name;
+
+                    if (move_uploaded_file($images['tmp_name'][$i], $destination)) {
+                        error_log("Archivo subido correctamente: " . $destination);
+                        $imageDtos[] = new ImageDto(
+                            1,
+                            $property_id,
+                            'media/' . $file_name,
+                            $is_main,
+                            date('Y-m-d H:i:s')
+                        );
+                    } else {
+                        error_log("Fallo al mover el archivo: " . $images['tmp_name'][$i] . " a " . $destination);
+                    }
+                } else {
+                    error_log("Error en la subida del archivo: " . $images['name'][$i] . " - Código de error: " . $images['error'][$i]);
+                }
+            }
+        }
+
+        return $imageDtos;
+    }
+
+    public function addImages($imageDtos)
+    {
+        foreach ($imageDtos as $imageDto) {
+            $result = $this->imageService->addImage($this->imageConverter->dtoToModel($imageDto));
+            if (!$result) {
+                return "error al insertar la imagen: " . $imageDto->imagePath;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Obtiene una imagen por su ID.
      *
      * @param int $id ID de la imagen.

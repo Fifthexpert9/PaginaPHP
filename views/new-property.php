@@ -6,7 +6,7 @@
         <div class="text-center mt-1 mb-3">
             <h2 class="logo">registrar propiedad</h2>
         </div>
-        <form id="multiStepForm" action="/controllers/CreateAddressCreateProperty.php" method="POST">
+        <form id="multiStepForm" action="/controllers/CreateAddressCreateProperty.php" method="POST" enctype="multipart/form-data">
             <!-- Paso 1 -->
             <div class="step" id="step-1">
                 <h4 class="mb-2">¿Dónde está tu casa?</h4>
@@ -94,6 +94,11 @@
             <div class="step d-none" id="step-3">
                 <h4>Datos adicionales</h4>
                 <div class="mb-3" id="dynamic-fields"></div>
+                <div class="mb-3">
+                    <label for="images" class="form-label">Imágenes de la propiedad (máx. 6)</label>
+                    <input type="file" class="form-control" id="images" name="images[]" accept="image/*" multiple required>
+                    <small class="form-text text-muted">Puedes subir hasta 6 imágenes.</small>
+                </div>
 
                 <div class="d-flex justify-content-center">
                     <button type="button" class="btn btn-outline-secondary btn-font mt-3 me-2" onclick="prevStep(2)">anterior</button>
@@ -115,6 +120,7 @@
     </div>
 </main>
 
+<!-- Lógica para los pasos del formulario -->
 <script>
     function nextStep(step) {
         document.querySelectorAll('.step').forEach(el => el.classList.add('d-none'));
@@ -127,52 +133,7 @@
     }
 </script>
 
-<!--<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        function hideAllPropertyFields() {
-            document.getElementById('room-fields').style.display = 'none';
-            document.getElementById('studio-fields').style.display = 'none';
-            document.getElementById('apartment-fields').style.display = 'none';
-            document.getElementById('house-fields').style.display = 'none';
-        }
-
-        function showPropertyFields(type) {
-            hideAllPropertyFields();
-            if (type === 'Habitación') {
-                document.getElementById('room-fields').style.display = '';
-            } else if (type === 'Estudio') {
-                document.getElementById('studio-fields').style.display = '';
-            } else if (type === 'Piso') {
-                document.getElementById('apartment-fields').style.display = '';
-            } else if (type === 'Casa') {
-                document.getElementById('house-fields').style.display = '';
-            }
-        }
-
-        document.querySelectorAll('input[name="property_type"]').forEach(function(radio) {
-            radio.addEventListener('change', function() {
-                // Si ya estamos en el paso 3, actualiza los campos visibles
-                if (!document.getElementById('step-3').classList.contains('d-none')) {
-                    showPropertyFields(this.value);
-                }
-            });
-        });
-
-        const originalNextStep = window.nextStep;
-        window.nextStep = function(step) {
-            originalNextStep(step);
-            if (step === 3) {
-                const selected = document.querySelector('input[name="property_type"]:checked');
-                if (selected) {
-                    showPropertyFields(selected.value);
-                }
-            }
-        };
-
-        hideAllPropertyFields();
-    });
-</script>-->
-
+<!-- Lógica para cargar campos dinámicos según el tipo de propiedad -->
 <script>
     function getRoomFields() {
         return `
@@ -545,16 +506,25 @@
         document.getElementById('dynamic-fields').innerHTML = html;
     }
 
-    // Evento para los radios
     document.querySelectorAll('input[name="property_type"]').forEach(function(radio) {
         radio.addEventListener('change', function() {
             loadFieldsForType(this.value);
         });
     });
 
-    // Al cargar el paso 3, también debes llamar a loadFieldsForType con el valor seleccionado
 </script>
 
+<!-- Limitador de número de imágenes -->
+<script>
+    document.getElementById('images').addEventListener('change', function() {
+        if (this.files.length > 6) {
+            alert('Sólo puedes subir hasta 6 imágenes.');
+            this.value = '';
+        }
+    });
+</script>
+
+<!-- Lógica para el resumen de datos -->
 <script>
     function getRadioValue(name) {
         const checked = document.querySelector('input[name="' + name + '"]:checked');

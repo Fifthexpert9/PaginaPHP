@@ -8,14 +8,12 @@ use services\StudioService;
 use services\ApartmentService;
 use services\HouseService;
 use services\AddressService;
-use services\ImageService;
 use converters\PropertyConverter;
 use converters\RoomConverter;
 use converters\StudioConverter;
 use converters\ApartmentConverter;
 use converters\HouseConverter;
 use converters\AddressConverter;
-use converters\ImageConverter;
 use dtos\PropertyDto;
 use dtos\AddressDto;
 
@@ -31,14 +29,12 @@ class PropertyFacade
     private $apartmentService;
     private $houseService;
     private $addressService;
-    private $imageService;
     private $propertyConverter;
     private $roomConverter;
     private $studioConverter;
     private $apartmentConverter;
     private $houseConverter;
     private $addressConverter;
-    private $imageConverter;
 
     /**
      * Constructor de PropertyFacade.
@@ -62,8 +58,7 @@ class PropertyFacade
         StudioConverter $studioConverter,
         ApartmentConverter $apartmentConverter,
         HouseConverter $houseConverter,
-        AddressConverter $addressConverter,
-        ImageConverter $imageConverter
+        AddressConverter $addressConverter
     ) {
         $this->propertyService = PropertyService::getInstance();
         $this->roomService = RoomService::getInstance();
@@ -71,14 +66,12 @@ class PropertyFacade
         $this->apartmentService = ApartmentService::getInstance();
         $this->houseService = HouseService::getInstance();
         $this->addressService = AddressService::getInstance();
-        $this->imageService = ImageService::getInstance();
         $this->propertyConverter = $propertyConverter;
         $this->roomConverter = $roomConverter;
         $this->studioConverter = $studioConverter;
         $this->apartmentConverter = $apartmentConverter;
         $this->houseConverter = $houseConverter;
         $this->addressConverter = $addressConverter;
-        $this->imageConverter = $imageConverter;
     }
 
     /**
@@ -100,12 +93,11 @@ class PropertyFacade
      * @param AddressDto $addressDto DTO con los datos de la dirección.
      * @param PropertyDto $propertyDto DTO con los datos generales de la propiedad.
      * @param mixed $specificDto DTO con los datos específicos de la propiedad (RoomDto, StudioDto, ApartmentDto o HouseDto).
-     * @param array $imagesDtos Array de ImageDto con las imágenes asociadas (opcional).
      * @return int|string Devuelve el ID de la propiedad creada si tiene éxito, o un mensaje de error si falla.
      *
      * @throws \Throwable Si ocurre un error inesperado durante el proceso de creación.
      */
-    public function createProperty($addressDto, $propertyDto, $specificDto, $imagesDtos = [])
+    public function createProperty($addressDto, $propertyDto, $specificDto)
     {
         try {
             $property_id = null;
@@ -165,11 +157,6 @@ class PropertyFacade
             } else {
                 return "El tipo de propiedad no es válido.";
             }
-
-            /*foreach ($imagesDtos as $imageDto) {
-                $imageModel = $this->imageConverter->dtoToModel($imageDto, $propertyId);
-                $this->imageService->addImage($imageModel);
-            }*/
 
             return $property_id;
         } catch (\Throwable $e) {

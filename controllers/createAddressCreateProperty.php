@@ -5,13 +5,14 @@ namespace controllers;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use facades\PropertyFacade;
+use facades\ImageFacade;
 use converters\PropertyConverter;
+use converters\ImageConverter;
 use converters\RoomConverter;
 use converters\StudioConverter;
 use converters\ApartmentConverter;
 use converters\HouseConverter;
 use converters\AddressConverter;
-use converters\ImageConverter;
 use dtos\PropertyDto;
 use dtos\RoomDto;
 use dtos\StudioDto;
@@ -29,8 +30,9 @@ try {
         new ApartmentConverter(),
         new HouseConverter(),
         new AddressConverter(),
-        new ImageConverter()
     );
+
+    $imageFacade = new ImageFacade(new ImageConverter());
 
     $addressDto = new AddressDto(
         null,
@@ -133,13 +135,22 @@ try {
             break;
     }
 
-    $images = [];
-    $result = $propertyFacade->createProperty($addressDto, $propertyDto, $specificDto, $images);
+    $images = $_FILES['images'];
 
-    if (is_numeric($result)) {
-        $_SESSION['message'] = 'Propiedad registrada correctamente. ID de propiedad: ' . $result;
+    $resultPropertyFacade = $propertyFacade->createProperty($addressDto, $propertyDto, $specificDto);
+
+    if (is_numeric($resultPropertyFacade)) {
+        $imageDtos = $imageFacade->transformImagesToArrayDto($images, $resultPropertyFacade);
+        if (!empty($imageDtos)) {
+            $resultImageFacade = $imageFacade->addImages($imageDtos);
+            if ($resultImageFacade === true) {
+                $_SESSION['message'] = 'Propiedad registrada correctamente. ID de propiedad: ' . $resultPropertyFacade;
+            } else {
+                $_SESSION['message'] = 'Error al registrar las imágenes de la propiedad';
+            }
+        }
     } else {
-        $_SESSION['message'] = $result;
+        $_SESSION['message'] = $resultPropertyFacade;
     }
 
     header('Location: /message');
