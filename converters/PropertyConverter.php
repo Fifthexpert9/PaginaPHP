@@ -3,22 +3,62 @@
 namespace converters;
 
 use models\PropertyModel;
+use services\ImageService;
 use dtos\PropertyDto;
+use converters\ImageConverter;
 
 /**
  * Conversor para la entidad Property.
- * Permite convertir entre PropertyModel y PropertyDto.
+ *
+ * Permite convertir entre PropertyModel (modelo de dominio) y PropertyDto (objeto de transferencia de datos).
+ * También se encarga de obtener la imagen principal y todas las imágenes asociadas a la propiedad,
+ * devolviendo rutas válidas o una imagen por defecto si no existen.
  */
 class PropertyConverter
 {
+    /** @var ImageService Servicio para la gestión de imágenes de propiedades */
+    private $imageService;
+    /** @var ImageConverter Conversor para imágenes */
+    private $imageConverter;
+
     /**
-     * Convierte un PropertyModel a PropertyDto.
+     * Constructor de PropertyConverter.
+     *
+     * Inicializa los servicios necesarios para la conversión y obtención de imágenes.
+     */
+    public function __construct()
+    {
+        $this->imageService = ImageService::getInstance();
+        $this->imageConverter = new ImageConverter();
+    }
+
+    /**
+     * Convierte un PropertyModel en un PropertyDto.
+     *
+     * Obtiene la imagen principal y todas las imágenes asociadas a la propiedad.
+     * Si no existen imágenes, se asigna una imagen por defecto ('media/no-image.jpg').
      *
      * @param PropertyModel $propertyModel Modelo de la propiedad.
-     * @return PropertyDto DTO de la propiedad.
+     * @return PropertyDto DTO de la propiedad con imágenes asociadas.
      */
     public function modelToDto(PropertyModel $propertyModel)
     {
+        $main_image = $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath();
+
+        if (!$main_image) {
+            $main_image = 'media/no-image.jpg';
+        }
+
+        $images = $this->imageService->getImagesByPropertyId($propertyModel->getId());
+
+        if (!$images) {
+            $images = ['media/no-image.jpg'];
+        } else {
+            $images = array_map(function ($imageModel) {
+                return $imageModel->getImagePath();
+            }, $images);
+        }
+
         return new PropertyDto(
             $propertyModel->getId(),
             $propertyModel->getPropertyType(),
@@ -26,7 +66,9 @@ class PropertyConverter
             $propertyModel->getBuiltSize(),
             $propertyModel->getStatus(),
             $propertyModel->getImmediateAvailability(),
-            $propertyModel->getUserId()
+            $propertyModel->getUserId(),
+            $main_image,
+            $images
         );
     }
 

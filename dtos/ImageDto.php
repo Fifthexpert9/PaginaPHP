@@ -10,29 +10,10 @@ namespace dtos;
  */
 class ImageDto
 {
-    /**
-     * @var int ID único de la imagen.
-     */
     public $id;
-
-    /**
-     * @var int ID de la propiedad asociada.
-     */
     public $propertyId;
-
-    /**
-     * @var string Ruta o URL de la imagen.
-     */
     public $imagePath;
-
-    /**
-     * @var bool Indica si la imagen es la principal de la propiedad.
-     */
     public $isMain;
-
-    /**
-     * @var string|null Fecha y hora en la que se subió la imagen.
-     */
     public $uploadedAt;
 
     /**

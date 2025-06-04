@@ -6,7 +6,7 @@ namespace dtos;
  * DTO para exponer información de un apartamento junto con los datos de la propiedad y la dirección.
  *
  * Este DTO agrupa toda la información relevante de un apartamento ofertado, incluyendo los datos generales de la propiedad,
- * la dirección (AddressDto) y los datos específicos del apartamento.
+ * la dirección (AddressDto), los datos específicos del apartamento y las imágenes relativas a él.
  * Se utiliza para transferir datos entre la capa de dominio y la capa de presentación o API.
  *
  * @property int $property_id ID de la propiedad.
@@ -16,6 +16,8 @@ namespace dtos;
  * @property string $status Estado del apartamento.
  * @property bool $immediate_availability Disponibilidad inmediata.
  * @property int $user_id ID del usuario propietario.
+ * @property string $main_image Ruta de la imagen principal de la propiedad (image_path de ImageDto).
+ * @property string[] $images Array de rutas de imágenes (image_path de ImageDto) asociadas a la propiedad.
  * @property AddressDto $address Objeto con la dirección del apartamento.
  * @property string $apartment_type Tipo de apartamento.
  * @property int $num_rooms Número de habitaciones.
@@ -35,10 +37,11 @@ class ApartmentDto
     public $property_id;
     public $property_type;
     public $built_size;
-    //public $price;
     public $status;
     public $immediate_availability;
     public $user_id;
+    public $main_image;
+    public $images = [];
 
     // Dirección (AddressDto)
     public $address;
@@ -53,7 +56,6 @@ class ApartmentDto
     public $elevator;
     public $air_conditioning;
     public $garage;
-    //public $pool;
     public $pets_allowed;
 
     /**
@@ -66,6 +68,8 @@ class ApartmentDto
      * @param string $status Estado del apartamento.
      * @param bool $immediate_availability Disponibilidad inmediata.
      * @param int $user_id ID del usuario propietario.
+     * @param string $main_image Ruta de la imagen principal de la propiedad (image_path de ImageDto).
+     * @param string[] $images (opcional) Array de rutas de imágenes (image_path de ImageDto) asociadas a la propiedad.
      * @param AddressDto $address Objeto con la dirección del apartamento.
      * @param string $apartment_type Tipo de apartamento.
      * @param int $num_rooms Número de habitaciones.
@@ -76,7 +80,6 @@ class ApartmentDto
      * @param bool $elevator Indica si tiene ascensor.
      * @param bool $air_conditioning Indica si tiene aire acondicionado.
      * @param bool $garage Indica si tiene garaje.
-     * @param bool $pool Indica si tiene piscina.
      * @param bool $pets_allowed Indica si se permiten mascotas.
      */
     public function __construct(
@@ -86,6 +89,8 @@ class ApartmentDto
         $status,
         $immediate_availability,
         $user_id,
+        $main_image,
+        $images = [],
         $address, // AddressDto
         $apartment_type,
         $num_rooms,
@@ -104,6 +109,8 @@ class ApartmentDto
         $this->status = $status;
         $this->immediate_availability = $immediate_availability;
         $this->user_id = $user_id;
+        $this->main_image = $main_image;
+        $this->images = $images;
         $this->address = $address;
         $this->apartment_type = $apartment_type;
         $this->num_rooms = $num_rooms;
@@ -131,7 +138,9 @@ class ApartmentDto
             'status' => $this->status,
             'immediate_availability' => $this->immediate_availability,
             'user_id' => $this->user_id,
-            'address' => $this->address ? (method_exists($this->address, 'toArray') ? $this->address->toArray() : (array)$this->address) : null,
+            'main_image' => $this->main_image,
+            'images' => $this->images,
+            'address' => $this->address ? $this->address->toArray() : null,
             'apartment_type' => $this->apartment_type,
             'num_rooms' => $this->num_rooms,
             'num_bathrooms' => $this->num_bathrooms,

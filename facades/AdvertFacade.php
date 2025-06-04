@@ -5,13 +5,12 @@ namespace facades;
 use services\AdvertService;
 use services\PropertyService;
 use services\AddressService;
-use services\ImageService;
+use facades\ImageFacade;
 use converters\AddressConverter;
 use converters\AdvertConverter;
 use converters\PropertyConverter;
 use converters\ImageConverter;
 use dtos\AdvertDto;
-use dtos\ImageDto;
 
 /**
  * Facade para la gestión de anuncios (advert).
@@ -22,10 +21,9 @@ class AdvertFacade
     private $advertService;
     private $propertyService;
     private $addressService;
-    private $imageService;
+    private $imageFacade;
     private $advertConverter;
     private $propertyConverter;
-    private $imageConverter;
 
     /**
      * Constructor de AdvertFacade.
@@ -35,17 +33,16 @@ class AdvertFacade
      * @param ImageConverter $imageConverter Conversor de anuncios.
      */
     public function __construct(
+        ImageFacade $imageFacade,
         AdvertConverter $advertConverter,
         PropertyConverter $propertyConverter,
-        ImageConverter $imageConverter
     ) {
         $this->advertService = AdvertService::getInstance();
         $this->propertyService = PropertyService::getInstance();
         $this->addressService = AddressService::getInstance();
-        $this->imageService = ImageService::getInstance();
+        $this->imageFacade = $imageFacade;
         $this->advertConverter = $advertConverter;
         $this->propertyConverter = $propertyConverter;
-        $this->imageConverter = $imageConverter;
     }
 
     /**
@@ -107,7 +104,7 @@ class AdvertFacade
 
         return [
             'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-            'advert' => $this->advertConverter->modelToDto($advertModel, $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath())
+            'advert' => $this->advertConverter->modelToDto($advertModel, $this->imageFacade->getMainImageByPropertyId($propertyModel->getId())->imagePath)
         ];
     }
 
@@ -126,12 +123,11 @@ class AdvertFacade
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
             $addressModel = $this->addressService->getAddressById($propertyModel->getAddressId());
-            $mainImage = $this->imageService->getMainImageByPropertyId($propertyModel->getId());
-            $imgUrl = $mainImage ? $mainImage->getImagePath() : 'media/no-image.jpg';
+            $mainImage = $this->imageFacade->getMainImageByPropertyId($propertyModel->getId());
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-                'advert' => $this->advertConverter->modelToDto($advertModel, $imgUrl),
+                'advert' => $this->advertConverter->modelToDto($advertModel, $mainImage->imagePath),
                 'property' => $this->propertyConverter->modelToDto($propertyModel),
                 'address' => $ac->modelToDto($addressModel)
             ];
@@ -153,7 +149,7 @@ class AdvertFacade
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
             $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
-            $imgUrl = $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath();
+            $imgUrl = $this->imageFacade->getMainImageByPropertyId($propertyModel->getId())->getImagePath();
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
@@ -177,8 +173,7 @@ class AdvertFacade
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
             $addressModel = $this->addressService->getAddressById($propertyModel->getAddressId());
-            $mainImage = $this->imageService->getMainImageByPropertyId($propertyModel->getId());
-            $imgUrl = $mainImage ? $mainImage->getImagePath() : 'media/no-image.jpg';
+            $mainImage = $this->imageFacade->getMainImageByPropertyId($propertyModel->getId())->imagePath;
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),

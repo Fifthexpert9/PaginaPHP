@@ -2,41 +2,80 @@
 
 namespace converters;
 
-use models\DatabaseModel;
 use models\PropertyModel;
 use models\StudioModel;
 use services\AddressService;
+use services\ImageService;
+use converters\AddressConverter;
 use dtos\StudioDto;
 
 /**
  * Clase encargada de convertir entre modelos de dominio (PropertyModel, StudioModel)
  * y el DTO StudioDto para la transferencia de datos de estudios.
+ *
+ * - Convierte modelos de dominio a DTOs para exponerlos en la capa de presentación o API.
+ * - Convierte DTOs a modelos de dominio para operaciones de persistencia.
  */
-class StudioConverter {
+class StudioConverter
+{
+    private $addressService;
+    private $imageService;
+    private $addressConverter;
+
+    /**
+     * Constructor de StudioConverter.
+     *
+     * Inicializa los servicios y conversores necesarios para la conversión.
+     */
+    public function __construct()
+    {
+        $this->addressService = AddressService::getInstance();
+        $this->imageService = ImageService::getInstance();
+        $this->addressConverter = new AddressConverter();
+    }
+
     /**
      * Convierte un PropertyModel y un StudioModel en un StudioDto.
      *
-     * @param PropertyModel $property Modelo con los datos generales de la propiedad.
-     * @param StudioModel $room Modelo con los datos específicos del estudio.
+     * Obtiene la imagen principal y todas las imágenes asociadas a la propiedad.
+     * Si no existen imágenes, se asigna una imagen por defecto ('media/no-image.jpg').
+     *
+     * @param PropertyModel $propertyModel Modelo con los datos generales de la propiedad.
+     * @param StudioModel $studioModel Modelo con los datos específicos del estudio.
      * @return StudioDto DTO resultante con la información combinada.
      */
-    public static function modelToDto(PropertyModel $property, StudioModel $studio): StudioDto {        
-        $as = new AddressService(DatabaseModel::getInstance());
-        $ac = new AddressConverter();
+    public function modelToDto(PropertyModel $propertyModel, StudioModel $studioModel): StudioDto
+    {
+        $main_image = $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath();
+
+        if (!$main_image) {
+            $main_image = 'media/no-image.jpg';
+        }
+
+        $images = $this->imageService->getImagesByPropertyId($propertyModel->getId());
+
+        if (!$images) {
+            $images = ['media/no-image.jpg'];
+        } else {
+            $images = array_map(function ($imageModel) {
+                return $imageModel->getImagePath();
+            }, $images);
+        }
 
         return new StudioDto(
-            $property->getId(),
-            $property->getPropertyType(),
-            $property->getBuiltSize(),
-            //$property->getPrice(),
-            $property->getStatus(),
-            $property->getImmediateAvailability(),
-            $property->getUserId(),
-            $ac->modelToDto($as->getAddressById($property->getAddressId())),
-            $studio->getFurnished(),
-            $studio->getBalcony(),
-            $studio->getAirConditioning(),
-            $studio->getPetsAllowed()
+            $propertyModel->getId(),
+            $propertyModel->getPropertyType(),
+            $propertyModel->getBuiltSize(),
+            $propertyModel->getStatus(),
+            $propertyModel->getImmediateAvailability(),
+            $propertyModel->getUserId(),
+            $main_image,
+            $images,
+            $this->addressConverter->modelToDto($this->addressService->getAddressById($propertyModel->getAddressId())),
+            $studioModel->getFurnished(),
+            $studioModel->getBalcony(),
+            $studioModel->getAirConditioning(),
+            $studioModel->getPetsAllowed()
         );
     }
 
@@ -46,16 +85,16 @@ class StudioConverter {
      * @param StudioDto $dto DTO con los datos del estudio y la propiedad.
      * @return PropertyModel Modelo de dominio con los datos generales de la propiedad.
      */
-    public static function dtoToPropertyModel(StudioDto $dto): PropertyModel {
+    public function dtoToPropertyModel(StudioDto $dto): PropertyModel
+    {
         return new PropertyModel(
             $dto->property_id,
             $dto->property_type,
             $dto->address->id,
             $dto->built_size,
-            //$dto->price,
             $dto->status,
             $dto->immediate_availability,
-            $dto->user_id            
+            $dto->user_id
         );
     }
 
@@ -65,7 +104,8 @@ class StudioConverter {
      * @param StudioDto $dto DTO con los datos del estudio.
      * @return StudioModel Modelo de dominio con los datos específicos del estudio.
      */
-    public static function dtoToStudioModel(StudioDto $dto): StudioModel {
+    public function dtoToStudioModel(StudioDto $dto): StudioModel
+    {
         return new StudioModel(
             $dto->property_id,
             $dto->furnished,

@@ -2,23 +2,27 @@
 
 namespace facades;
 
-use facades\ImageFacade;
 use services\PropertyService;
 use services\RoomService;
 use services\StudioService;
 use services\ApartmentService;
 use services\HouseService;
 use services\AddressService;
+use services\ImageService;
 use converters\PropertyConverter;
-use converters\ImageConverter;
 use converters\RoomConverter;
 use converters\StudioConverter;
 use converters\ApartmentConverter;
 use converters\HouseConverter;
 use converters\AddressConverter;
+use converters\ImageConverter;
 use dtos\PropertyDto;
-use dtos\ImageDto;
+use dtos\RoomDto;
+use dtos\StudioDto;
+use dtos\ApartmentDto;
+use dtos\HouseDto;
 use dtos\AddressDto;
+use dtos\ImageDto;
 
 /**
  * Facade para la gestión de propiedades.
@@ -32,12 +36,14 @@ class PropertyFacade
     private $apartmentService;
     private $houseService;
     private $addressService;
+    private $imageService;
     private $propertyConverter;
     private $roomConverter;
     private $studioConverter;
     private $apartmentConverter;
     private $houseConverter;
     private $addressConverter;
+    private $imageConverter;
 
     /**
      * Constructor de PropertyFacade.
@@ -45,15 +51,12 @@ class PropertyFacade
      * Inicializa la fachada de propiedades con los servicios y conversores necesarios para cada tipo de propiedad.
      * Permite gestionar propiedades de tipo habitación, estudio, piso y casa, utilizando el servicio y conversor adecuado según el tipo.
      *
-     * @param PropertyService $propertyService Servicio principal de propiedades.
-     * @param RoomService $roomService Servicio específico para habitaciones.
-     * @param StudioService $studioService Servicio específico para estudios.
-     * @param ApartmentService $apartmentService Servicio específico para pisos.
      * @param HouseService $houseService Servicio específico para casas.
      * @param RoomConverter $roomConverter Conversor para habitaciones.
      * @param StudioConverter $studioConverter Conversor para estudios.
      * @param ApartmentConverter $apartmentConverter Conversor para pisos.
      * @param HouseConverter $houseConverter Conversor para casas.
+     * @param AddressConverter $addressConverter Conversor para direcciones.
      */
     public function __construct(
         PropertyConverter $propertyConverter,
@@ -61,7 +64,8 @@ class PropertyFacade
         StudioConverter $studioConverter,
         ApartmentConverter $apartmentConverter,
         HouseConverter $houseConverter,
-        AddressConverter $addressConverter
+        AddressConverter $addressConverter,
+        ImageConverter $imageConverter
     ) {
         $this->propertyService = PropertyService::getInstance();
         $this->roomService = RoomService::getInstance();
@@ -69,38 +73,35 @@ class PropertyFacade
         $this->apartmentService = ApartmentService::getInstance();
         $this->houseService = HouseService::getInstance();
         $this->addressService = AddressService::getInstance();
+        $this->imageService = ImageService::getInstance();
         $this->propertyConverter = $propertyConverter;
         $this->roomConverter = $roomConverter;
         $this->studioConverter = $studioConverter;
         $this->apartmentConverter = $apartmentConverter;
         $this->houseConverter = $houseConverter;
         $this->addressConverter = $addressConverter;
+        $this->imageConverter = $imageConverter;
     }
 
     /**
-     * Crea una nueva propiedad en la base de datos junto con su dirección, datos específicos y, opcionalmente, imágenes.
+     * Crea una nueva propiedad con todos sus datos asociados.
      *
-     * Este método orquesta la creación completa de una propiedad:
-     *  - Inserta la dirección asociada a la propiedad (tabla `address`).
-     *  - Inserta los datos generales de la propiedad (tabla `property`).
-     *  - Inserta los datos específicos según el tipo de propiedad:
-     *      - Si es habitación: tabla `property_room`
-     *      - Si es estudio: tabla `property_studio`
-     *      - Si es piso: tabla `property_apartment`
-     *      - Si es casa: tabla `property_house`
-     *  - Inserta las imágenes asociadas (tabla `property_image`), si se proporcionan.
+     * Este método orquesta el proceso de alta de una propiedad, incluyendo:
+     *  - Inserción de la dirección (AddressDto)
+     *  - Inserción de los datos generales de la propiedad (PropertyDto)
+     *  - Inserción de las imágenes asociadas (array de ImageDto)
+     *  - Inserción de los datos específicos según el tipo de propiedad (RoomDto, StudioDto, ApartmentDto o HouseDto)
      *
-     * El método devuelve el ID de la propiedad creada si todo el proceso es exitoso.
-     * Si ocurre cualquier error en alguno de los pasos, devuelve un mensaje de error como string.
+     * Si ocurre algún error en cualquiera de los pasos, devuelve un mensaje descriptivo del error.
+     * Si todo es correcto, devuelve el ID de la propiedad creada.
      *
      * @param AddressDto $addressDto DTO con los datos de la dirección.
      * @param PropertyDto $propertyDto DTO con los datos generales de la propiedad.
-     * @param mixed $specificDto DTO con los datos específicos de la propiedad (RoomDto, StudioDto, ApartmentDto o HouseDto).
-     * @return int|string Devuelve el ID de la propiedad creada si tiene éxito, o un mensaje de error si falla.
-     *
-     * @throws \Throwable Si ocurre un error inesperado durante el proceso de creación.
+     * @param \dtos\ImageDto[] $imageDtos Array de DTOs de imágenes asociadas a la propiedad.
+     * @param mixed $specificDto DTO específico según el tipo de propiedad (RoomDto, StudioDto, ApartmentDto, HouseDto).
+     * @return int|string ID de la propiedad creada o mensaje de error si falla algún paso.
      */
-    public function createProperty($addressDto, $propertyDto, $specificDto)
+    public function createProperty($addressDto, $propertyDto, array $imageDtos, $specificDto)
     {
         try {
             $property_id = null;
@@ -132,26 +133,37 @@ class PropertyFacade
                 return "Los datos generales de la propiedad son obligatorios para registrar la propiedad.";
             }
 
+            // Crear las imágenes e insertarlas en la bbdd
+            foreach ($imageDtos as $imageDto) {
+                if (!$imageDto instanceof ImageDto) {
+                    return "Error: Se esperaba un objeto de tipo ImageDto en el array de imágenes.";
+                }
+                $result = $this->imageService->addImage($this->imageConverter->dtoToModel($imageDto));
+                if (!$result) {
+                    return "Error al insertar la imagen: " . (property_exists($imageDto, 'imagePath') ? $imageDto->imagePath : '');
+                }
+            }
+
             // Crear los datos específicos según el tipo de propiedad e insertarlos en la bbdd
-            if ($specificDto instanceof \dtos\RoomDto) {
+            if ($specificDto instanceof RoomDto) {
                 $roomModel = $this->roomConverter->dtoToRoomModel($specificDto);
                 $auxR = $this->roomService->createRoom($roomModel);
                 if (!$auxR) {
                     return "Ha ocurrido un error al registrar los datos específicos de la habitación.";
                 }
-            } elseif ($specificDto instanceof \dtos\StudioDto) {
+            } elseif ($specificDto instanceof StudioDto) {
                 $studioModel = $this->studioConverter->dtoToStudioModel($specificDto);
                 $auxS = $this->studioService->createStudio($studioModel);
                 if (!$auxS) {
                     return "Ha ocurrido un error al registrar los datos específicos del estudio.";
                 }
-            } elseif ($specificDto instanceof \dtos\ApartmentDto) {
+            } elseif ($specificDto instanceof ApartmentDto) {
                 $apartmentModel = $this->apartmentConverter->dtoToApartmentModel($specificDto);
                 $auxA = $this->apartmentService->createApartment($apartmentModel);
                 if (!$auxA) {
                     return "Ha ocurrido un error al registrar los datos específicos del piso.";
                 }
-            } elseif ($specificDto instanceof \dtos\HouseDto) {
+            } elseif ($specificDto instanceof HouseDto) {
                 $houseModel = $this->houseConverter->dtoToHouseModel($specificDto);
                 $auxH = $this->houseService->createHouse($houseModel);
                 if (!$auxH) {
@@ -225,20 +237,15 @@ class PropertyFacade
      *  - El identificador de la propiedad ('id')
      *  - Un texto descriptivo ('text') con el id, tipo y ciudad
      *  - El DTO de la propiedad ('property')
-     *  - La ruta de la imagen principal ('main_image'), o una imagen por defecto si no tiene
      *
      * @param int $user_id ID del usuario cuyas propiedades se desean obtener.
      * @return array[] Array de arrays con las claves:
      *                 - 'id' (int): ID de la propiedad
      *                 - 'text' (string): Descripción breve (ej: "5 - Piso en Madrid")
      *                 - 'property' (PropertyDto): DTO de la propiedad
-     *                 - 'main_image' (string): Ruta de la imagen principal o imagen por defecto
      */
     public function getPropertiesByUserId($user_id)
     {
-        $if = new ImageFacade(
-            new ImageConverter()
-        );
         $propertyModels = $this->propertyService->getPropertiesByUserId($user_id);
 
         $properties = [];
@@ -247,14 +254,11 @@ class PropertyFacade
             foreach ($propertyModels as $propertyModel) {
                 $address = $this->addressService->getAddressByPropertyId($propertyModel->getId());
                 $city = $address ? $address->getCity() : 'Sin ciudad';
-                $mainImage = $if->getMainImageByPropertyId($propertyModel->getId());
-                $imgUrl = $mainImage ? $mainImage->imagePath : 'media/no-image.jpg';
-                
+
                 $properties[] = [
                     'id' => $propertyModel->getId(),
                     'text' => $propertyModel->getId() . ' - ' . $propertyModel->getPropertyType() . ' en ' . $city,
-                    'property' => $this->propertyConverter->modelToDto($propertyModel),
-                    'main_image' => $imgUrl
+                    'property' => $this->propertyConverter->modelToDto($propertyModel)
                 ];
             }
         }

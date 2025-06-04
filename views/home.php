@@ -75,17 +75,10 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                 <div class="card h-100 shadow-sm">
                                     <div class="row g-0 h-100">
                                         <div class="col-6 d-flex align-items-stretch" style="overflow: hidden;">
-                                            <?php if ($advert['advert']->main_image): ?>
-                                                <img src="<?= htmlspecialchars($advert['advert']->main_image) ?>"
-                                                    class="img-fluid rounded-start w-100 h-100"
-                                                    alt="Imagen propiedad"
-                                                    style="object-fit: cover; min-height: 200px;">
-                                            <?php else: ?>
-                                                <img src="/ruta/a/imagen-default.jpg"
-                                                    class="img-fluid rounded-start w-100 h-100"
-                                                    alt="Sin imagen"
-                                                    style="object-fit: cover; min-height: 200px;">
-                                            <?php endif; ?>
+                                            <img src="<?= htmlspecialchars($advert['advert']->main_image) ?>"
+                                                class="img-fluid rounded-start w-100 h-100"
+                                                alt="Imagen propiedad"
+                                                style="object-fit: cover; min-height: 200px;">
                                         </div>
                                         <div class="col-6">
                                             <div class="card-body d-flex flex-column h-100">
@@ -110,7 +103,7 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                                 </p>
                                                 <div class="mt-2 d-flex justify-content-evenly align-items-center">
                                                     <button class="btn btn-outline-danger btn-sm btn-font" title="Añadir a favoritos"><i class="bi bi-heart-fill mx-2"></i></button>
-                                                    <a href="/detallePropiedad?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm btn-font w-50" title="Ver detalles">ver detalles</a>
+                                                    <a href="/property-details?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm btn-font w-50" title="Ver detalles">ver detalles</a>
                                                 </div>
                                             </div>
                                         </div>

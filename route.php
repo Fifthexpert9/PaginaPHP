@@ -11,6 +11,9 @@ try {
                 case '/':
                     require 'views/home.php';
                     break;
+                case '/property-details':
+                    require 'controllers/PropertyDetails.php';
+                    break;
                 case '/message':
                     require 'views/message.php';
                     break;

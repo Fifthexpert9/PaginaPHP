@@ -24,6 +24,7 @@ session_start();
 
 try {
     $propertyFacade = new PropertyFacade(
+        new ImageFacade(new ImageConverter()),
         new PropertyConverter(),
         new RoomConverter(),
         new StudioConverter(),

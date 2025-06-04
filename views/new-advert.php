@@ -4,6 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 session_start();
 
 use facades\PropertyFacade;
+use facades\ImageFacade;
 use converters\PropertyConverter;
 use converters\RoomConverter;
 use converters\StudioConverter;
@@ -11,15 +12,9 @@ use converters\ApartmentConverter;
 use converters\HouseConverter;
 use converters\AddressConverter;
 use converters\ImageConverter;
-use dtos\UserDto;
-use dtos\PropertyDto;
-use dtos\RoomDto;
-use dtos\StudioDto;
-use dtos\ApartmentDto;
-use dtos\HouseDto;
-use dtos\AddressDto;
 
 $propertyFacade = new PropertyFacade(
+    new ImageFacade(new ImageConverter()),
     new PropertyConverter(),
     new RoomConverter(),
     new StudioConverter(),

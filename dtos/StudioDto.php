@@ -6,7 +6,7 @@ namespace dtos;
  * DTO para exponer información de un estudio junto con los datos de la propiedad y la dirección.
  *
  * Este DTO agrupa toda la información relevante de un estudio ofertado, incluyendo los datos generales de la propiedad,
- * la dirección (AddressDto) y los datos específicos del estudio.
+ * la dirección (AddressDto), los datos específicos del estudio y las imágenes relativas a él.
  * Se utiliza para transferir datos entre la capa de dominio y la capa de presentación o API.
  *
  * @property int $property_id ID de la propiedad.
@@ -16,6 +16,8 @@ namespace dtos;
  * @property string $status Estado del estudio.
  * @property bool $immediate_availability Disponibilidad inmediata.
  * @property int $user_id ID del usuario propietario.
+ * @property string $main_image Ruta de la imagen principal de la propiedad (image_path de ImageDto).
+ * @property string[] $images Array de rutas de imágenes (image_path de ImageDto) asociadas a la propiedad.
  * @property AddressDto $address Objeto con la dirección del estudio.
  * @property bool $furnished Indica si está amueblado.
  * @property bool $balcony Indica si tiene balcón.
@@ -28,10 +30,11 @@ class StudioDto
     public $property_id;
     public $property_type;
     public $built_size;
-    //public $price;
     public $status;
     public $immediate_availability;
     public $user_id;
+    public $main_image;
+    public $images = [];
 
     // Dirección (AddressDto)
     public $address;
@@ -52,6 +55,8 @@ class StudioDto
      * @param string $status Estado del estudio.
      * @param bool $immediate_availability Disponibilidad inmediata.
      * @param int $user_id ID del usuario propietario.
+     * @param string $main_image Ruta de la imagen principal de la propiedad (image_path de ImageDto).
+     * @param string[] $images (opcional) Array de rutas de imágenes (image_path de ImageDto) asociadas a la propiedad.
      * @param AddressDto $address Objeto con la dirección del estudio.
      * @param bool $furnished Indica si está amueblado.
      * @param bool $balcony Indica si tiene balcón.
@@ -62,10 +67,11 @@ class StudioDto
         $property_id,
         $property_type,
         $built_size,
-        //$price,
         $status,
         $immediate_availability,
         $user_id,
+        $main_image,
+        $images = [],
         $address, // AddressDto
         $furnished,
         $balcony,
@@ -75,10 +81,11 @@ class StudioDto
         $this->property_id = $property_id;
         $this->property_type = $property_type;
         $this->built_size = $built_size;
-        //$this->price = $price;
         $this->status = $status;
         $this->immediate_availability = $immediate_availability;
         $this->user_id = $user_id;
+        $this->main_image = $main_image;
+        $this->images = $images;
         $this->address = $address;
         $this->furnished = $furnished;
         $this->balcony = $balcony;
@@ -97,11 +104,10 @@ class StudioDto
             'property_id' => $this->property_id,
             'property_type' => $this->property_type,
             'built_size' => $this->built_size,
-            //'price' => $this->price,
             'status' => $this->status,
             'immediate_availability' => $this->immediate_availability,
             'user_id' => $this->user_id,
-            'address' => $this->address ? (method_exists($this->address, 'toArray') ? $this->address->toArray() : (array)$this->address) : null,
+            'address' => $this->address ? $this->address->toArray() : null,
             'furnished' => $this->furnished,
             'balcony' => $this->balcony,
             'air_conditioning' => $this->air_conditioning,

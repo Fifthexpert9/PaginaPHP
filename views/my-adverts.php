@@ -32,7 +32,7 @@ if ($user && isset($user->id)) {
         <?php else: ?>
             <div class="row g-4">
                 <?php foreach ($adverts as $advert):
-                    $mainImage = isset($advert['advert']->main_image) ? $advert['advert']->main_image : 'media/no-image.png';
+                    $mainImage = $advert['advert']->main_image;
                     $property = isset($advert['property']) ? $advert['property'] : [];
                 ?>
                     <div class="col-12">

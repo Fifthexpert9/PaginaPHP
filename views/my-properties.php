@@ -3,6 +3,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 session_start();
 
 use facades\PropertyFacade;
+use facades\ImageFacade;
 use converters\PropertyConverter;
 use converters\RoomConverter;
 use converters\StudioConverter;
@@ -16,6 +17,7 @@ $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 $properties = [];
 if ($user && isset($user->id)) {
     $propertyFacade = new PropertyFacade(
+        new ImageFacade(new ImageConverter()),
         new PropertyConverter(),
         new RoomConverter(),
         new StudioConverter(),
@@ -40,7 +42,7 @@ if ($user && isset($user->id)) {
         <?php else: ?>
             <div class="row g-4">
                 <?php foreach ($properties as $property): 
-                    $mainImage = isset($property['main_image']) ? $property['main_image'] : 'media/no-image.png';
+                    $mainImage = $property['main_image'];
                     $propertyDto = isset($property['property']) ? $property['property'] : null;
                 ?>
                     <div class="col-12">
