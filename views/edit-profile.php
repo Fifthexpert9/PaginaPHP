@@ -3,7 +3,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 session_start();
 
-use dtos\UserDto;
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
+    $_SESSION['message'] = 'Debes iniciar sesión para acceder a esta funcionalidad.';
+    header('Location: /message');
+    exit();
+}
 
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 

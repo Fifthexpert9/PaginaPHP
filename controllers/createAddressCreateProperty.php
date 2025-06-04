@@ -5,7 +5,6 @@ namespace controllers;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use facades\PropertyFacade;
-use facades\ImageFacade;
 use converters\PropertyConverter;
 use converters\ImageConverter;
 use converters\RoomConverter;
@@ -24,16 +23,14 @@ session_start();
 
 try {
     $propertyFacade = new PropertyFacade(
-        new ImageFacade(new ImageConverter()),
         new PropertyConverter(),
         new RoomConverter(),
         new StudioConverter(),
         new ApartmentConverter(),
         new HouseConverter(),
         new AddressConverter(),
+        new ImageConverter()
     );
-
-    $imageFacade = new ImageFacade(new ImageConverter());
 
     $addressDto = new AddressDto(
         null,
@@ -53,8 +50,12 @@ try {
         $_POST['built_size'],
         $_POST['status'],
         $_POST['immediate_availability'] === 'true' ? 1 : 0,
-        $_SESSION['user']->id
+        $_SESSION['user']->id,
+        null,
+        null
     );
+
+    $images = $_FILES['images'];
 
     $specificDto = null;
     switch ($_POST['property_type']) {
@@ -67,6 +68,8 @@ try {
                 $propertyDto->status,
                 $propertyDto->immediate_availability,
                 $propertyDto->user_id,
+                null,
+                null,
                 $_POST['private_bathroom'] === 'true' ? 1 : 0,
                 $_POST['max_roommates'],
                 $_POST['pets_allowed'] === 'true' ? 1 : 0,
@@ -84,6 +87,8 @@ try {
                 $propertyDto->status,
                 $propertyDto->immediate_availability,
                 $propertyDto->user_id,
+                null,
+                null,
                 $_POST['furnished'] === 'true' ? 1 : 0,
                 $_POST['balcony'] === 'true' ? 1 : 0,
                 $_POST['air_conditioning'] === 'true' ? 1 : 0,
@@ -99,6 +104,8 @@ try {
                 $propertyDto->status,
                 $propertyDto->immediate_availability,
                 $propertyDto->user_id,
+                null,
+                null,
                 $_POST['apartment_type'],
                 $_POST['num_rooms'],
                 $_POST['num_bathrooms'],
@@ -120,6 +127,8 @@ try {
                 $propertyDto->status,
                 $propertyDto->immediate_availability,
                 $propertyDto->user_id,
+                null,
+                null,
                 $_POST['house_type'],
                 $_POST['garden_size'],
                 $_POST['num_floors'],
@@ -136,10 +145,11 @@ try {
             break;
     }
 
-    $images = $_FILES['images'];
+    $result = $propertyFacade->createProperty($addressDto, $propertyDto, $images, $specificDto);
 
-    $resultPropertyFacade = $propertyFacade->createProperty($addressDto, $propertyDto, $specificDto);
+    $_SESSION['message'] = $result;
 
+    /*
     if (is_numeric($resultPropertyFacade)) {
         $imageDtos = $imageFacade->transformImagesToArrayDto($images, $resultPropertyFacade);
         if (!empty($imageDtos)) {
@@ -155,6 +165,7 @@ try {
     } else {
         $_SESSION['message'] = $resultPropertyFacade;
     }
+    */
 
     header('Location: /message');
     exit();

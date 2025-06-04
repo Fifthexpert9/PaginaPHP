@@ -97,11 +97,11 @@ class PropertyFacade
      *
      * @param AddressDto $addressDto DTO con los datos de la dirección.
      * @param PropertyDto $propertyDto DTO con los datos generales de la propiedad.
-     * @param \dtos\ImageDto[] $imageDtos Array de DTOs de imágenes asociadas a la propiedad.
+     * @param array $images Array de imágenes asociadas a la propiedad extraídas de $_FILES['images'].
      * @param mixed $specificDto DTO específico según el tipo de propiedad (RoomDto, StudioDto, ApartmentDto, HouseDto).
      * @return int|string ID de la propiedad creada o mensaje de error si falla algún paso.
      */
-    public function createProperty($addressDto, $propertyDto, array $imageDtos, $specificDto)
+    public function createProperty($addressDto, $propertyDto, $images, $specificDto)
     {
         try {
             $property_id = null;
@@ -134,6 +134,41 @@ class PropertyFacade
             }
 
             // Crear las imágenes e insertarlas en la bbdd
+            $imageDtos = [];
+            if (!empty($images) && !empty($images['name'][0])) {
+                $max_files = min(count($images['name']), 6);
+                $upload_dir = __DIR__ . '/../media/';
+
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0777, true);
+                }
+
+                for ($i = 0; $i < $max_files; $i++) {
+                    $is_main = ($i == 0);
+
+                    if ($images['error'][$i] === UPLOAD_ERR_OK) {
+                        $file_type = pathinfo($images['name'][$i], PATHINFO_EXTENSION);
+                        $file_name = 'property_' . $property_id . '_' . $i . '.' . $file_type;
+                        $destination = $upload_dir . $file_name;
+
+                        if (move_uploaded_file($images['tmp_name'][$i], $destination)) {
+                            error_log("Archivo subido correctamente: " . $destination);
+                            $imageDtos[] = new ImageDto(
+                                1,
+                                $property_id,
+                                'media/' . $file_name,
+                                $is_main,
+                                date('Y-m-d H:i:s')
+                            );
+                        } else {
+                            error_log("Fallo al mover el archivo: " . $images['tmp_name'][$i] . " a " . $destination);
+                        }
+                    } else {
+                        error_log("Error en la subida del archivo: " . $images['name'][$i] . " - Código de error: " . $images['error'][$i]);
+                    }
+                }
+            }
+
             foreach ($imageDtos as $imageDto) {
                 if (!$imageDto instanceof ImageDto) {
                     return "Error: Se esperaba un objeto de tipo ImageDto en el array de imágenes.";
@@ -173,7 +208,7 @@ class PropertyFacade
                 return "El tipo de propiedad no es válido.";
             }
 
-            return $property_id;
+            return 'Propiedad registrada correctamente. ID de propiedad: ' . $property_id;
         } catch (\Throwable $e) {
             return "Ha ocurrido un error al registrar la propiedad.";
         }

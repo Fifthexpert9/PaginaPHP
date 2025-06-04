@@ -7,9 +7,11 @@ session_start();
 use facades\AdvertFacade;
 use converters\PropertyConverter;
 use converters\AdvertConverter;
-use converters\ImageConverter;
 
-$advertFacade = new AdvertFacade(new AdvertConverter(), new PropertyConverter(), new ImageConverter());
+$advertFacade = new AdvertFacade(
+    new AdvertConverter(),
+    new PropertyConverter()
+);
 
 $advert_id = $_POST['id'];
 $result = $advertFacade->deleteAdvert($advert_id);

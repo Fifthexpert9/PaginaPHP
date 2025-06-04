@@ -7,11 +7,12 @@ session_start();
 use facades\UserFacade;
 use converters\UserConverter;
 
-// if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
-//     $_SESSION['message'] = 'Debes iniciar sesión para eliminar tu cuenta.';
-//     header('Location: /user-menu.php');
-//     exit();
-// }
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
+    $_SESSION['message'] = 'Debes iniciar sesión para eliminar tu cuenta.';
+    header('Location: /user-menu.php');
+    exit();
+}
+
 $userFacade = new UserFacade(new UserConverter());
 
 $user_id = $_SESSION['user']->id;

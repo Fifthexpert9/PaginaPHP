@@ -1,9 +1,7 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-session_start();
 
 use facades\PropertyFacade;
-use facades\ImageFacade;
 use converters\PropertyConverter;
 use converters\RoomConverter;
 use converters\StudioConverter;
@@ -12,20 +10,19 @@ use converters\HouseConverter;
 use converters\AddressConverter;
 use converters\ImageConverter;
 
+session_start();
+
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
+    $_SESSION['message'] = 'Debes iniciar sesión para acceder a esta funcionalidad.';
+    header('Location: /message');
+    exit();
+}
+
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
 $properties = [];
 if ($user && isset($user->id)) {
-    $propertyFacade = new PropertyFacade(
-        new ImageFacade(new ImageConverter()),
-        new PropertyConverter(),
-        new RoomConverter(),
-        new StudioConverter(),
-        new ApartmentConverter(),
-        new HouseConverter(),
-        new AddressConverter(),
-        new ImageConverter()
-    );
+    $propertyFacade = new PropertyFacade(new PropertyConverter(), new RoomConverter(), new StudioConverter(), new ApartmentConverter(), new HouseConverter(), new AddressConverter(), new ImageConverter());
     $properties = $propertyFacade->getPropertiesByUserId($user->id);
 }
 ?>
@@ -42,7 +39,7 @@ if ($user && isset($user->id)) {
         <?php else: ?>
             <div class="row g-4">
                 <?php foreach ($properties as $property): 
-                    $mainImage = $property['main_image'];
+                    $mainImage = $property['property']->main_image;
                     $propertyDto = isset($property['property']) ? $property['property'] : null;
                 ?>
                     <div class="col-12">
@@ -79,7 +76,7 @@ if ($user && isset($user->id)) {
                                 </div>
                                 <!-- Botones a la derecha -->
                                 <div class="col-lg-2 d-flex flex-column align-items-center justify-content-center p-3">
-                                    <a href="/detallePropiedad?id=<?= urlencode($property['id']) ?>" class="btn btn-secondary btn-sm mb-2 w-100 btn-font">ver detalles</a>
+                                    <a href="/property-details?id=<?= urlencode($property['id']) ?>" class="btn btn-secondary btn-sm mb-2 w-100 btn-font">ver detalles</a>
                                     <a href="/editarPropiedad?id=<?= urlencode($property['id']) ?>" class="btn btn-secondary btn-sm mb-2 w-100 btn-font">editar</a>
                                     <form action="/delete-property" method="post" class="border w-100" style="display:inline;">
                                         <input type="hidden" name="id" value="<?= htmlspecialchars($property['id']) ?>">

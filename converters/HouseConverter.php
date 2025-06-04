@@ -46,10 +46,12 @@ class HouseConverter
      */
     public function modelToDto(PropertyModel $propertyModel, HouseModel $houseModel): HouseDto
     {
-        $main_image = $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath();
+        $main_image = $this->imageService->getMainImageByPropertyId($propertyModel->getId());
 
         if (!$main_image) {
             $main_image = 'media/no-image.jpg';
+        } else {
+            $main_image = $main_image->getImagePath();
         }
 
         $images = $this->imageService->getImagesByPropertyId($propertyModel->getId());

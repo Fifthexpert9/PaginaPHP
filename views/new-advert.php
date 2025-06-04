@@ -1,10 +1,7 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-session_start();
-
 use facades\PropertyFacade;
-use facades\ImageFacade;
 use converters\PropertyConverter;
 use converters\RoomConverter;
 use converters\StudioConverter;
@@ -13,8 +10,15 @@ use converters\HouseConverter;
 use converters\AddressConverter;
 use converters\ImageConverter;
 
+session_start();
+
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
+    $_SESSION['message'] = 'Debes iniciar sesión para acceder a esta funcionalidad.';
+    header('Location: /message');
+    exit();
+}
+
 $propertyFacade = new PropertyFacade(
-    new ImageFacade(new ImageConverter()),
     new PropertyConverter(),
     new RoomConverter(),
     new StudioConverter(),

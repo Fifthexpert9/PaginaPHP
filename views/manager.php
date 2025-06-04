@@ -1,6 +1,18 @@
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+session_start();
+
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
+    $_SESSION['message'] = 'Debes iniciar sesión para acceder a esta funcionalidad.';
+    header('Location: /message');
+    exit();
+}
+?>
+
 <?php require_once __DIR__ . '/partials/head.php'; ?>
 <?php require_once __DIR__ . '/partials/header.php'; ?>
-
 <main class="container d-flex justify-content-center align-items-center">
     <div class="card shadow-sm pt-2 ps-4 pe-4 pb-4" style="max-width: 800px; width: 100%;" style="height: 68vh;">
         <div class="text-center mt-1 mb-3">

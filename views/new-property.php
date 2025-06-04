@@ -1,3 +1,15 @@
+<?php
+require_once __DIR__ . '/../vendor/autoload.php';
+
+session_start();
+
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
+    $_SESSION['message'] = 'Debes iniciar sesión para acceder a esta funcionalidad.';
+    header('Location: /message');
+    exit();
+}
+?>
+
 <?php require_once __DIR__ . '/partials/head.php'; ?>
 <?php require_once __DIR__ . '/partials/header.php'; ?>
 

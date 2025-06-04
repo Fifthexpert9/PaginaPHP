@@ -5,8 +5,6 @@ namespace facades;
 use services\AdvertService;
 use services\PropertyService;
 use services\AddressService;
-use facades\ImageFacade;
-use converters\AddressConverter;
 use converters\AdvertConverter;
 use converters\PropertyConverter;
 use converters\ImageConverter;
@@ -21,7 +19,6 @@ class AdvertFacade
     private $advertService;
     private $propertyService;
     private $addressService;
-    private $imageFacade;
     private $advertConverter;
     private $propertyConverter;
 
@@ -33,14 +30,12 @@ class AdvertFacade
      * @param ImageConverter $imageConverter Conversor de anuncios.
      */
     public function __construct(
-        ImageFacade $imageFacade,
         AdvertConverter $advertConverter,
         PropertyConverter $propertyConverter,
     ) {
         $this->advertService = AdvertService::getInstance();
         $this->propertyService = PropertyService::getInstance();
         $this->addressService = AddressService::getInstance();
-        $this->imageFacade = $imageFacade;
         $this->advertConverter = $advertConverter;
         $this->propertyConverter = $propertyConverter;
     }
@@ -68,18 +63,21 @@ class AdvertFacade
     }
 
     /**
-     * Crea un nuevo anuncio.
+     * Crea un nuevo anuncio en el sistema.
      *
-     * @param AdvertDto $advertDto DTO con los datos del anuncio.
-     * @return array Resultado de la operación (success, message)
+     * Convierte el DTO recibido a modelo de dominio y lo inserta en la base de datos.
+     * Devuelve un mensaje indicando si la operación fue exitosa o si ocurrió un error.
+     *
+     * @param AdvertDto $advertDto DTO con los datos del anuncio a crear.
+     * @return string Mensaje indicando el resultado de la operación.
      */
     public function createAdvert(AdvertDto $advertDto)
     {
         $advertModel = $this->advertConverter->dtoToModel($advertDto);
         if ($this->advertService->createAdvert($advertModel)) {
-            return ['success' => true, 'message' => 'Anuncio creado correctamente.'];
+            return 'Anuncio creado correctamente.';
         } else {
-            return ['success' => false, 'message' => 'Error al crear el anuncio.'];
+            return 'Error al crear el anuncio.';
         }
     }
 
@@ -104,42 +102,59 @@ class AdvertFacade
 
         return [
             'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-            'advert' => $this->advertConverter->modelToDto($advertModel, $this->imageFacade->getMainImageByPropertyId($propertyModel->getId())->imagePath)
+            'advert' => $this->advertConverter->modelToDto($advertModel)
         ];
     }
 
     /**
-     * Obtiene los anuncios de un usuario, devolviendo un array de arrays con el título generado y el DTO correspondiente.
+     * Obtiene todos los anuncios publicados por un usuario.
      *
-     * @param int $userId ID del usuario.
-     * @return array[] Array de arrays con 'title' y 'advert' (AdvertDto) de cada anuncio.
+     * Recupera todos los anuncios asociados al usuario indicado por su ID.
+     * Para cada anuncio, obtiene el modelo de la propiedad y la dirección asociada,
+     * y construye un array con:
+     *  - 'title': título generado a partir del tipo de propiedad, acción y dirección,
+     *  - 'advert': DTO del anuncio,
+     *  - 'property': DTO de la propiedad asociada.
+     *
+     * @param int $userId ID del usuario cuyos anuncios se desean obtener.
+     * @return array[] Array de arrays con las claves:
+     *                 - 'title' (string): Título generado para el anuncio.
+     *                 - 'advert' (AdvertDto): DTO del anuncio.
+     *                 - 'property' (PropertyDto): DTO de la propiedad asociada.
      */
     public function getAdvertsByUserId($userId)
     {
-        $ac = new AddressConverter();
         $adverts = $this->advertService->getAdvertsByUserId($userId);
 
         $result = [];
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
             $addressModel = $this->addressService->getAddressById($propertyModel->getAddressId());
-            $mainImage = $this->imageFacade->getMainImageByPropertyId($propertyModel->getId());
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-                'advert' => $this->advertConverter->modelToDto($advertModel, $mainImage->imagePath),
-                'property' => $this->propertyConverter->modelToDto($propertyModel),
-                'address' => $ac->modelToDto($addressModel)
+                'advert' => $this->advertConverter->modelToDto($advertModel),
+                'property' => $this->propertyConverter->modelToDto($propertyModel)
             ];
         }
         return $result;
     }
 
     /**
-     * Obtiene los anuncios asociados a una propiedad.
+     * Obtiene todos los anuncios asociados a una propiedad concreta.
      *
-     * @param int $propertyId ID de la propiedad.
-     * @return array[] Array de arrays con 'title', 'advert' (AdvertDto) de cada anuncio, y 'property' (PropertyDto).
+     * Recupera todos los anuncios cuyo property_id coincide con el proporcionado.
+     * Para cada anuncio, obtiene el modelo de la propiedad y la dirección asociada,
+     * y construye un array con:
+     *  - 'title': título generado a partir del tipo de propiedad, acción y dirección,
+     *  - 'advert': DTO del anuncio,
+     *  - 'property': DTO de la propiedad asociada.
+     *
+     * @param int $propertyId ID de la propiedad cuyos anuncios se desean obtener.
+     * @return array[] Array de arrays con las claves:
+     *                 - 'title' (string): Título generado para el anuncio.
+     *                 - 'advert' (AdvertDto): DTO del anuncio.
+     *                 - 'property' (PropertyDto): DTO de la propiedad asociada.
      */
     public function getAdvertsByPropertyId($propertyId)
     {
@@ -149,11 +164,10 @@ class AdvertFacade
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
             $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
-            $imgUrl = $this->imageFacade->getMainImageByPropertyId($propertyModel->getId())->getImagePath();
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-                'advert' => $this->advertConverter->modelToDto($advertModel, $imgUrl),
+                'advert' => $this->advertConverter->modelToDto($advertModel),
                 'property' => $this->propertyConverter->modelToDto($propertyModel)
             ];
         }
@@ -161,9 +175,18 @@ class AdvertFacade
     }
 
     /**
-     * Obtiene todos los anuncios.
+     * Obtiene todos los anuncios del sistema.
      *
-     * @return array[] Array de arrays con 'title', 'advert' (AdvertDto) de cada anuncio y 'property' (PropertyDto).
+     * Recupera todos los anuncios existentes en la base de datos. Para cada anuncio,
+     * obtiene el modelo de la propiedad y la dirección asociada, y construye un array con:
+     *  - 'title': título generado a partir del tipo de propiedad, acción y dirección,
+     *  - 'advert': DTO del anuncio,
+     *  - 'property': DTO de la propiedad asociada.
+     *
+     * @return array[] Array de arrays con las claves:
+     *                 - 'title' (string): Título generado para el anuncio.
+     *                 - 'advert' (AdvertDto): DTO del anuncio.
+     *                 - 'property' (PropertyDto): DTO de la propiedad asociada.
      */
     public function getAllAdverts()
     {
@@ -173,11 +196,10 @@ class AdvertFacade
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
             $addressModel = $this->addressService->getAddressById($propertyModel->getAddressId());
-            $mainImage = $this->imageFacade->getMainImageByPropertyId($propertyModel->getId())->imagePath;
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-                'advert' => $this->advertConverter->modelToDto($advertModel, $imgUrl),
+                'advert' => $this->advertConverter->modelToDto($advertModel),
                 'property' => $this->propertyConverter->modelToDto($propertyModel)
             ];
         }
@@ -197,9 +219,9 @@ class AdvertFacade
             return ['success' => false, 'message' => 'No se han proporcionado campos para actualizar.'];
         }
         if ($this->advertService->updateAdvert($id, $fields)) {
-            return ['success' => true, 'message' => 'Anuncio actualizado correctamente.'];
+            return 'Anuncio actualizado correctamente.';
         } else {
-            return ['success' => false, 'message' => 'Error al actualizar el anuncio.'];
+            return 'Error al actualizar el anuncio.';
         }
     }
 
@@ -250,12 +272,10 @@ class AdvertFacade
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
             if (!$propertyModel) continue;
             $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
-            $imgUrl = $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath();
-            $advertDto = $this->advertConverter->modelToDto($advertModel, $imgUrl);
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-                'advert' => $advertDto,
+                'advert' => $this->advertConverter->modelToDto($advertModel),
                 'property' => $this->propertyConverter->modelToDto($propertyModel)
             ];
         }

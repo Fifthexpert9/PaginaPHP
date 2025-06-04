@@ -7,7 +7,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use facades\AdvertFacade;
 use converters\PropertyConverter;
 use converters\AdvertConverter;
-use converters\ImageConverter;
 use dtos\AdvertDto;
 
 session_start();
@@ -15,8 +14,7 @@ session_start();
 try {
     $advertFacade = new AdvertFacade(
         new AdvertConverter(),
-        new PropertyConverter(),
-        new ImageConverter()
+        new PropertyConverter()
     );
 
     $advertDto = new AdvertDto(
@@ -32,7 +30,7 @@ try {
 
     $result = $advertFacade->createAdvert($advertDto);
 
-    $_SESSION['message'] = $result['message'];
+    $_SESSION['message'] = $result;
     header('Location: /message');
     exit();
 } catch (\Throwable $e) {

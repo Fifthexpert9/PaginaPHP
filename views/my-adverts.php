@@ -1,11 +1,18 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-session_start();
 
 use facades\AdvertFacade;
 use converters\AdvertConverter;
 use converters\PropertyConverter;
 use converters\ImageConverter;
+
+session_start();
+
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
+    $_SESSION['message'] = 'Debes iniciar sesión para acceder a esta funcionalidad.';
+    header('Location: /message');
+    exit();
+}
 
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
@@ -73,7 +80,7 @@ if ($user && isset($user->id)) {
                                 </div>
                                 <!-- Botones a la derecha -->
                                 <div class="col-lg-2 d-flex flex-column align-items-center justify-content-center p-3">
-                                    <a href="/detallePropiedad?id=<?= urlencode($advert['property']->id) ?>" class="btn btn-secondary btn-sm mb-2 btn-font w-100">ver detalles</a>
+                                    <a href="/advert-details?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm mb-2 btn-font w-100">ver detalles</a>
                                     <a href="/editarAnuncio?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm mb-2 btn-font w-100">editar</a>
                                     <form action="/delete-advert" method="post" class="border w-100" style="display:inline;">
                                         <input type="hidden" name="id" value="<?= htmlspecialchars($advert['advert']->id) ?>">

@@ -103,7 +103,7 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                                 </p>
                                                 <div class="mt-2 d-flex justify-content-evenly align-items-center">
                                                     <button class="btn btn-outline-danger btn-sm btn-font" title="Añadir a favoritos"><i class="bi bi-heart-fill mx-2"></i></button>
-                                                    <a href="/property-details?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm btn-font w-50" title="Ver detalles">ver detalles</a>
+                                                    <a href="/advert-details?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm btn-font w-50" title="Ver detalles">ver detalles</a>
                                                 </div>
                                             </div>
                                         </div>

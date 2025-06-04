@@ -4,7 +4,6 @@ session_start();
 
 use facades\AdvertFacade;
 use facades\PropertyFacade;
-use facades\ImageFacade;
 use converters\AdvertConverter;
 use converters\PropertyConverter;
 use converters\RoomConverter;
@@ -21,11 +20,8 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 }
 
 $propertyConverter = new PropertyConverter();
-$imageConverter = new ImageConverter();
-$imageFacade = new ImageFacade($imageConverter);
-$advertFacade = new AdvertFacade($imageFacade, new AdvertConverter(), $propertyConverter, $imageConverter);
-$imageFacade->setAdvertFacade($advertFacade);
-$propertyFacade = new PropertyFacade($imageFacade, $propertyConverter, new RoomConverter(), new StudioConverter(), new ApartmentConverter(), new HouseConverter(), new AddressConverter());
+$advertFacade = new AdvertFacade(new AdvertConverter(), $propertyConverter);
+$propertyFacade = new PropertyFacade($propertyConverter, new RoomConverter(), new StudioConverter(), new ApartmentConverter(), new HouseConverter(), new AddressConverter(), new ImageConverter());
 
 $advertAux = $advertFacade->getAdvertById($_GET['id']);
 
@@ -35,10 +31,8 @@ if (!$advertAux) {
     exit();
 }
 
-$auxImgs = $imageFacade->getImagesByAdvertId($_GET['id']);
-
 $title = $advertAux['title'] ?? 'Detalles del Anuncio';
-$advertDTO = $advertAux['advert'] ?? null;
-$propertyDTO = $propertyFacade->getCompletePropertyById($advertDTO->property_id ?? null);
+$advertDto = $advertAux['advert'] ?? null;
+$propertyDto = $propertyFacade->getCompletePropertyById($advertDto->property_id ?? null);
 
-require __DIR__ . '/../views/property-details.php';
+require __DIR__ . '/../views/advert-details.php';

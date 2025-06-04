@@ -3,14 +3,27 @@
 namespace converters;
 
 use models\AdvertModel;
+use services\ImageService;
 use dtos\AdvertDto;
-use dtos\ImageDto;
 
 /**
  * Clase encargada de convertir entre AdvertModel y AdvertDto
  * para la transferencia de datos de anuncios.
  */
-class AdvertConverter {
+class AdvertConverter
+{
+    private $imageService;
+
+    /**
+     * Constructor de AdvertConverter.
+     *
+     * Inicializa el servicio de imágenes para obtener la imagen principal del anuncio.
+     */
+    public function __construct()
+    {
+        $this->imageService = ImageService::getInstance();
+    }
+
     /**
      * Convierte un AdvertModel y opcionalmente una imagen principal (ImageDto) en un AdvertDto.
      *
@@ -18,7 +31,16 @@ class AdvertConverter {
      * @param string $main_image Imagen principal asociada al anuncio.
      * @return AdvertDto DTO resultante con la información del anuncio.
      */
-    public static function modelToDto(AdvertModel $model, $main_image): AdvertDto {
+    public function modelToDto(AdvertModel $model): AdvertDto
+    {
+        $main_image = $this->imageService->getMainImageByPropertyId($model->getPropertyId());
+
+        if (!$main_image) {
+            $main_image = 'media/no-image.jpg';
+        } else {
+            $main_image = $main_image->getImagePath();
+        }
+
         return new AdvertDto(
             $model->getId(),
             $model->getPropertyId(),
@@ -40,7 +62,8 @@ class AdvertConverter {
      * @param AdvertDto $dto DTO con los datos del anuncio.
      * @return AdvertModel Modelo de dominio con los datos del anuncio.
      */
-    public static function dtoToModel(AdvertDto $dto): AdvertModel {
+    public static function dtoToModel(AdvertDto $dto): AdvertModel
+    {
         return new AdvertModel(
             $dto->id,
             $dto->property_id,

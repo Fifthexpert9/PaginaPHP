@@ -5,7 +5,6 @@ namespace converters;
 use models\PropertyModel;
 use services\ImageService;
 use dtos\PropertyDto;
-use converters\ImageConverter;
 
 /**
  * Conversor para la entidad Property.
@@ -16,10 +15,7 @@ use converters\ImageConverter;
  */
 class PropertyConverter
 {
-    /** @var ImageService Servicio para la gestión de imágenes de propiedades */
     private $imageService;
-    /** @var ImageConverter Conversor para imágenes */
-    private $imageConverter;
 
     /**
      * Constructor de PropertyConverter.
@@ -29,7 +25,6 @@ class PropertyConverter
     public function __construct()
     {
         $this->imageService = ImageService::getInstance();
-        $this->imageConverter = new ImageConverter();
     }
 
     /**
@@ -43,10 +38,12 @@ class PropertyConverter
      */
     public function modelToDto(PropertyModel $propertyModel)
     {
-        $main_image = $this->imageService->getMainImageByPropertyId($propertyModel->getId())->getImagePath();
+        $main_image = $this->imageService->getMainImageByPropertyId($propertyModel->getId());
 
         if (!$main_image) {
             $main_image = 'media/no-image.jpg';
+        } else {
+            $main_image = $main_image->getImagePath();
         }
 
         $images = $this->imageService->getImagesByPropertyId($propertyModel->getId());
