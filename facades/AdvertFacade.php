@@ -8,6 +8,7 @@ use services\AddressService;
 use converters\AdvertConverter;
 use converters\PropertyConverter;
 use converters\ImageConverter;
+use converters\AddressConverter;
 use dtos\AdvertDto;
 
 /**
@@ -21,6 +22,7 @@ class AdvertFacade
     private $addressService;
     private $advertConverter;
     private $propertyConverter;
+    private $addressConverter;
 
     /**
      * Constructor de AdvertFacade.
@@ -32,12 +34,14 @@ class AdvertFacade
     public function __construct(
         AdvertConverter $advertConverter,
         PropertyConverter $propertyConverter,
+        AddressConverter $addressConverter // <-- añade esto
     ) {
         $this->advertService = AdvertService::getInstance();
         $this->propertyService = PropertyService::getInstance();
         $this->addressService = AddressService::getInstance();
         $this->advertConverter = $advertConverter;
         $this->propertyConverter = $propertyConverter;
+        $this->addressConverter = $addressConverter; // <-- añade esto
     }
 
     /**
@@ -97,7 +101,7 @@ class AdvertFacade
 
         if (!$propertyModel) return null;
 
-        $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
+        $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getId());
 
 
         return [
@@ -129,12 +133,14 @@ class AdvertFacade
         $result = [];
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
-            $addressModel = $this->addressService->getAddressById($propertyModel->getAddressId());
+            if (!$propertyModel) continue;
+            $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getId());
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
                 'advert' => $this->advertConverter->modelToDto($advertModel),
-                'property' => $this->propertyConverter->modelToDto($propertyModel)
+                'property' => $this->propertyConverter->modelToDto($propertyModel),
+                'address' => $addressModel ? $this->addressConverter->modelToDto($addressModel) : null
             ];
         }
         return $result;
@@ -163,12 +169,14 @@ class AdvertFacade
         $result = [];
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
-            $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
+            if (!$propertyModel) continue;
+            $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getId());
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
                 'advert' => $this->advertConverter->modelToDto($advertModel),
-                'property' => $this->propertyConverter->modelToDto($propertyModel)
+                'property' => $this->propertyConverter->modelToDto($propertyModel),
+                'address' => $addressModel ? $this->addressConverter->modelToDto($addressModel) : null
             ];
         }
         return $result;
@@ -195,12 +203,14 @@ class AdvertFacade
         $result = [];
         foreach ($adverts as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
-            $addressModel = $this->addressService->getAddressById($propertyModel->getAddressId());
+            if (!$propertyModel) continue;
+            $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getId());
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
                 'advert' => $this->advertConverter->modelToDto($advertModel),
-                'property' => $this->propertyConverter->modelToDto($propertyModel)
+                'property' => $this->propertyConverter->modelToDto($propertyModel),
+                'address' => $addressModel ? $this->addressConverter->modelToDto($addressModel) : null
             ];
         }
         return $result;
@@ -267,19 +277,18 @@ class AdvertFacade
         }
 
         $result = [];
-
         foreach ($advertModels as $advertModel) {
             $propertyModel = $this->propertyService->getPropertyById($advertModel->getPropertyId());
             if (!$propertyModel) continue;
-            $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getAddressId());
+            $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getId());
 
             $result[] = [
                 'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
                 'advert' => $this->advertConverter->modelToDto($advertModel),
-                'property' => $this->propertyConverter->modelToDto($propertyModel)
+                'property' => $this->propertyConverter->modelToDto($propertyModel),
+                'address' => $addressModel ? $this->addressConverter->modelToDto($addressModel) : null
             ];
         }
-
         return $result;
     }
 }
