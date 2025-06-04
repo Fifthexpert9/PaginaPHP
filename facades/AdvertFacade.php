@@ -34,14 +34,14 @@ class AdvertFacade
     public function __construct(
         AdvertConverter $advertConverter,
         PropertyConverter $propertyConverter,
-        AddressConverter $addressConverter // <-- añade esto
+        AddressConverter $addressConverter 
     ) {
         $this->advertService = AdvertService::getInstance();
         $this->propertyService = PropertyService::getInstance();
         $this->addressService = AddressService::getInstance();
         $this->advertConverter = $advertConverter;
         $this->propertyConverter = $propertyConverter;
-        $this->addressConverter = $addressConverter; // <-- añade esto
+        $this->addressConverter = $addressConverter; 
     }
 
     /**
