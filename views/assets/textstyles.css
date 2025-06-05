@@ -13,6 +13,40 @@
     src: url('/views/assets/fonts/SchoolTeacher.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'BienchenA';
+    src: url('/views/assets/fonts/Bienchen\ a.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'BienchenB';
+    src: url('/views/assets/fonts/Bienchen\ b.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'DeutscheA';
+    src: url('/views/assets/fonts/Deutsche\ Normalschrift\ a.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'DeutscheB';
+    src: url('/views/assets/fonts/Deutsche\ Normalschrift\ b.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'LittleDayA';
+    src: url('/views/assets/fonts/Little\ Daisy.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'LittleDayB';
+    src: url('/views/assets/fonts/Little\ days.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'LittleDayC';
+    src: url('/views/assets/fonts/Little\ Days\ Alt.ttf') format('truetype');
+}
 
 .tooltip-inner {
     background-color: #6c757d !important; /* secondary de Bootstrap */
@@ -81,6 +115,18 @@ body {
   font-family: 'SchoolTeacher';
   font-weight: 600;
   font-size: 1.6em;
+}
+
+.spec-font {
+  font-family: 'SchoolTeacher';
+  font-weight: 600;
+  font-size: 2em;
+}
+
+.spec-font-small {
+  font-family: 'DeutscheA';
+  font-weight: 600;
+  font-size: 1.4em;
 }
 
 .icon{

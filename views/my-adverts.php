@@ -4,7 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use facades\AdvertFacade;
 use converters\AdvertConverter;
 use converters\PropertyConverter;
-use converters\ImageConverter;
+use converters\AddressConverter;
 
 session_start();
 
@@ -21,7 +21,7 @@ if ($user && isset($user->id)) {
     $advertFacade = new AdvertFacade(
         new AdvertConverter(),
         new PropertyConverter(),
-        new ImageConverter()
+        new AddressConverter()
     );
     $adverts = $advertFacade->getAdvertsByUserId($user->id);
 }

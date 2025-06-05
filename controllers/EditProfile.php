@@ -27,6 +27,7 @@ $result = $userFacade->updateUser($user_id, $fields);
 if ($result['success']) {
     session_destroy();
     session_start();
+    $_SESSION['user_edited'] = true;
     $_SESSION['message'] = $result['message'];
     header('Location: /message');
     exit();

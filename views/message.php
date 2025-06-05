@@ -2,7 +2,7 @@
 <?php require_once __DIR__ . '/partials/header.php'; ?>
 
 <main class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
-    <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
+    <div class="card shadow-sm p-3" style="max-width: 400px; width: 100%;">
         <div class="text-center mb-4">
             <h2 class="mt-2 mb-0 logo">houspecial</h2>
             <?php if (!empty($_SESSION['message'])): ?>
@@ -18,6 +18,13 @@
                     <?php elseif ($_SESSION['logged']): ?>
                         <button id="goHome" class="btn btn-secondary mt-4 btn-font">ir a la pagina principal</button>
                     <?php endif; ?>
+                <?php elseif (isset($_SESSION['user_edited']) || isset($_SESSION['registered'])): ?>
+                    <?php if ($_SESSION['user_edited']): ?>
+                        <?php unset($_SESSION['user_edited']); ?>
+                    <?php elseif ($_SESSION['registered']): ?>
+                        <?php unset($_SESSION['registered']); ?>
+                    <?php endif; ?>
+                    <button id="goBack" class="btn btn-secondary mt-4 btn-font">iniciar sesion</button>
                 <?php else: ?>
                     <button id="goHome" class="btn btn-secondary mt-4 btn-font">ir a la pagina principal</button>
                 <?php endif; ?>
@@ -28,9 +35,9 @@
 </main>
 
 <script>
-    /*setTimeout(function() {
+    setTimeout(function() {
         window.location.href = '/';
-    }, 10000);*/
+    }, 10000);
 
     document.addEventListener('DOMContentLoaded', function() {
         var goBack = document.getElementById('goBack');

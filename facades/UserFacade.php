@@ -100,6 +100,26 @@ class UserFacade
     }
 
     /**
+     * Obtiene un usuario por su ID.
+     *
+     * Busca el usuario en la base de datos utilizando el ID proporcionado.
+     * Si el usuario existe, lo convierte a un UserDto y lo devuelve.
+     * Si no existe, devuelve null.
+     *
+     * @param int $id ID del usuario a buscar.
+     * @return UserDto|null DTO del usuario si existe, o null si no se encuentra.
+     */
+    public function getUserById($id)
+    {
+        $userModel = $this->userService->getUserById($id);
+        if ($userModel) {
+            return $this->userConverter->modelToDto($userModel);
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Actualiza los datos de un usuario.
      *
      * @param int $id ID del usuario a actualizar.
@@ -112,7 +132,7 @@ class UserFacade
             return ['success' => false, 'message' => 'No se han proporcionado campos para actualizar.'];
         }
         if ($this->userService->updateUser($id, $fields)) {
-            return ['success' => true, 'message' => 'Usuario actualizado correctamente.'];
+            return ['success' => true, 'message' => 'Usuario actualizado correctamente. Se ha cerrado tu sesión por seguridad. Por favor, vuelve a iniciar sesión.'];
         } else {
             return ['success' => false, 'message' => 'Error al actualizar el usuario.'];
         }

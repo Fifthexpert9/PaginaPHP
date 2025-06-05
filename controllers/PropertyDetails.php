@@ -4,7 +4,6 @@ session_start();
 
 use facades\AdvertFacade;
 use facades\PropertyFacade;
-use facades\UserFacade;
 use converters\AdvertConverter;
 use converters\PropertyConverter;
 use converters\RoomConverter;
@@ -13,10 +12,9 @@ use converters\ApartmentConverter;
 use converters\HouseConverter;
 use converters\AddressConverter;
 use converters\ImageConverter;
-use converters\UserConverter;
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    $_SESSION['message'] = 'Anuncio no encontrado.';
+    $_SESSION['message'] = 'Propiedad no encontrada.';
     header('Location: /message');
     exit();
 }
@@ -24,19 +22,16 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $propertyConverter = new PropertyConverter();
 $advertFacade = new AdvertFacade(new AdvertConverter(), $propertyConverter, new AddressConverter());
 $propertyFacade = new PropertyFacade($propertyConverter, new RoomConverter(), new StudioConverter(), new ApartmentConverter(), new HouseConverter(), new AddressConverter(), new ImageConverter());
-$userFacade = new UserFacade(new UserConverter());
 
-$advertAux = $advertFacade->getAdvertById($_GET['id']);
+$propertyDto = $propertyFacade->getCompletePropertyById($_GET['id']);
 
-if (!$advertAux) {
-    $_SESSION['message'] = 'Anuncio no encontrado.';
+if (!$propertyDto) {
+    $_SESSION['message'] = 'Propiedad no encontrada.';
     header('Location: /message');
     exit();
 }
 
-$title = $advertAux['title'] ?? 'Detalles del Anuncio';
-$advertDto = $advertAux['advert'] ?? null;
-$propertyDto = $propertyFacade->getCompletePropertyById($advertDto->property_id ?? null);
-$propietaryUsername = $userFacade->getUserById($advertDto->user_id ?? null) ? $userFacade->getUserById($advertDto->user_id ?? null)->username : 'usuario no existente';
+$title = $propertyDto->property_id . ' - ' . $propertyDto->property_type . ' en ' . $propertyDto->address->city;
+$numAdverts = count($advertFacade->getAdvertsByPropertyId($_GET['id']));
 
-require __DIR__ . '/../views/advert-details.php';
+require __DIR__ . '/../views/property-details.php';

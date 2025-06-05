@@ -67,7 +67,6 @@ class HouseDto
      * @param int $property_id ID de la propiedad.
      * @param string $property_type Tipo de propiedad.
      * @param int $built_size Superficie construida (m²).
-     * @param float $price Precio de la casa.
      * @param string $status Estado de la casa.
      * @param bool $immediate_availability Disponibilidad inmediata.
      * @param int $user_id ID del usuario propietario.
@@ -80,7 +79,6 @@ class HouseDto
      * @param int $num_rooms Número de habitaciones.
      * @param int $num_bathrooms Número de baños.
      * @param bool $private_garage Indica si tiene garaje privado.
-     * @param bool $private_pool Indica si tiene piscina privada.
      * @param bool $furnished Indica si está amueblada.
      * @param bool $terrace Indica si tiene terraza.
      * @param bool $storage_room Indica si tiene trastero.

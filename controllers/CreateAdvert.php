@@ -7,6 +7,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use facades\AdvertFacade;
 use converters\PropertyConverter;
 use converters\AdvertConverter;
+use converters\AddressConverter;
 use dtos\AdvertDto;
 
 session_start();
@@ -14,7 +15,8 @@ session_start();
 try {
     $advertFacade = new AdvertFacade(
         new AdvertConverter(),
-        new PropertyConverter()
+        new PropertyConverter(),
+        new AddressConverter()
     );
 
     $advertDto = new AdvertDto(

@@ -141,6 +141,13 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                                     <?= htmlspecialchars($advert['property']->built_size) ?> m²
                                                 </p>
                                                 <p class="card-text mb-1">
+                                                    <?php if ($advert['advert']->action == 'Alquiler'): ?>
+                                                        <span class="badge text-bg-success fs-6"><?= htmlspecialchars($advert['advert']->price) ?> €/mes</span>
+                                                    <?php else: ?>
+                                                        <span class="badge text-bg-success fs-6"><?= htmlspecialchars($advert['advert']->price) ?> €</span>
+                                                    <?php endif; ?>
+                                                </p>
+                                                <p class="card-text mb-1">
                                                     <span class="badge text-bg-secondary fs-6">
                                                         <?= htmlspecialchars($advert['property']->status) ?>
                                                     </span>
@@ -148,8 +155,7 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                                 <!-- Añade la ciudad y provincia aquí -->
                                                 <p class="card-text mb-1">
                                                     <i class="bi bi-geo-alt"></i>
-                                                    <?= htmlspecialchars($advert['address']->city ?? '') ?>
-                                                    <?= htmlspecialchars($advert['address']->province ?? '') ?>
+                                                    <?= htmlspecialchars($advert['address']->city ?? '') ?>, <?= htmlspecialchars($advert['address']->province ?? '') ?>
                                                 </p>
                                                 <p class="card-text flex-grow-1 d-flex align-items-end">
                                                     <?= htmlspecialchars(mb_strimwidth($advert['advert']->description, 0, 120, '...')) ?>

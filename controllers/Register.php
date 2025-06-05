@@ -25,6 +25,7 @@ $userDto = new UserDto(
 $result = $userFacade->userRegister($userDto, $_POST['password']);
 
 $_SESSION['message'] = $result['message'];
+$_SESSION['registered'] = true;
 
 header('Location: /message');
 exit();

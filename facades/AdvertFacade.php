@@ -29,7 +29,7 @@ class AdvertFacade
      *
      * @param AdvertConverter $advertConverter Conversor de anuncios.
      * @param PropertyConverter $propertyConverter Conversor de propiedades.
-     * @param ImageConverter $imageConverter Conversor de anuncios.
+     * @param AddressConverter $addressConverter Conversor de direcciones.
      */
     public function __construct(
         AdvertConverter $advertConverter,
@@ -60,10 +60,8 @@ class AdvertFacade
         $propertyType = $propertyModel->getPropertyType() ?? '';
         $action = strtolower($action);
         $street = $addressModel ? $addressModel->getStreet() : '';
-        $city = $addressModel ? $addressModel->getCity() : '';
-        $province = $addressModel ? $addressModel->getProvince() : '';
 
-        return "{$propertyType} en {$action} en {$street}, {$city}, {$province}";
+        return "{$propertyType} en {$action} en {$street}";
     }
 
     /**

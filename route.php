@@ -14,6 +14,9 @@ try {
                 case '/advert-details':
                     require 'controllers/AdvertDetails.php';
                     break;
+                case '/property-details':
+                    require 'controllers/PropertyDetails.php';
+                    break;
                 case '/message':
                     require 'views/message.php';
                     break;
