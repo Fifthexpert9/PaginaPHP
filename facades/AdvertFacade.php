@@ -7,7 +7,6 @@ use services\PropertyService;
 use services\AddressService;
 use converters\AdvertConverter;
 use converters\PropertyConverter;
-use converters\ImageConverter;
 use converters\AddressConverter;
 use dtos\AdvertDto;
 
@@ -84,10 +83,10 @@ class AdvertFacade
     }
 
     /**
-     * Obtiene un anuncio por su ID, devolviendo el título generado y el DTO correspondiente.
+     * Obtiene un anuncio por su ID, devolviendo el título generado, el advertDto correspondiente, y el propertyDto correspondiente.
      *
      * @param int $id ID del anuncio.
-     * @return array|null Array con 'title' y 'advert' (AdvertDto), o null si no existe.
+     * @return array|null Array con 'title', 'advert' (AdvertDto) y 'property' (PropertyDto), o null si no existe.
      */
     public function getAdvertById($id)
     {
@@ -104,7 +103,8 @@ class AdvertFacade
 
         return [
             'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
-            'advert' => $this->advertConverter->modelToDto($advertModel)
+            'advert' => $this->advertConverter->modelToDto($advertModel),
+            'property' => $this->propertyConverter->modelToDto($propertyModel)
         ];
     }
 

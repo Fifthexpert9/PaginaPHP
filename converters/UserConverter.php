@@ -4,44 +4,71 @@ namespace converters;
 
 use models\UserModel;
 use dtos\UserDto;
-use services\AdvertService;
+use facades\AdvertFacade;
 use services\FavoritesService;
-use models\DatabaseModel;
 
-class UserConverter {
+class UserConverter
+{
+    private $favoritesService;
+    private $advertFacade;
+
+    /**
+     * Constructor de UserConverter.
+     *
+     * Inicializa los servicios necesarios para la conversión.
+     */
+    public function __construct(AdvertFacade $advertFacade)
+    {
+        $this->favoritesService = FavoritesService::getInstance();
+        $this->advertFacade = $advertFacade;
+    }
+
     /**
      * Convierte un UserModel en UserDto.
      */
-    public static function modelToDto(UserModel $model): UserDto {
-        $as = AdvertService::getInstance();
-        $fs = FavoritesService::getInstance();
-        
+    public function modelToDto(UserModel $userModel): UserDto
+    {
+        $eagerFavorites = $this->favoritesService->getFavoritesByUserId($userModel->getId());
+        $favoriteAdvertsDtos = [];
+        if ($eagerFavorites) {
+            foreach ($eagerFavorites as $favorite) {
+                $advert = $this->advertFacade->getAdvertById($favorite->getAdvertId());
+                if ($advert) {
+                    $favoriteAdvertsDtos[] = [
+                        'title' => $advert['title'],
+                        'advert' => $advert['advert'],
+                        'property' => $advert['property']
+                    ];
+                }
+            }
+        }
+
         return new UserDto(
-            $model->getId(),
-            $model->getName(),
-            $model->getLastName(),
-            $model->getUsername(),
-            $model->getEmail(),
-            $model->getRole(),
-            $model->getRegistrationDate(),
-            $as->getAdvertsByUserId($model->getId()),
-            $fs->getFavoritesByUserId($model->getId())
+            $userModel->getId(),
+            $userModel->getName(),
+            $userModel->getLastName(),
+            $userModel->getUsername(),
+            $userModel->getEmail(),
+            $userModel->getRole(),
+            $userModel->getRegistrationDate(),
+            $favoriteAdvertsDtos
         );
     }
 
     /**
      * Convierte un UserDto en UserModel.
      */
-    public static function dtoToModel(UserDto $dto): UserModel {
+    public function dtoToModel(UserDto $userDto): UserModel
+    {
         return new UserModel(
-            $dto->id,
-            $dto->name,
-            $dto->last_name,
-            $dto->username,
-            $dto->email,
-            null,
-            $dto->role,
-            $dto->registration_date
+            $userDto->id,
+            $userDto->name,
+            $userDto->last_name,
+            $userDto->username,
+            $userDto->email,
+            null, // password
+            $userDto->role,
+            $userDto->registration_date
         );
     }
 }

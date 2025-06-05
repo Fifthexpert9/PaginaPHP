@@ -324,8 +324,16 @@ class AdvertService
             $params[] = $filters['built_size_max'];
         }
         if (!empty($filters['status'])) {
-            $wheres[] = "p.status = ?";
-            $params[] = $filters['status'];
+            if (is_array($filters['status'])) {
+                $placeholders = implode(',', array_fill(0, count($filters['status']), '?'));
+                $wheres[] = "p.status IN ($placeholders)";
+                foreach ($filters['status'] as $status) {
+                    $params[] = $status;
+                }
+            } else {
+                $wheres[] = "p.status = ?";
+                $params[] = $filters['status'];
+            }
         }
         if (isset($filters['immediate_availability'])) {
             $wheres[] = "p.immediate_availability = ?";

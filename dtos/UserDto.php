@@ -12,8 +12,7 @@ namespace dtos;
  * @property string $email Correo electrónico del usuario.
  * @property string $role Rol del usuario.
  * @property string $registration_date Fecha de registro del usuario.
- * @property array $advert_ids IDs de los anuncios publicados por el usuario.
- * @property array $favorite_advert_ids IDs de los anuncios marcados como favoritos por el usuario.
+ * @property array $favorite_adverts Anuncios marcados como favoritos por el usuario.
  */
 class UserDto
 {
@@ -24,8 +23,8 @@ class UserDto
     public $email;
     public $role;
     public $registration_date;
-    public $advert_ids;
-    public $favorite_advert_ids;
+    public $adverts;
+    public $favorite_adverts;
 
     /**
      * Constructor de UserDto.
@@ -37,10 +36,9 @@ class UserDto
      * @param string $email Correo electrónico del usuario.
      * @param string $role Rol del usuario.
      * @param string $registration_date Fecha de registro del usuario.
-     * @param array $advert_ids IDs de los anuncios publicados por el usuario.
-     * @param array $favorite_advert_ids IDs de los anuncios favoritos del usuario.
+     * @param array $favorite_adverts listado de anuncios favoritos del usuario.
      */
-    public function __construct($id, $name, $last_name, $username, $email, $role, $registration_date, $advert_ids = [], $favorite_advert_ids = [])
+    public function __construct($id, $name, $last_name, $username, $email, $role, $registration_date, $favorite_adverts = [])
     {
         $this->id = $id;
         $this->name = $name;
@@ -49,8 +47,7 @@ class UserDto
         $this->email = $email;
         $this->role = $role;
         $this->registration_date = $registration_date;
-        $this->advert_ids = $advert_ids;
-        $this->favorite_advert_ids = $favorite_advert_ids;
+        $this->favorite_adverts = $favorite_adverts;
     }
 
     /**
@@ -68,8 +65,7 @@ class UserDto
             'email' => $this->email,
             'role' => $this->role,
             'registration_date' => $this->registration_date,
-            'advert_ids' => $this->advert_ids,
-            'favorite_advert_ids' => $this->favorite_advert_ids
+            'favorite_adverts' => $this->favorite_adverts
         ];
     }
 }

@@ -24,7 +24,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $propertyConverter = new PropertyConverter();
 $advertFacade = new AdvertFacade(new AdvertConverter(), $propertyConverter, new AddressConverter());
 $propertyFacade = new PropertyFacade($propertyConverter, new RoomConverter(), new StudioConverter(), new ApartmentConverter(), new HouseConverter(), new AddressConverter(), new ImageConverter());
-$userFacade = new UserFacade(new UserConverter());
+$userFacade = new UserFacade(new UserConverter(new AdvertFacade(new AdvertConverter(), new PropertyConverter(), new AddressConverter())));
 
 $advertAux = $advertFacade->getAdvertById($_GET['id']);
 

@@ -5,7 +5,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
 session_start();
 
 use facades\UserFacade;
+use facades\AdvertFacade;
+use converters\AddressConverter;
+use converters\PropertyConverter;
 use converters\UserConverter;
+use converters\AdvertConverter;
 
 if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
     $_SESSION['message'] = 'Debes iniciar sesión para eliminar tu cuenta.';
@@ -13,7 +17,7 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
     exit();
 }
 
-$userFacade = new UserFacade(new UserConverter());
+$userFacade = new UserFacade(new UserConverter(new AdvertFacade(new AdvertConverter(), new PropertyConverter(), new AddressConverter())));
 
 $user_id = $_SESSION['user']->id;
 $result = $userFacade->deleteUser($user_id);

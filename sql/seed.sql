@@ -133,3 +133,24 @@ VALUES
     (9, 'Unifamiliar', 50, 1, 4, 2, 0, 0, 0, 1, 1, 0, 1), -- Casa en Murcia
     (14, 'Chalet', 300, 2, 7, 9, 1, 1, 0, 1, 1, 1, 0), -- Casa en Alicante
     (16, 'Adosado', 20, 2, 4, 3, 0, 1, 1, 1, 0, 0, 1); -- Casa en Cádiz
+
+INSERT INTO favorites (user_id, advert_id) VALUES (2, 1);
+INSERT INTO favorites (user_id, advert_id) VALUES (2, 3);
+INSERT INTO favorites (user_id, advert_id) VALUES (2, 5);
+INSERT INTO favorites (user_id, advert_id) VALUES (2, 7);
+
+INSERT INTO favorites (user_id, advert_id) VALUES (3, 2);
+INSERT INTO favorites (user_id, advert_id) VALUES (3, 4);
+INSERT INTO favorites (user_id, advert_id) VALUES (3, 6);
+INSERT INTO favorites (user_id, advert_id) VALUES (3, 8);
+
+INSERT INTO favorites (user_id, advert_id) VALUES (4, 9);
+INSERT INTO favorites (user_id, advert_id) VALUES (4, 10);
+INSERT INTO favorites (user_id, advert_id) VALUES (4, 11);
+
+INSERT INTO favorites (user_id, advert_id) VALUES (5, 12);
+INSERT INTO favorites (user_id, advert_id) VALUES (5, 13);
+INSERT INTO favorites (user_id, advert_id) VALUES (5, 14);
+INSERT INTO favorites (user_id, advert_id) VALUES (5, 15);
+INSERT INTO favorites (user_id, advert_id) VALUES (5, 16);
+INSERT INTO favorites (user_id, advert_id) VALUES (5, 17);

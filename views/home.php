@@ -1,59 +1,12 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
 
-session_start();
+require_once 'controllers\SearchFilter.php';
 
-use facades\AdvertFacade;
-use converters\AdvertConverter;
-use converters\ImageConverter;
-use converters\PropertyConverter;
-use converters\AddressConverter;
-
-$advertFacade = new AdvertFacade(
-    new AdvertConverter(),
-    new PropertyConverter(),
-    new AddressConverter()
-);
-
-// Recoger filtros del formulario
-$filters = [];
-if (!empty($_GET['tipo'])) {
-    $filters['property_types'] = [$_GET['tipo']];
-}
-if (!empty($_GET['precio'])) {
-    $filters['advert_price_max'] = $_GET['precio'];
-}
-if (!empty($_GET['city'])) {
-    $filters['city'] = $_GET['city'];
-}
-if (!empty($_GET['province'])) {
-    $filters['province'] = $_GET['province'];
-}
-if (isset($_GET['immediate_availability']) && $_GET['immediate_availability'] !== '') {
-    $filters['immediate_availability'] = $_GET['immediate_availability'];
-}
-if (!empty($_GET['status'])) {
-    $filters['status'] = $_GET['status'];
-}
-
-// Obtener anuncios filtrados o todos si no hay filtros
-if (!empty($filters)) {
-    $adverts = $advertFacade->searchAdverts($filters);
-    if (is_string($adverts)) {
-        $adverts = [];
-    }
-} else {
-    $adverts = $advertFacade->getAllAdverts();
-}
-
-//$adverts = [];
-
-// Parámetros de paginación
 $advertsPerPage = 6;
 $totalAdverts = count($adverts);
 $totalPages = max(1, ceil($totalAdverts / $advertsPerPage));
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-$page = max(1, min($page, $totalPages)); // <-- Limita el valor de $page
+$page = max(1, min($page, $totalPages));
 $start = ($page - 1) * $advertsPerPage;
 $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
 ?>
@@ -61,10 +14,9 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
 <?php require_once __DIR__ . '/partials/head.php'; ?>
 <?php require_once __DIR__ . '/partials/header.php'; ?>
 <main>
-    <!-- Anuncios y Filtros -->
     <div class="container body-ody-ody">
         <div class="row">
-            <!-- Aside de filtros -->
+            <!-- Filtros -->
             <aside class="col-12 col-md-3 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-header bg-secondary text-white">
@@ -73,18 +25,37 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                     <div class="card-body">
                         <form>
                             <div class="mb-3">
-                                <label for="property_type" class="form-label">Tipo</label>
-                                <select class="form-select" id="tipo" name="tipo">
+                                <label for="action" class="form-label">Acción</label>
+                                <select class="form-select" id="action" name="action">
                                     <option value="">Todos</option>
-                                    <option value="Habitación" <?= (isset($_GET['tipo']) && $_GET['tipo'] === 'Habitación') ? 'selected' : '' ?>>Habitación</option>
-                                    <option value="Estudio" <?= (isset($_GET['tipo']) && $_GET['tipo'] === 'Estudio') ? 'selected' : '' ?>>Estudio</option>
-                                    <option value="Piso" <?= (isset($_GET['tipo']) && $_GET['tipo'] === 'Piso') ? 'selected' : '' ?>>Piso</option>
-                                    <option value="Casa" <?= (isset($_GET['tipo']) && $_GET['tipo'] === 'Casa') ? 'selected' : '' ?>>Casa</option>
+                                    <option value="Venta" <?= (isset($_GET['action']) && $_GET['action'] === 'Venta') ? 'selected' : '' ?>>Venta</option>
+                                    <option value="Alquiler" <?= (isset($_GET['action']) && $_GET['action'] === 'Alquiler') ? 'selected' : '' ?>>Alquiler</option>
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="precio" class="form-label">Precio máximo</label>
-                                <input type="number" class="form-control" id="precio" name="precio" placeholder="Ej: 1000" value="<?= isset($_GET['precio']) ? htmlspecialchars($_GET['precio']) : '' ?>">
+                                <label for="property_types" class="form-label">Tipo</label>
+                                <div class="ms-3">
+                                    <?php
+                                    $propertyTypes = ['Habitación', 'Estudio', 'Piso', 'Casa'];
+                                    $selectedTypes = isset($_GET['property_types']) ? (array)$_GET['property_types'] : [];
+                                    foreach ($propertyTypes as $type): ?>
+                                        <div class="form-check">
+                                            <input class="form-check-input"
+                                                type="checkbox"
+                                                name="property_types[]"
+                                                value="<?= htmlspecialchars($type) ?>"
+                                                id="property_type_<?= htmlspecialchars($type) ?>"
+                                                <?= in_array($type, $selectedTypes) ? 'checked' : '' ?>>
+                                            <label class="form-check-label" for="property_types<?= htmlspecialchars($type) ?>">
+                                                <?= htmlspecialchars($type) ?>
+                                            </label>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Precio máximo</label>
+                                <input type="number" class="form-control" id="price" name="price" placeholder="Ej: 1000" value="<?= isset($_GET['price']) ? htmlspecialchars($_GET['price']) : '' ?>">
                             </div>
                             <div class="mb-3">
                                 <label for="city" class="form-label">Ciudad</label>
@@ -104,7 +75,24 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                             </div>
                             <div class="mb-3">
                                 <label for="status" class="form-label">Estado</label>
-                                <input type="text" class="form-control" id="status" name="status" placeholder="Ej: Reformado" value="<?= isset($_GET['status']) ? htmlspecialchars($_GET['status']) : '' ?>">
+                                <div class="ms-3">
+                                    <?php
+                                    $statusTypes = ['Obra nueva', 'Reformado', 'A reformar', 'En buen estado'];
+                                    $selectedTypes = isset($_GET['status']) ? (array)$_GET['status'] : [];
+                                    foreach ($statusTypes as $type): ?>
+                                        <div class="form-check">
+                                            <input class="form-check-input"
+                                                type="checkbox"
+                                                name="status[]"
+                                                value="<?= htmlspecialchars($type) ?>"
+                                                id="status<?= htmlspecialchars($type) ?>"
+                                                <?= in_array($type, $selectedTypes) ? 'checked' : '' ?>>
+                                            <label class="form-check-label" for="status<?= htmlspecialchars($type) ?>">
+                                                <?= htmlspecialchars($type) ?>
+                                            </label>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
                             <button type="submit" class="btn btn-secondary w-100 btn-font">ver propiedades</button>
                         </form>

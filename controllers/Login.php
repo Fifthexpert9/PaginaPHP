@@ -4,8 +4,12 @@ namespace controllers;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use converters\AddressConverter;
 use facades\UserFacade;
 use converters\UserConverter;
+use converters\AdvertConverter;
+use converters\PropertyConverter;
+use facades\AdvertFacade;
 
 session_start();
 
@@ -22,7 +26,7 @@ session_start();
  *     - Guarda el mensaje de error en la sesión.
  * - Redirige a la página de mensajes para mostrar el resultado.
  */
-$userFacade = new UserFacade(new UserConverter());
+$userFacade = new UserFacade(new UserConverter(new AdvertFacade(new AdvertConverter(), new PropertyConverter(), new AddressConverter())));
 
 $result = $userFacade->userLogin($_POST['email'], $_POST['password']);
 

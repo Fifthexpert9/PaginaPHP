@@ -8,7 +8,10 @@
         <?php else: ?>
             <div class="row">
                 <!-- Título -->
-                <h2 class="mb-3"><?= htmlspecialchars($title) ?></h2>
+                <div class="col-12">
+                    <h2 class="mb-3"><?= htmlspecialchars($title) ?></h2>
+                    
+                </div>
 
                 <!-- Imagen principal y galería en carrusel -->
                 <div class="col-12 col-lg-6 mb-4">

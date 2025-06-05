@@ -4,13 +4,14 @@ namespace controllers;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use converters\AdvertConverter;
 use facades\UserFacade;
 use converters\UserConverter;
 use dtos\UserDto;
 
 session_start();
 
-$userFacade = new UserFacade(new UserConverter());
+$userFacade = new UserFacade(new UserConverter(new AdvertConverter()));
 
 $userDto = new UserDto(
     null,
