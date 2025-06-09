@@ -89,6 +89,9 @@ try {
                 case '/delete-advert':
                     require 'controllers/DeleteAdvert.php';
                     break;
+                case '/toggle-favorite':
+                    require 'controllers/ToggleFavorite.php';
+                    break;
                 default:
                     echo "Error, ruta POST no permitida";
                     break;

@@ -6,13 +6,23 @@
         <?php if (!isset($advertDto) || !$advertDto): ?>
             <div class="alert alert-danger text-center">No se ha encontrado el anuncio solicitado.</div>
         <?php else: ?>
-            <div class="row">
-                <!-- Título -->
-                <div class="col-12">
+            <div class="row mb-4">
+                <div class="col-12 d-flex justify-content-between align-items-center">
                     <h2 class="mb-3"><?= htmlspecialchars($title) ?></h2>
-                    
+                    <?php
+                    $isFavorite = isset($_SESSION['user']) && in_array($advertDto->id, $_SESSION['userFavoriteIds'] ?? []);
+                    ?>
+                    <button
+                        id="favorite-btn"
+                        class="btn btn-outline-danger btn-sm btn-font"
+                        title="<?= $isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos' ?>"
+                        data-advert-id="<?= $advertDto->id ?>">
+                        <i class="bi bi-heart-fill mx-2" style="color:<?= $isFavorite ? 'red' : '#ccc' ?>"></i>
+                    </button>
                 </div>
+            </div>
 
+            <div class="row">
                 <!-- Imagen principal y galería en carrusel -->
                 <div class="col-12 col-lg-6 mb-4">
                     <?php if (!empty($propertyDto->images) && sizeof($propertyDto->images) > 1): ?>
@@ -79,7 +89,7 @@
                             <p class="mb-2"><strong>Estado:</strong> <?= htmlspecialchars($propertyDto->status ?? 'No especificado') ?></p>
                             <p><strong>Disponibilidad:</strong> <?= htmlspecialchars($propertyDto->immediate_availability ? 'Inmediata' : 'Tendrás que esperar un poco ^^U') ?></p>
                         </div>
-                        <div class="col-5 d-flex flex-column align-items-baseline">
+                        <div class="col-5 d-flex flex-column align-items-baseline p-0">
                             <span class="fw-bold mb-1">Precio:</span>
                             <div class="border px-3 py-2 rounded bg-light fs-3 w-100">
                                 <?= htmlspecialchars($advertDto->price) ?>
@@ -198,6 +208,29 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('favorite-btn').addEventListener('click', function() {
+            const btn = this; // Referencia al botón
+            const advertId = btn.getAttribute('data-advert-id');
+            fetch('/toggle-favorite', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'advert_id=' + encodeURIComponent(advertId)
+                })
+                .then(response => response.json())
+                .then((data) => {
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    } else if (data.success) {
+                        btn.querySelector('i').style.color = data.is_favorite ? 'red' : '#ccc';
+                        btn.title = data.is_favorite ? 'Quitar de favoritos' : 'Añadir a favoritos';
+                    }
+                });
+        });
+    </script>
 </main>
 
 <?php require_once __DIR__ . '/partials/footer.php'; ?>

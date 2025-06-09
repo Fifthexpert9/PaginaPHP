@@ -12,7 +12,6 @@ namespace dtos;
  * @property string $email Correo electrónico del usuario.
  * @property string $role Rol del usuario.
  * @property string $registration_date Fecha de registro del usuario.
- * @property array $favorite_adverts Anuncios marcados como favoritos por el usuario.
  */
 class UserDto
 {
@@ -24,7 +23,6 @@ class UserDto
     public $role;
     public $registration_date;
     public $adverts;
-    public $favorite_adverts;
 
     /**
      * Constructor de UserDto.
@@ -36,9 +34,8 @@ class UserDto
      * @param string $email Correo electrónico del usuario.
      * @param string $role Rol del usuario.
      * @param string $registration_date Fecha de registro del usuario.
-     * @param array $favorite_adverts listado de anuncios favoritos del usuario.
      */
-    public function __construct($id, $name, $last_name, $username, $email, $role, $registration_date, $favorite_adverts = [])
+    public function __construct($id, $name, $last_name, $username, $email, $role, $registration_date)
     {
         $this->id = $id;
         $this->name = $name;
@@ -47,7 +44,6 @@ class UserDto
         $this->email = $email;
         $this->role = $role;
         $this->registration_date = $registration_date;
-        $this->favorite_adverts = $favorite_adverts;
     }
 
     /**
@@ -64,8 +60,7 @@ class UserDto
             'username' => $this->username,
             'email' => $this->email,
             'role' => $this->role,
-            'registration_date' => $this->registration_date,
-            'favorite_adverts' => $this->favorite_adverts
+            'registration_date' => $this->registration_date
         ];
     }
 }

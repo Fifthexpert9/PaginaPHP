@@ -26,7 +26,7 @@ session_start();
  *     - Guarda el mensaje de error en la sesión.
  * - Redirige a la página de mensajes para mostrar el resultado.
  */
-$userFacade = new UserFacade(new UserConverter(new AdvertFacade(new AdvertConverter(), new PropertyConverter(), new AddressConverter())));
+$userFacade = new UserFacade(new UserConverter());
 
 $result = $userFacade->userLogin($_POST['email'], $_POST['password']);
 

@@ -149,8 +149,15 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                                     <?= htmlspecialchars(mb_strimwidth($advert['advert']->description, 0, 120, '...')) ?>
                                                 </p>
                                                 <div class="mt-2 d-flex justify-content-evenly align-items-center">
-                                                    <button class="btn btn-outline-danger btn-sm btn-font" title="Añadir a favoritos"><i class="bi bi-heart-fill mx-2"></i></button>
-                                                    <a href="/advert-details?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm btn-font w-50" title="Ver detalles">ver detalles</a>
+                                                    <?php
+                                                    $isFavorite = isset($_SESSION['user']) && in_array($advert['advert']->id, $_SESSION['userFavoriteIds'] ?? []);
+                                                    ?>
+                                                    <button
+                                                        class="btn btn-outline-danger btn-sm btn-font favorite-btn"
+                                                        title="<?= $isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos' ?>"
+                                                        data-advert-id="<?= $advert['advert']->id ?>">
+                                                        <i class="bi bi-heart-fill mx-2" style="color:<?= $isFavorite ? 'red' : '#ccc' ?>"></i>
+                                                    </button> <a href="/advert-details?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm btn-font w-50" title="Ver detalles">ver detalles</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -179,6 +186,30 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
             </div>
         </div>
     </div>
+
+    <script>
+        document.querySelectorAll('.favorite-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const advertId = this.getAttribute('data-advert-id');
+                fetch('/toggle-favorite', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'advert_id=' + encodeURIComponent(advertId)
+                    })
+                    .then(response => response.json())
+                    .then((data) => {
+                        if (data.redirect) {
+                            window.location.href = data.redirect;
+                        } else if (data.success) {
+                            this.querySelector('i').style.color = data.is_favorite ? 'red' : '#ccc';
+                            this.title = data.is_favorite ? 'Quitar de favoritos' : 'Añadir a favoritos';
+                        }
+                    });
+            });
+        });
+    </script>
 </main>
 
 <?php require_once __DIR__ . '/partials/footer.php'; ?>
