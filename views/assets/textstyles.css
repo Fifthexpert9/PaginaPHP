@@ -81,18 +81,14 @@ html {
 }
 
 body {
+  background-image: url('https://i.imgur.com/NJydr4l.png');
+  background-repeat: repeat-y;
+  background-position: center top;
   background-color: #ffffff;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    #ffffff 0px,
-    #ffffff 35px,
-    #e4e4e4 36px,
-    #ffffff 37px
-    );
-    height: 100%;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .body-ody-ody {

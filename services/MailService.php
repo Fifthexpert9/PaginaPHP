@@ -1,4 +1,5 @@
 <?php
+
 namespace services;
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -16,15 +17,18 @@ class MailService
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'messaging.houspecial@gmail.com';
-            $mail->Password = 'khjr ewzs lhca gfhj'; // Cambia esto por tu contraseña SMTP
+            $mail->Password = 'khjr ewzs lhca gfhj';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
             // Configuración del correo
             $mail->setFrom($from, 'Houspecial');
             $mail->addAddress($to);
+            $mail->addReplyTo($from);
             $mail->Subject = $subject;
             $mail->Body = $body;
+            $mail->CharSet = 'UTF-8';
+            $mail->isHTML(true);
 
             // Enviar el correo
             $mail->send();

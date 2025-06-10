@@ -19,9 +19,9 @@
                         <button id="goHome" class="btn btn-secondary mt-4 btn-font">ir a la pagina principal</button>
                     <?php endif; ?>
                 <?php elseif (isset($_SESSION['user_edited']) || isset($_SESSION['registered'])): ?>
-                    <?php if ($_SESSION['user_edited']): ?>
+                    <?php if (isset($_SESSION['user_edited']) && $_SESSION['user_edited']): ?>
                         <?php unset($_SESSION['user_edited']); ?>
-                    <?php elseif ($_SESSION['registered']): ?>
+                    <?php elseif (isset($_SESSION['registered']) && $_SESSION['registered']): ?>
                         <?php unset($_SESSION['registered']); ?>
                     <?php endif; ?>
                     <button id="goBack" class="btn btn-secondary mt-4 btn-font">iniciar sesion</button>

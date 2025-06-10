@@ -40,28 +40,11 @@ class MessageFacade
      * @param MessageDto $messageDto DTO del mensaje a enviar.
      * @return string Mensaje de éxito o error.
      */
-    public function sendMessage(MessageDto $messageDto)
+    public function registerMessage(MessageDto $messageDto)
     {
         $messageModel = $this->messageConverter->dtoToModel($messageDto);
-        $messageCreated = $this->messageService->createMessage($messageModel);
-
-        if ($messageCreated) {
-            $receiverEmail = $this->userService->getUserById($messageModel->getReceiverId())->getEmail();
-            $senderEmail = $this->userService->getUserById($messageModel->getSenderId())->getEmail();
-
-            if ($receiverEmail && $senderEmail) {
-                $body = $messageModel->getContent() . "\n\n" .
-                    "Puedes contactarme a través de mi email: " . $senderEmail;
-
-                try {
-                    $this->mailService->sendEmail('messaging.houspecial@gmail.com', $receiverEmail, $messageModel->getSubject(), $body);
-                    return "Mensaje enviado correctamente.";
-                } catch (\Exception $e) {
-                    //error_log("Error al enviar el correo: " . $e->getMessage());
-                    return "Se ha producido un error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.";
-                }
-            } else return "Se ha producido un error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.";
-        }
+        
+        return $this->messageService->createMessage($messageModel);
     }
 
     /**

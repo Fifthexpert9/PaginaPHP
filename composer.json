@@ -17,5 +17,7 @@
             "email": "nataliayeva09@hotmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "phpmailer/phpmailer": "^6.10"
+    }
 }

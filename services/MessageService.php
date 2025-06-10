@@ -51,16 +51,16 @@ class MessageService
      */
     public function createMessage(MessageModel $message)
     {
-        $sql = "INSERT INTO message (sender_id, receiver_id, advert_id, subject, content, sent_at)
-                VALUES (:sender_id, :receiver_id, :advert_id, :subject, :content, :sent_at)";
+        $sql = "INSERT INTO `message`(`sender_id`, `receiver_id`, `advert_id`, `subject`, `content`)
+                VALUES (:sender_id, :receiver_id, :advert_id, :subject, :content)";
+                
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([
             ':sender_id' => $message->getSenderId(),
             ':receiver_id' => $message->getReceiverId(),
             ':advert_id' => $message->getAdvertId(),
             ':subject' => $message->getSubject(),
-            ':content' => $message->getContent(),
-            ':sent_at' => $message->getSentAt()
+            ':content' => $message->getContent()
         ]);
     }
 

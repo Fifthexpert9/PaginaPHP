@@ -103,7 +103,7 @@
                             <h4 class="spec-font mt-3">te interesa este anuncio?</h4>
                             <?php if (isset($_SESSION['user']) && $_SESSION['user']->id !== $advertDto->user_id): ?>
                                 <p class="mb-1">El propietario recibirá un email con tu dirección de correo electrónico, ¡para que te contacte si le interesa tu oferta!</p>
-                                <form action="send_message" method="post">
+                                <form action="/controllers/SendMessage.php" method="post">
                                     <div class="mb-3">
                                         <div class="d-flex align-items-center gap-2">
                                             <p>De:</p>
@@ -116,6 +116,7 @@
                                         <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
                                     </div>
                                     <input type="hidden" name="advert_id" value="<?= htmlspecialchars($advertDto->id) ?>">
+                                    <input type="hidden" name="adverts_user_id" value="<?= htmlspecialchars($advertDto->user_id) ?>">
                                     <button type="submit" class="btn btn-secondary btn-font">enviar mensaje</button>
                                 </form>
                             <?php elseif (isset($_SESSION['user']) && $_SESSION['user']->id === $advertDto->user_id): ?>
