@@ -51,6 +51,17 @@ class AddressService
      */
     public function createAddress(AddressModel $address)
     {
+        // Geocodificar antes de guardar
+        $coords = $this->geocodeAddress(
+            $address->getStreet(),
+            $address->getCity(),
+            $address->getProvince(),
+            $address->getPostalCode(),
+            $address->getCountry()
+        );
+        $latitude = $coords['latitude'];
+        $longitude = $coords['longitude'];
+
         $sql = "INSERT INTO address (street, city, province, postal_code, country, latitude, longitude)
                 VALUES (:street, :city, :province, :postal_code, :country, :latitude, :longitude)";
         $stmt = $this->db->prepare($sql);
@@ -60,8 +71,8 @@ class AddressService
             ':province' => $address->getProvince(),
             ':postal_code' => $address->getPostalCode(),
             ':country' => $address->getCountry(),
-            ':latitude' => $address->getLatitude(),
-            ':longitude' => $address->getLongitude()
+            ':latitude' => $latitude,
+            ':longitude' => $longitude
         ]);
         return $this->db->lastInsertId();
     }
@@ -122,6 +133,30 @@ class AddressService
     public function updateAddress($id, $fields)
     {
         try {
+            // Si se actualiza algún campo de dirección, recalcula lat/lon
+            $direccionKeys = ['street', 'city', 'province', 'postal_code', 'country'];
+            $needsGeocode = false;
+            foreach ($direccionKeys as $key) {
+                if (array_key_exists($key, $fields)) {
+                    $needsGeocode = true;
+                    break;
+                }
+            }
+
+            if ($needsGeocode) {
+                // Obtener los valores actuales de la dirección si no se pasan todos los campos
+                $current = $this->getAddressById($id);
+                $street = $fields['street'] ?? $current->getStreet();
+                $city = $fields['city'] ?? $current->getCity();
+                $province = $fields['province'] ?? $current->getProvince();
+                $postal_code = $fields['postal_code'] ?? $current->getPostalCode();
+                $country = $fields['country'] ?? $current->getCountry();
+
+                $coords = $this->geocodeAddress($street, $city, $province, $postal_code, $country);
+                $fields['latitude'] = $coords['latitude'];
+                $fields['longitude'] = $coords['longitude'];
+            }
+
             $setClause = [];
             foreach ($fields as $key => $value) {
                 $setClause[] = "`$key` = :$key";
@@ -178,5 +213,37 @@ class AddressService
             error_log('Error al eliminar dirección por property_id: ' . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Geocodifica una dirección utilizando el servicio Nominatim de OpenStreetMap.
+     *
+     * @param string $street Calle de la dirección.
+     * @param string $city Ciudad de la dirección.
+     * @param string $province Provincia de la dirección.
+     * @param string $postal_code Código postal de la dirección.
+     * @param string $country País de la dirección.
+     * @return array Array con la latitud y longitud de la dirección, o null si no se pudo geocodificar.
+     */
+    private function geocodeAddress($street, $city, $province, $postal_code, $country)
+    {
+        $address = urlencode("$street, $city, $province, $postal_code, $country");
+        $url = "https://nominatim.openstreetmap.org/search?q=$address&format=json&limit=1";
+        $opts = [
+            "http" => [
+                "header" => "User-Agent: PaginaPHP/1.0\r\n"
+            ]
+        ];
+        $context = stream_context_create($opts);
+        $response = file_get_contents($url, false, $context);
+        $data = json_decode($response, true);
+
+        if (!empty($data) && isset($data[0]['lat']) && isset($data[0]['lon'])) {
+            return [
+                'latitude' => $data[0]['lat'],
+                'longitude' => $data[0]['lon']
+            ];
+        }
+        return ['latitude' => null, 'longitude' => null];
     }
 }
