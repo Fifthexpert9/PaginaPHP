@@ -2,6 +2,7 @@
   <div class="d-flex flex-column justify-content-center align-items-center">
     <span class="logo-footer">houspecial</span>
     <p>&copy; 2025. Todos los derechos reservados.</p>
+    <p>Si necesitas contactar con el administrador del sistema, escribe a <u>messaging.houspecial@gmail.com</u></p>
   </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
