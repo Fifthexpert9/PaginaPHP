@@ -21,6 +21,24 @@ use dtos\AddressDto;
 
 session_start();
 
+$errores = [];
+$old = $_POST;
+
+// Validar vacíos
+if (empty(trim($_POST['street'] ?? ''))) $errores['street'] = "La calle es obligatoria.";
+if (empty(trim($_POST['city'] ?? ''))) $errores['city'] = "La ciudad es obligatoria.";
+if (empty(trim($_POST['province'] ?? ''))) $errores['province'] = "La provincia es obligatoria.";
+if (empty(trim($_POST['postal_code'] ?? ''))) $errores['postal_code'] = "El código postal es obligatorio.";
+if (empty(trim($_POST['country'] ?? ''))) $errores['country'] = "El país es obligatorio.";
+
+// Si hay errores, vuelve al formulario
+if ($errores) {
+    $_SESSION['property_errors'] = $errores;
+    $_SESSION['property_old'] = $old;
+    header('Location: /new-property');
+    exit();
+}
+
 try {
     $propertyFacade = new PropertyFacade(
         new PropertyConverter(),

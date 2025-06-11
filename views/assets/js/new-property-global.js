@@ -19,24 +19,15 @@ function clearError(inputId) {
 async function validateStep1() {
     let valid = true;
     let fields = ['street','city','province','postal_code','country'];
-    let fieldLabels = {
-        street: 'calle',
-        city: 'ciudad',
-        province: 'provincia',
-        postal_code: 'código postal',
-        country: 'país'
-    };
     fields.forEach(clearError);
 
     let values = {};
-    let firstEmpty = null;
     fields.forEach(function(id) {
         let el = document.getElementById(id);
         values[id] = el ? el.value.trim() : '';
-        if (!values[id] && !firstEmpty) {
+        if (!values[id]) {
             showError(id, 'Este campo es obligatorio.');
             valid = false;
-            firstEmpty = id;
         }
     });
     if (!valid) return false;
@@ -48,19 +39,17 @@ async function validateStep1() {
         let response = await fetch(url, {headers: {'Accept-Language': 'es'}});
         let data = await response.json();
         if (!data || data.length === 0) {
-            // Solo muestra el error en el campo más relevante (por ejemplo, calle)
-            showError('street', 'Introduce una calle real.');
+            fields.forEach(id => showError(id, 'Introduce una localización real.'));
             return false;
         }
     } catch (e) {
-        showError('street', 'No se pudo validar la dirección. Intenta de nuevo.');
+        fields.forEach(id => showError(id, 'No se pudo validar la dirección. Intenta de nuevo.'));
         return false;
     }
     return true;
 }
 window.validateStep1 = validateStep1;
 
-// nextStep debe esperar a validateStep1 si es el paso 2
 function nextStep(step) {
     if (step === 2 && typeof validateStep1 === 'function') {
         Promise.resolve(validateStep1()).then(valid => {

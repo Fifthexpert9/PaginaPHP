@@ -8,6 +8,14 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
     header('Location: /message');
     exit();
 }
+
+$old = $_SESSION['property_old'] ?? [];
+$errors = $_SESSION['property_errors'] ?? [];
+unset($_SESSION['property_old'], $_SESSION['property_errors']);
+
+function field_error($field, $errors) {
+    return isset($errors[$field]) ? '<div class="invalid-feedback" style="display:block;">' . htmlspecialchars($errors[$field]) . '</div>' : '';
+}
 ?>
 
 <?php require_once __DIR__ . '/partials/head.php'; ?>
@@ -24,23 +32,43 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
                 <h4 class="mb-2">¿Dónde está tu casa?</h4>
                 <div class="mb-3">
                     <label for="street" class="form-label">Calle</label>
-                    <input type="text" class="form-control" id="street" name="street" placeholder="Ej: Calle de las Amapolas, 70" required>
+                    <input type="text" class="form-control<?= isset($errors['street']) ? ' is-invalid' : '' ?>" id="street" name="street"
+                        placeholder="Ej: Calle de las Amapolas, 70"
+                        value="<?= htmlspecialchars($old['street'] ?? '') ?>" required>
+                    <div id="streetError" class="invalid-feedback" style="display:none;"></div>
+                    <?= field_error('street', $errors) ?>
                 </div>
                 <div class="mb-3">
                     <label for="city" class="form-label">Ciudad</label>
-                    <input type="text" class="form-control" id="city" name="city" placeholder="Ej: Mejorada del Campo" required>
+                    <input type="text" class="form-control<?= isset($errors['city']) ? ' is-invalid' : '' ?>" id="city" name="city"
+                        placeholder="Ej: Mejorada del Campo"
+                        value="<?= htmlspecialchars($old['city'] ?? '') ?>" required>
+                    <div id="cityError" class="invalid-feedback" style="display:none;"></div>
+                    <?= field_error('city', $errors) ?>
                 </div>
                 <div class="mb-3">
                     <label for="province" class="form-label">Provincia</label>
-                    <input type="text" class="form-control" id="province" name="province" placeholder="Ej: Madrid">
+                    <input type="text" class="form-control<?= isset($errors['province']) ? ' is-invalid' : '' ?>" id="province" name="province"
+                        placeholder="Ej: Madrid"
+                        value="<?= htmlspecialchars($old['province'] ?? '') ?>" required>
+                    <div id="provinceError" class="invalid-feedback" style="display:none;"></div>
+                    <?= field_error('province', $errors) ?>
                 </div>
                 <div class="mb-3">
                     <label for="postal_code" class="form-label">Código postal</label>
-                    <input type="text" class="form-control" id="postal_code" name="postal_code" placeholder="Ej: 28840" required>
+                    <input type="text" class="form-control<?= isset($errors['postal_code']) ? ' is-invalid' : '' ?>" id="postal_code" name="postal_code"
+                        placeholder="Ej: 28840"
+                        value="<?= htmlspecialchars($old['postal_code'] ?? '') ?>" required>
+                    <div id="postal_codeError" class="invalid-feedback" style="display:none;"></div>
+                    <?= field_error('postal_code', $errors) ?>
                 </div>
                 <div class="mb-3">
                     <label for="country" class="form-label">País</label>
-                    <input type="text" class="form-control" id="country" name="country" placeholder="Ej: España" required>
+                    <input type="text" class="form-control<?= isset($errors['country']) ? ' is-invalid' : '' ?>" id="country" name="country"
+                        placeholder="Ej: España"
+                        value="<?= htmlspecialchars($old['country'] ?? '') ?>" required>
+                    <div id="countryError" class="invalid-feedback" style="display:none;"></div>
+                    <?= field_error('country', $errors) ?>
                 </div>
                 <button type="button" class="btn btn-secondary btn-font d-flex mx-auto mt-3" onclick="nextStep(2)">siguiente</button>
             </div>
