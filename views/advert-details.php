@@ -196,6 +196,29 @@
 
                 </div>
             </div>
+
+            <?php if (
+    isset($propertyDto->address->latitude, $propertyDto->address->longitude) &&
+    $propertyDto->address->latitude && $propertyDto->address->longitude
+): ?>
+    <div id="map" style="height: 350px; width: 100%; margin-top: 1.5rem; margin-bottom: 1.5rem;"></div>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([
+            <?= floatval($propertyDto->address->latitude) ?>,
+            <?= floatval($propertyDto->address->longitude) ?>
+        ], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        L.marker([
+            <?= floatval($propertyDto->address->latitude) ?>,
+            <?= floatval($propertyDto->address->longitude) ?>
+        ]).addTo(map)
+            .bindPopup('Ubicación de la vivienda').openPopup();
+    </script>
+<?php endif; ?>
         <?php endif; ?>
     </div>
 
