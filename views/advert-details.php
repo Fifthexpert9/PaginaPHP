@@ -216,7 +216,7 @@
             <?= floatval($propertyDto->address->latitude) ?>,
             <?= floatval($propertyDto->address->longitude) ?>
         ]).addTo(map)
-            .bindPopup('Ubicación de la vivienda').openPopup();
+            .bindPopup('<?= htmlspecialchars($propertyDto->address->street ?? '') ?>').openPopup();
     </script>
 <?php endif; ?>
         <?php endif; ?>
