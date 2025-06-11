@@ -154,11 +154,12 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                                     $isFavorite = isset($_SESSION['user']) && in_array($advert['advert']->id, $_SESSION['userFavoriteIds'] ?? []);
                                                     ?>
                                                     <button
-                                                        class="btn btn-outline-danger btn-sm btn-font favorite-btn"
+                                                        class="btn btn-sm btn-font favorite-btn <?= $isFavorite ? 'btn-danger' : 'btn-outline-secondary' ?>"
                                                         title="<?= $isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos' ?>"
                                                         data-advert-id="<?= $advert['advert']->id ?>">
-                                                        <i class="bi bi-heart-fill mx-2" style="color:<?= $isFavorite ? 'red' : '#ccc' ?>"></i>
-                                                    </button> <a href="/advert-details?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm btn-font w-50" title="Ver detalles">ver detalles</a>
+                                                        <i class="bi bi-heart-fill mx-2" style="color:<?= $isFavorite ? 'white' : '#888' ?>"></i>
+                                                    </button>
+                                                    <a href="/advert-details?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm btn-font w-50" title="Ver detalles">ver detalles</a>
                                                 </div>
                                             </div>
                                         </div>

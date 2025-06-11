@@ -27,6 +27,11 @@ session_start();
  * - Redirige a la página de mensajes para mostrar el resultado.
  */
 $userFacade = new UserFacade(new UserConverter());
+$advertFacade = new AdvertFacade(
+    new AdvertConverter(),
+    new PropertyConverter(),
+    new AddressConverter()
+);
 
 $result = $userFacade->userLogin($_POST['email'], $_POST['password']);
 
@@ -34,6 +39,13 @@ if (!empty($result['success']) && $result['success']) {
     $_SESSION['user'] = $result['user'];
     $_SESSION['logged'] = true;
     $_SESSION['message'] = $result['message'];
+
+    $_SESSION['userFavorites'] = [];
+    foreach ($_SESSION['userFavoriteIds'] as $favAdvertId) {
+        if (is_numeric($favAdvertId)) {
+            $_SESSION['userFavorites'][] = $advertFacade->getAdvertById($favAdvertId);
+        }
+    }
 } else {
     $_SESSION['logged'] = false;
     $_SESSION['message'] = $result['message'];

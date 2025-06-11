@@ -13,11 +13,10 @@
                     $isFavorite = isset($_SESSION['user']) && in_array($advertDto->id, $_SESSION['userFavoriteIds'] ?? []);
                     ?>
                     <button
-                        id="favorite-btn"
-                        class="btn btn-outline-danger btn-sm btn-font"
+                        class="btn btn-sm btn-font favorite-btn <?= $isFavorite ? 'btn-danger' : 'btn-outline-secondary' ?>"
                         title="<?= $isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos' ?>"
                         data-advert-id="<?= $advertDto->id ?>">
-                        <i class="bi bi-heart-fill mx-2" style="color:<?= $isFavorite ? 'red' : '#ccc' ?>"></i>
+                        <i class="bi bi-heart-fill mx-2" style="color:<?= $isFavorite ? 'white' : '#888' ?>"></i>
                     </button>
                 </div>
             </div>

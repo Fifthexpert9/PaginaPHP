@@ -3,13 +3,31 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 session_start();
 
+use facades\AdvertFacade;
+use converters\AdvertConverter;
+use converters\PropertyConverter;
+use converters\AddressConverter;
+
 if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
     $_SESSION['message'] = 'Debes iniciar sesión para acceder a esta funcionalidad.';
     header('Location: /message');
     exit();
 }
 
+$advertFacade = new AdvertFacade(
+    new AdvertConverter(),
+    new PropertyConverter(),
+    new AddressConverter()
+);
+
 $userDto = isset($_SESSION['user']) ? $_SESSION['user'] : null;
+
+$_SESSION['userFavorites'] = [];
+foreach ($_SESSION['userFavoriteIds'] as $favAdvertId) {
+    if (is_numeric($favAdvertId)) {
+        $_SESSION['userFavorites'][] = $advertFacade->getAdvertById($favAdvertId);
+    }
+}
 ?>
 
 <?php require_once __DIR__ . '/partials/head.php'; ?>
@@ -19,13 +37,14 @@ $userDto = isset($_SESSION['user']) ? $_SESSION['user'] : null;
         <h3 class="logo text-center mb-4">favoritos</h3>
         <?php if (!$userDto): ?>
             <div class="alert alert-warning text-center">No has iniciado sesión.</div>
-        <?php elseif (empty($userDto->favorite_adverts)): ?>
+        <?php elseif (empty($_SESSION['userFavorites'])): ?>
             <div class="alert alert-secondary text-center">No tienes anuncios favoritos.</div>
         <?php else: ?>
             <div class="row g-4">
-                <?php foreach ($userDto->favorite_adverts as $advert):
+                <?php foreach ($_SESSION['userFavorites'] as $advert):
                     $mainImage = $advert['advert']->main_image;
                     $property = isset($advert['property']) ? $advert['property'] : [];
+                    $isFavorite = isset($_SESSION['user']) && in_array($advert['advert']->id, $_SESSION['userFavoriteIds'] ?? []);
                 ?>
                     <div class="col-12">
                         <div class="card h-100 shadow-sm">
@@ -66,10 +85,12 @@ $userDto = isset($_SESSION['user']) ? $_SESSION['user'] : null;
                                 <!-- Botones a la derecha -->
                                 <div class="col-lg-2 d-flex flex-column align-items-center justify-content-center p-3">
                                     <a href="/advert-details?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm mb-2 btn-font w-100">ver detalles</a>
-                                    <form action="/delete-advert" method="post" class="border w-100" style="display:inline;">
-                                        <input type="hidden" name="id" value="<?= htmlspecialchars($advert['advert']->id) ?>">
-                                        <button type="submit" class="btn btn-danger btn-sm btn-font w-100" onclick="return confirm('¿Seguro que quieres borrar este anuncio?')">borrar</button>
-                                    </form>
+                                    <button
+                                        class="btn btn-sm btn-font favorite-btn <?= $isFavorite ? 'btn-danger' : 'btn-outline-secondary' ?>"
+                                        title="<?= $isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos' ?>"
+                                        data-advert-id="<?= $advert['advert']->id ?>">
+                                        <i class="bi bi-heart-fill mx-2" style="color:<?= $isFavorite ? 'white' : '#888' ?>"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -78,5 +99,8 @@ $userDto = isset($_SESSION['user']) ? $_SESSION['user'] : null;
             </div>
         <?php endif; ?>
     </div>
+    <script>
+        <?php require_once __DIR__ . '/assets/js/favorites.js'; ?>
+    </script>
 </main>
 <?php require_once __DIR__ . '/partials/footer.php'; ?>
