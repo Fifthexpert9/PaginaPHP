@@ -40,16 +40,26 @@ if (!empty($result['success']) && $result['success']) {
     $_SESSION['logged'] = true;
     $_SESSION['message'] = $result['message'];
 
+    // Asegúrate de que userFavoriteIds existe y es array
+    if (!isset($_SESSION['userFavoriteIds']) || !is_array($_SESSION['userFavoriteIds'])) {
+        $_SESSION['userFavoriteIds'] = [];
+    }
+
     $_SESSION['userFavorites'] = [];
     foreach ($_SESSION['userFavoriteIds'] as $favAdvertId) {
         if (is_numeric($favAdvertId)) {
             $_SESSION['userFavorites'][] = $advertFacade->getAdvertById($favAdvertId);
         }
     }
-} else {
-    $_SESSION['logged'] = false;
-    $_SESSION['message'] = $result['message'];
-}
 
-header('Location: /message');
-exit();
+    // Redirige a la página principal
+    header('Location: /');
+    exit();
+} else {
+    $_SESSION['login_errors'] = [$result['message'] ?? 'Error de autenticación.'];
+    $_SESSION['login_old'] = [
+        'email' => $_POST['email'] ?? ''
+    ];
+    header('Location: /login');
+    exit();
+}
