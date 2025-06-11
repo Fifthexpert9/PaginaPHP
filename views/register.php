@@ -1,6 +1,12 @@
 <?php require_once __DIR__ . '/partials/head.php'; ?>
 <?php require_once __DIR__ . '/partials/header.php'; ?>
 
+<?php
+$old = $_SESSION['register_old'] ?? [];
+$errors = $_SESSION['register_errors'] ?? [];
+unset($_SESSION['register_old'], $_SESSION['register_errors']);
+?>
+
 <main class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
     <div class="card shadow-sm p-4" style="max-width: 650px; width: 100%;">
         <div class="text-center mb-2">
@@ -12,27 +18,29 @@
                 <div class="col-12 col-md-6 pe-3">
                     <div class="mb-3">
                         <label for="email" class="form-label">Correo electrónico *</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="tucorreo@email.com" required>
+                        <input type="email" class="form-control" id="email" name="email" value="<?= htmlspecialchars($old['email'] ?? '') ?>" required>
+                        <div id="emailError" class="invalid-feedback" style="display:none;"></div>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Contraseña *</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <div id="passwordError" class="invalid-feedback" style="display:none;"></div>
                     </div>
                 </div>
                 <div class="col-12 col-md-6 border-start ps-3">
                     <div class="mb-3">
-                        <label for="name" class="form-label">
-                            Nombre *
-                            <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Necesitamos esta información únicamente para crear el nombre de usuario único"></i>
-                        </label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Nombre" required>
+                        <label for="name" class="form-label">Nombre *</label>
+                        <input type="text" class="form-control" id="name" name="name" value="<?= htmlspecialchars($old['name'] ?? '') ?>" required>
+                        <?php if (in_array("Todos los campos son obligatorios.", $errors)): ?>
+                            <div class="invalid-feedback" style="display:block;">El nombre es obligatorio.</div>
+                        <?php endif; ?>
                     </div>
                     <div class="mb-3">
-                        <label for="last_name" class="form-label">
-                            Apellido *
-                            <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Necesitamos esta información únicamente para crear el nombre de usuario único"></i>
-                        </label>
-                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="¡Sólo el primer apellido!" required>
+                        <label for="last_name" class="form-label">Apellido *</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" value="<?= htmlspecialchars($old['last_name'] ?? '') ?>" required>
+                        <?php if (in_array("Todos los campos son obligatorios.", $errors)): ?>
+                            <div class="invalid-feedback" style="display:block;">El apellido es obligatorio.</div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -59,3 +67,60 @@
 </main>
 
 <?php require_once __DIR__ . '/partials/footer.php'; ?>
+<script>
+document.querySelector('form').addEventListener('submit', function(e) {
+    let valid = true;
+
+    // Limpiar mensajes anteriores
+    ['email','name','last_name','password'].forEach(function(id) {
+        document.getElementById(id + 'Error').style.display = 'none';
+        document.getElementById(id).classList.remove('is-invalid');
+    });
+
+    // Validaciones
+    const email = document.getElementById('email').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const lastName = document.getElementById('last_name').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (!email) {
+        document.getElementById('emailError').textContent = 'El correo es obligatorio.';
+        document.getElementById('emailError').style.display = 'block';
+        document.getElementById('email').classList.add('is-invalid');
+        valid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('emailError').textContent = 'Introduce un email válido.';
+        document.getElementById('emailError').style.display = 'block';
+        document.getElementById('email').classList.add('is-invalid');
+        valid = false;
+    }
+
+    if (!name) {
+        document.getElementById('nameError').textContent = 'El nombre es obligatorio.';
+        document.getElementById('nameError').style.display = 'block';
+        document.getElementById('name').classList.add('is-invalid');
+        valid = false;
+    }
+
+    if (!lastName) {
+        document.getElementById('lastNameError').textContent = 'El apellido es obligatorio.';
+        document.getElementById('lastNameError').style.display = 'block';
+        document.getElementById('last_name').classList.add('is-invalid');
+        valid = false;
+    }
+
+    if (!password) {
+        document.getElementById('passwordError').textContent = 'La contraseña es obligatoria.';
+        document.getElementById('passwordError').style.display = 'block';
+        document.getElementById('password').classList.add('is-invalid');
+        valid = false;
+    } else if (password.length < 6) {
+        document.getElementById('passwordError').textContent = 'La contraseña debe tener al menos 6 caracteres.';
+        document.getElementById('passwordError').style.display = 'block';
+        document.getElementById('password').classList.add('is-invalid');
+        valid = false;
+    }
+
+    if (!valid) e.preventDefault();
+});
+</script>

@@ -344,7 +344,11 @@ class AdvertService
         $tipoFiltros = [];
 
         // Filtros específicos para habitaciones
-        if ($filters['property_types'][0] === 'Habitación' && !empty($filters['room'])) {
+        if (
+            isset($filters['property_types'][0]) &&
+            $filters['property_types'][0] === 'Habitación' &&
+            !empty($filters['room'])
+        ) {
             if (isset($filters['room']['private_bathroom'])) {
                 $tipoFiltros[] = "r.private_bathroom = ?";
                 $params[] = $filters['room']['private_bathroom'];
@@ -372,7 +376,11 @@ class AdvertService
         }
 
         // Filtros específicos para estudios
-        if ($filters['property_types'][0] === 'Estudio' && !empty($filters['studio'])) {
+        if (
+            isset($filters['property_types'][0]) &&
+            $filters['property_types'][0] === 'Estudio' &&
+            !empty($filters['studio'])
+        ) {
             if (isset($filters['studio']['furnished'])) {
                 $tipoFiltros[] = "s.furnished = ?";
                 $params[] = $filters['studio']['furnished'];
@@ -392,7 +400,11 @@ class AdvertService
         }
 
         // Filtros específicos para pisos
-        if ($filters['property_types'][0] === 'Piso' && !empty($filters['apartment'])) {
+        if (
+            isset($filters['property_types'][0]) &&
+            $filters['property_types'][0] === 'Piso' &&
+            !empty($filters['apartment'])
+        ) {
             if (!empty($filters['apartment']['apartment_type'])) {
                 $tipoFiltros[] = "a.apartment_type = ?";
                 $params[] = $filters['apartment']['apartment_type'];
@@ -436,7 +448,11 @@ class AdvertService
         }
 
         // Filtros específicos para casas
-        if ($filters['property_types'][0] === 'Casa' && !empty($filters['house'])) {
+        if (
+            isset($filters['property_types'][0]) &&
+            $filters['property_types'][0] === 'Casa' &&
+            !empty($filters['house'])
+        ) {
             if (!empty($filters['house']['house_type'])) {
                 $tipoFiltros[] = "h.house_type = ?";
                 $params[] = $filters['house']['house_type'];
