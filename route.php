@@ -62,9 +62,6 @@ try {
                 case '/privacy-policy':
                     require 'views/privacy-policy.php';
                     break;
-                case '/about':
-                    require 'views/about.php';
-                    break;
                 case '/logout':
                     session_start();
                     session_unset();
