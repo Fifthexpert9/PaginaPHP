@@ -344,163 +344,168 @@ class AdvertService
         $tipoFiltros = [];
 
         // Filtros específicos para habitaciones
-        if (isset($filters['room']['private_bathroom'])) {
-            $tipoFiltros[] = "(p.property_type = 'Habitación' AND r.private_bathroom = ?)";
-            $params[] = $filters['room']['private_bathroom'];
-        }
-        if (!empty($filters['room']['max_roommates'])) {
-            $tipoFiltros[] = "(p.property_type = 'Habitación' AND r.max_roommates = ?)";
-            $params[] = $filters['room']['max_roommates'];
-        }
-        if (isset($filters['room']['pets_allowed'])) {
-            $tipoFiltros[] = "(p.property_type = 'Habitación' AND r.pets_allowed = ?)";
-            $params[] = $filters['room']['pets_allowed'];
-        }
-        if (isset($filters['room']['furnished'])) {
-            $tipoFiltros[] = "(p.property_type = 'Habitación' AND r.furnished = ?)";
-            $params[] = $filters['room']['furnished'];
-        }
-        if (isset($filters['room']['students_only'])) {
-            $tipoFiltros[] = "(p.property_type = 'Habitación' AND r.students_only = ?)";
-            $params[] = $filters['room']['students_only'];
-        }
-        if (!empty($filters['room']['gender_restriction']) && $filters['room']['gender_restriction'] !== 'None') {
-            $tipoFiltros[] = "(p.property_type = 'Habitación' AND r.gender_restriction = ?)";
-            $params[] = $filters['room']['gender_restriction'];
-        }
-
-        // Filtros específicos para estudios (property_studio)
-        if (isset($filters['studio']['furnished'])) {
-            $tipoFiltros[] = "(p.property_type = 'Estudio' AND s.furnished = ?)";
-            $params[] = $filters['studio']['furnished'];
-        }
-        if (isset($filters['studio']['balcony'])) {
-            $tipoFiltros[] = "(p.property_type = 'Estudio' AND s.balcony = ?)";
-            $params[] = $filters['studio']['balcony'];
-        }
-        if (isset($filters['studio']['air_conditioning'])) {
-            $tipoFiltros[] = "(p.property_type = 'Estudio' AND s.air_conditioning = ?)";
-            $params[] = $filters['studio']['air_conditioning'];
-        }
-        if (isset($filters['studio']['pets_allowed'])) {
-            $tipoFiltros[] = "(p.property_type = 'Estudio' AND s.pets_allowed = ?)";
-            $params[] = $filters['studio']['pets_allowed'];
+        if ($filters['property_types'][0] === 'Habitación' && !empty($filters['room'])) {
+            if (isset($filters['room']['private_bathroom'])) {
+                $tipoFiltros[] = "r.private_bathroom = ?";
+                $params[] = $filters['room']['private_bathroom'];
+            }
+            if (!empty($filters['room']['max_roommates'])) {
+                $tipoFiltros[] = "r.max_roommates <= ?";
+                $params[] = $filters['room']['max_roommates'];
+            }
+            if (isset($filters['room']['pets_allowed'])) {
+                $tipoFiltros[] = "r.pets_allowed = ?";
+                $params[] = $filters['room']['pets_allowed'];
+            }
+            if (isset($filters['room']['furnished'])) {
+                $tipoFiltros[] = "r.furnished = ?";
+                $params[] = $filters['room']['furnished'];
+            }
+            if (isset($filters['room']['students_only'])) {
+                $tipoFiltros[] = "r.students_only = ?";
+                $params[] = $filters['room']['students_only'];
+            }
+            if (!empty($filters['room']['gender_restriction']) && $filters['room']['gender_restriction'] !== 'sin restricciones') {
+                $tipoFiltros[] = "r.gender_restriction = ?";
+                $params[] = $filters['room']['gender_restriction'];
+            }
         }
 
-        // Filtros específicos para pisos (property_apartment)
-        if (!empty($filters['apartment']['apartment_type'])) {
-            $tipoFiltros[] = "(p.property_type = 'Piso' AND a.apartment_type = ?)";
-            $params[] = $filters['apartment']['apartment_type'];
-        }
-        if (!empty($filters['apartment']['num_rooms'])) {
-            $tipoFiltros[] = "(p.property_type = 'Piso' AND a.num_rooms = ?)";
-            $params[] = $filters['apartment']['num_rooms'];
-        }
-        if (!empty($filters['apartment']['num_bathrooms'])) {
-            $tipoFiltros[] = "(p.property_type = 'Piso' AND a.num_bathrooms = ?)";
-            $params[] = $filters['apartment']['num_bathrooms'];
-        }
-        if (isset($filters['apartment']['furnished'])) {
-            $tipoFiltros[] = "(p.property_type = 'Piso' AND a.furnished = ?)";
-            $params[] = $filters['apartment']['furnished'];
-        }
-        if (isset($filters['apartment']['balcony'])) {
-            $tipoFiltros[] = "(p.property_type = 'Piso' AND a.balcony = ?)";
-            $params[] = $filters['apartment']['balcony'];
-        }
-        if (!empty($filters['apartment']['floor'])) {
-            $tipoFiltros[] = "(p.property_type = 'Piso' AND a.floor = ?)";
-            $params[] = $filters['apartment']['floor'];
-        }
-        if (isset($filters['apartment']['elevator'])) {
-            $tipoFiltros[] = "(p.property_type = 'Piso' AND a.elevator = ?)";
-            $params[] = $filters['apartment']['elevator'];
-        }
-        if (isset($filters['apartment']['air_conditioning'])) {
-            $tipoFiltros[] = "(p.property_type = 'Piso' AND a.air_conditioning = ?)";
-            $params[] = $filters['apartment']['air_conditioning'];
-        }
-        if (isset($filters['apartment']['garage'])) {
-            $tipoFiltros[] = "(p.property_type = 'Piso' AND a.garage = ?)";
-            $params[] = $filters['apartment']['garage'];
-        }
-        /*if (isset($filters['apartment']['pool'])) {
-            $tipoFiltros[] = "(p.property_type = 'Piso' AND a.pool = ?)";
-            $params[] = $filters['apartment']['pool'];
-        }*/
-        if (isset($filters['apartment']['pets_allowed'])) {
-            $tipoFiltros[] = "(p.property_type = 'Piso' AND a.pets_allowed = ?)";
-            $params[] = $filters['apartment']['pets_allowed'];
+        // Filtros específicos para estudios
+        if ($filters['property_types'][0] === 'Estudio' && !empty($filters['studio'])) {
+            if (isset($filters['studio']['furnished'])) {
+                $tipoFiltros[] = "s.furnished = ?";
+                $params[] = $filters['studio']['furnished'];
+            }
+            if (isset($filters['studio']['balcony'])) {
+                $tipoFiltros[] = "s.balcony = ?";
+                $params[] = $filters['studio']['balcony'];
+            }
+            if (isset($filters['studio']['air_conditioning'])) {
+                $tipoFiltros[] = "s.air_conditioning = ?";
+                $params[] = $filters['studio']['air_conditioning'];
+            }
+            if (isset($filters['studio']['pets_allowed'])) {
+                $tipoFiltros[] = "s.pets_allowed = ?";
+                $params[] = $filters['studio']['pets_allowed'];
+            }
         }
 
-        // Filtros específicos para casas (property_house)
-        if (!empty($filters['house']['house_type'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.house_type = ?)";
-            $params[] = $filters['house']['house_type'];
-        }
-        if (!empty($filters['house']['garden_size_min'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.garden_size >= ?)";
-            $params[] = $filters['house']['garden_size_min'];
-        }
-        if (!empty($filters['house']['garden_size_max'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.garden_size <= ?)";
-            $params[] = $filters['house']['garden_size_max'];
-        }
-        if (!empty($filters['house']['num_floors_min'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.num_floors >= ?)";
-            $params[] = $filters['house']['num_floors_min'];
-        }
-        if (!empty($filters['house']['num_floors_max'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.num_floors <= ?)";
-            $params[] = $filters['house']['num_floors_max'];
-        }
-        if (!empty($filters['house']['num_rooms_min'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.num_rooms >= ?)";
-            $params[] = $filters['house']['num_rooms_min'];
-        }
-        if (!empty($filters['house']['num_rooms_max'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.num_rooms <= ?)";
-            $params[] = $filters['house']['num_rooms_max'];
-        }
-        if (!empty($filters['house']['num_bathrooms_min'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.num_bathrooms >= ?)";
-            $params[] = $filters['house']['num_bathrooms_min'];
-        }
-        if (!empty($filters['house']['num_bathrooms_max'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.num_bathrooms <= ?)";
-            $params[] = $filters['house']['num_bathrooms_max'];
-        }
-        if (isset($filters['house']['private_garage'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.private_garage = ?)";
-            $params[] = $filters['house']['private_garage'];
-        }
-        if (isset($filters['house']['private_pool'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.private_pool = ?)";
-            $params[] = $filters['house']['private_pool'];
-        }
-        if (isset($filters['house']['furnished'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.furnished = ?)";
-            $params[] = $filters['house']['furnished'];
-        }
-        if (isset($filters['house']['terrace'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.terrace = ?)";
-            $params[] = $filters['house']['terrace'];
-        }
-        if (isset($filters['house']['storage_room'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.storage_room = ?)";
-            $params[] = $filters['house']['storage_room'];
-        }
-        if (isset($filters['house']['air_conditioning'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.air_conditioning = ?)";
-            $params[] = $filters['house']['air_conditioning'];
-        }
-        if (isset($filters['house']['pets_allowed'])) {
-            $tipoFiltros[] = "(p.property_type = 'Casa' AND h.pets_allowed = ?)";
-            $params[] = $filters['house']['pets_allowed'];
+        // Filtros específicos para pisos
+        if ($filters['property_types'][0] === 'Piso' && !empty($filters['apartment'])) {
+            if (!empty($filters['apartment']['apartment_type'])) {
+                $tipoFiltros[] = "a.apartment_type = ?";
+                $params[] = $filters['apartment']['apartment_type'];
+            }
+            if (!empty($filters['apartment']['num_rooms'])) {
+                $tipoFiltros[] = "a.num_rooms = ?";
+                $params[] = $filters['apartment']['num_rooms'];
+            }
+            if (!empty($filters['apartment']['num_bathrooms'])) {
+                $tipoFiltros[] = "a.num_bathrooms = ?";
+                $params[] = $filters['apartment']['num_bathrooms'];
+            }
+            if (isset($filters['apartment']['furnished'])) {
+                $tipoFiltros[] = "a.furnished = ?";
+                $params[] = $filters['apartment']['furnished'];
+            }
+            if (isset($filters['apartment']['balcony'])) {
+                $tipoFiltros[] = "a.balcony = ?";
+                $params[] = $filters['apartment']['balcony'];
+            }
+            if (!empty($filters['apartment']['floor'])) {
+                $tipoFiltros[] = "a.floor = ?";
+                $params[] = $filters['apartment']['floor'];
+            }
+            if (isset($filters['apartment']['elevator'])) {
+                $tipoFiltros[] = "a.elevator = ?";
+                $params[] = $filters['apartment']['elevator'];
+            }
+            if (isset($filters['apartment']['air_conditioning'])) {
+                $tipoFiltros[] = "a.air_conditioning = ?";
+                $params[] = $filters['apartment']['air_conditioning'];
+            }
+            if (isset($filters['apartment']['garage'])) {
+                $tipoFiltros[] = "a.garage = ?";
+                $params[] = $filters['apartment']['garage'];
+            }
+            if (isset($filters['apartment']['pets_allowed'])) {
+                $tipoFiltros[] = "a.pets_allowed = ?";
+                $params[] = $filters['apartment']['pets_allowed'];
+            }
         }
 
+        // Filtros específicos para casas
+        if ($filters['property_types'][0] === 'Casa' && !empty($filters['house'])) {
+            if (!empty($filters['house']['house_type'])) {
+                $tipoFiltros[] = "h.house_type = ?";
+                $params[] = $filters['house']['house_type'];
+            }
+            if (!empty($filters['house']['garden_size_min'])) {
+                $tipoFiltros[] = "h.garden_size >= ?";
+                $params[] = $filters['house']['garden_size_min'];
+            }
+            if (!empty($filters['house']['garden_size_max'])) {
+                $tipoFiltros[] = "h.garden_size <= ?";
+                $params[] = $filters['house']['garden_size_max'];
+            }
+            if (!empty($filters['house']['num_floors_min'])) {
+                $tipoFiltros[] = "h.num_floors >= ?";
+                $params[] = $filters['house']['num_floors_min'];
+            }
+            if (!empty($filters['house']['num_floors_max'])) {
+                $tipoFiltros[] = "h.num_floors <= ?";
+                $params[] = $filters['house']['num_floors_max'];
+            }
+            if (!empty($filters['house']['num_rooms_min'])) {
+                $tipoFiltros[] = "h.num_rooms >= ?";
+                $params[] = $filters['house']['num_rooms_min'];
+            }
+            if (!empty($filters['house']['num_rooms_max'])) {
+                $tipoFiltros[] = "h.num_rooms <= ?";
+                $params[] = $filters['house']['num_rooms_max'];
+            }
+            if (!empty($filters['house']['num_bathrooms_min'])) {
+                $tipoFiltros[] = "h.num_bathrooms >= ?";
+                $params[] = $filters['house']['num_bathrooms_min'];
+            }
+            if (!empty($filters['house']['num_bathrooms_max'])) {
+                $tipoFiltros[] = "h.num_bathrooms <= ?";
+                $params[] = $filters['house']['num_bathrooms_max'];
+            }
+            if (isset($filters['house']['private_garage'])) {
+                $tipoFiltros[] = "h.private_garage = ?";
+                $params[] = $filters['house']['private_garage'];
+            }
+            if (isset($filters['house']['private_pool'])) {
+                $tipoFiltros[] = "h.private_pool = ?";
+                $params[] = $filters['house']['private_pool'];
+            }
+            if (isset($filters['house']['furnished'])) {
+                $tipoFiltros[] = "h.furnished = ?";
+                $params[] = $filters['house']['furnished'];
+            }
+            if (isset($filters['house']['terrace'])) {
+                $tipoFiltros[] = "h.terrace = ?";
+                $params[] = $filters['house']['terrace'];
+            }
+            if (isset($filters['house']['storage_room'])) {
+                $tipoFiltros[] = "h.storage_room = ?";
+                $params[] = $filters['house']['storage_room'];
+            }
+            if (isset($filters['house']['air_conditioning'])) {
+                $tipoFiltros[] = "h.air_conditioning = ?";
+                $params[] = $filters['house']['air_conditioning'];
+            }
+            if (isset($filters['house']['pets_allowed'])) {
+                $tipoFiltros[] = "h.pets_allowed = ?";
+                $params[] = $filters['house']['pets_allowed'];
+            }
+        }
+
+        // Añade los filtros específicos al WHERE
         if (!empty($tipoFiltros)) {
-            $wheres[] = '(' . implode(' OR ', $tipoFiltros) . ')';
+            $wheres[] = implode(' AND ', $tipoFiltros);
         }
 
         $sql .= " WHERE " . implode(' AND ', $wheres);

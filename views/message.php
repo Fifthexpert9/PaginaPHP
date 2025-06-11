@@ -7,7 +7,7 @@
             <h2 class="mt-2 mb-0 logo">houspecial</h2>
             <?php if (!empty($_SESSION['message'])): ?>
                 <div class="alert alert-secondary mt-3">
-                    <?= htmlspecialchars($_SESSION['message']);
+                    <?= $_SESSION['message'];
                     unset($_SESSION['message']); ?>
                 </div>
             <?php endif; ?>
@@ -35,24 +35,7 @@
 </main>
 
 <script>
-    setTimeout(function() {
-        window.location.href = '/';
-    }, 10000);
-
-    document.addEventListener('DOMContentLoaded', function() {
-        var goBack = document.getElementById('goBack');
-        if (goBack) {
-            goBack.addEventListener('click', function() {
-                window.location.href = '/login';
-            });
-        }
-        var goHome = document.getElementById('goHome');
-        if (goHome) {
-            goHome.addEventListener('click', function() {
-                window.location.href = '/';
-            });
-        }
-    });
+    <?php require_once __DIR__ . '/assets/js/message.js'; ?>
 </script>
 
 <?php require_once __DIR__ . '/partials/footer.php'; ?>
