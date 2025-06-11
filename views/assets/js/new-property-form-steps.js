@@ -15,7 +15,6 @@ function clearError(inputId) {
     if (input) input.classList.remove('is-invalid');
 }
 
-// Validación del primer paso: dirección real y no vacía
 async function validateStep1() {
     let valid = true;
     let fields = ['street','city','province','postal_code','country'];
@@ -48,8 +47,13 @@ async function validateStep1() {
         let response = await fetch(url, {headers: {'Accept-Language': 'es'}});
         let data = await response.json();
         if (!data || data.length === 0) {
-            // Solo muestra el error en el campo más relevante (por ejemplo, calle)
-            showError('street', 'Introduce una calle real.');
+            // Solo muestra el error en el campo más relevante (el primero no vacío empezando por calle)
+            for (let i = 0; i < fields.length; i++) {
+                if (values[fields[i]]) {
+                    showError(fields[i], `Introduce una ${fieldLabels[fields[i]]} real.`);
+                    break;
+                }
+            }
             return false;
         }
     } catch (e) {
