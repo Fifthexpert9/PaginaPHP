@@ -1,12 +1,15 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
 
-session_start();
+namespace controllers;
+
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use facades\AdvertFacade;
 use converters\AdvertConverter;
 use converters\PropertyConverter;
 use converters\AddressConverter;
+
+session_start();
 
 $advertFacade = new AdvertFacade(
     new AdvertConverter(),
@@ -14,7 +17,6 @@ $advertFacade = new AdvertFacade(
     new AddressConverter()
 );
 
-// Recoger filtros del formulario
 $filters = [];
 if (!empty($_GET['action'])) {
     $filters['action'] = $_GET['action'];

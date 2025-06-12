@@ -302,15 +302,48 @@ class PropertyFacade
     }
 
     /**
-     * Actualiza una propiedad existente.
+     * Actualiza una propiedad existente y sus datos específicos.
      *
      * @param int $id ID de la propiedad a actualizar.
-     * @param array $fields Campos a actualizar (clave => valor).
+     * @param array $fields Campos generales a actualizar (clave => valor).
+     * @param array $specificFields Campos específicos a actualizar (clave => valor).
      * @return bool True si la actualización fue exitosa, false en caso contrario.
      */
-    public function updateProperty($id, $fields)
+    public function updateProperty($id, $fields, $specificFields = [])
     {
-        return $this->propertyService->updateProperty($id, $fields);
+        $success = $this->propertyService->updateProperty($id, $fields);
+
+        $propertyModel = $this->propertyService->getPropertyById($id);
+        if (!$propertyModel) {
+            return false;
+        }
+
+        $type = $propertyModel->getPropertyType();
+
+        switch ($type) {
+            case 'Habitación':
+                if (!empty($specificFields)) {
+                    $success = $this->roomService->updateRoom($id, $specificFields) && $success;
+                }
+                break;
+            case 'Estudio':
+                if (!empty($specificFields)) {
+                    $success = $this->studioService->updateStudio($id, $specificFields) && $success;
+                }
+                break;
+            case 'Piso':
+                if (!empty($specificFields)) {
+                    $success = $this->apartmentService->updateApartment($id, $specificFields) && $success;
+                }
+                break;
+            case 'Casa':
+                if (!empty($specificFields)) {
+                    $success = $this->houseService->updateHouse($id, $specificFields) && $success;
+                }
+                break;
+        }
+
+        return $success;
     }
 
     /**

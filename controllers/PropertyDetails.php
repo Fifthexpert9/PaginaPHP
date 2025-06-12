@@ -1,6 +1,8 @@
 <?php
+
+namespace controllers;
+
 require_once __DIR__ . '/../vendor/autoload.php';
-session_start();
 
 use facades\AdvertFacade;
 use facades\PropertyFacade;
@@ -12,6 +14,8 @@ use converters\ApartmentConverter;
 use converters\HouseConverter;
 use converters\AddressConverter;
 use converters\ImageConverter;
+
+session_start();
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     $_SESSION['message'] = 'Propiedad no encontrada.';

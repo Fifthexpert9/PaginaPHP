@@ -75,7 +75,10 @@ foreach ($_SESSION['userFavoriteIds'] as $favAdvertId) {
                                             <?php endif; ?>
                                         <?php endif; ?>
                                         <?php if (isset($advert['advert']->description)): ?>
-                                            <p class="card-text mb-1"><strong>Descripción:</strong> <?= htmlspecialchars($advert['advert']->description) ?></p>
+                                            <p class="card-text mb-1"><strong>Descripción:</strong></p>
+                                            <p class="card-text flex-grow-1 d-flex align-items-end">
+                                                <?= htmlspecialchars(mb_strimwidth($advert['advert']->description, 0, 250, '...')) ?>
+                                            </p>
                                         <?php endif; ?>
                                         <?php if (isset($advert['advert']->created_at)): ?>
                                             <p class="card-text mb-1"><strong>Fecha de publicación:</strong> <?= htmlspecialchars($advert['advert']->created_at) ?></p>

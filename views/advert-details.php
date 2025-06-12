@@ -13,6 +13,7 @@
                     $isFavorite = isset($_SESSION['user']) && in_array($advertDto->id, $_SESSION['userFavoriteIds'] ?? []);
                     ?>
                     <button
+                        id="favorite-btn"
                         class="btn btn-sm btn-font favorite-btn <?= $isFavorite ? 'btn-danger' : 'btn-outline-secondary' ?>"
                         title="<?= $isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos' ?>"
                         data-advert-id="<?= $advertDto->id ?>">
@@ -84,6 +85,7 @@
                     <div class="row">
                         <div class="col-7">
                             <p class="mb-2"><strong>Tipo:</strong> <?= htmlspecialchars($propertyDto->property_type ?? 'No especificado') ?></p>
+                            <p class="mb-2"><strong>Tamaño:</strong> <?= htmlspecialchars($propertyDto->built_size ?? 'No especificado') ?> m²</p>
                             <p class="mb-2"><strong>Ubicación:</strong> <?= htmlspecialchars($propertyDto->address->city ?? 'No especificada') ?>, <?= htmlspecialchars($propertyDto->address->province ?? 'no especificada') ?> (<?= htmlspecialchars($propertyDto->address->country ?? 'no especificado') ?>)</p>
                             <p class="mb-2"><strong>Estado:</strong> <?= htmlspecialchars($propertyDto->status ?? 'No especificado') ?></p>
                             <p><strong>Disponibilidad:</strong> <?= htmlspecialchars($propertyDto->immediate_availability ? 'Inmediata' : 'Tendrás que esperar un poco ^^U') ?></p>
@@ -198,27 +200,27 @@
             </div>
 
             <?php if (
-    isset($propertyDto->address->latitude, $propertyDto->address->longitude) &&
-    $propertyDto->address->latitude && $propertyDto->address->longitude
-): ?>
-    <div id="map" style="height: 350px; width: 100%; margin-top: 1.5rem; margin-bottom: 1.5rem;"></div>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        var map = L.map('map').setView([
-            <?= floatval($propertyDto->address->latitude) ?>,
-            <?= floatval($propertyDto->address->longitude) ?>
-        ], 16);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-        L.marker([
-            <?= floatval($propertyDto->address->latitude) ?>,
-            <?= floatval($propertyDto->address->longitude) ?>
-        ]).addTo(map)
-            .bindPopup('<?= htmlspecialchars($propertyDto->address->street ?? '') ?>').openPopup();
-    </script>
-<?php endif; ?>
+                isset($propertyDto->address->latitude, $propertyDto->address->longitude) &&
+                $propertyDto->address->latitude && $propertyDto->address->longitude
+            ): ?>
+                <div id="map" style="height: 350px; width: 100%; margin-top: 1.5rem; margin-bottom: 1.5rem;"></div>
+                <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+                <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+                <script>
+                    var map = L.map('map').setView([
+                        <?= floatval($propertyDto->address->latitude) ?>,
+                        <?= floatval($propertyDto->address->longitude) ?>
+                    ], 16);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(map);
+                    L.marker([
+                            <?= floatval($propertyDto->address->latitude) ?>,
+                            <?= floatval($propertyDto->address->longitude) ?>
+                        ]).addTo(map)
+                        .bindPopup('<?= htmlspecialchars($propertyDto->address->street ?? '') ?>').openPopup();
+                </script>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
 
