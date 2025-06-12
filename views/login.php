@@ -1,3 +1,6 @@
+<?php require_once __DIR__ . '/partials/head.php'; ?>
+<?php require_once __DIR__ . '/partials/header.php'; ?>
+
 <?php
 $old = $_SESSION['login_old'] ?? [];
 $errors = $_SESSION['login_errors'] ?? [];
@@ -13,8 +16,6 @@ function field_error($field, $errors) {
     return '';
 }
 ?>
-<?php require_once __DIR__ . '/partials/head.php'; ?>
-<?php require_once __DIR__ . '/partials/header.php'; ?>
 
 <main class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
     <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
