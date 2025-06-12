@@ -13,6 +13,9 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
 
 <?php require_once __DIR__ . '/partials/head.php'; ?>
 <?php require_once __DIR__ . '/partials/header.php'; ?>
+
+
+
 <main>
     <div class="container body-ody-ody">
         <div class="row">
@@ -195,3 +198,4 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
 </main>
 
 <?php require_once __DIR__ . '/partials/footer.php'; ?>
+

@@ -22,6 +22,13 @@ function field_error($field, $errors) {
             <h2 class="mt-2 mb-0 logo">houspecial</h2>
             <h5 class="text-muted mt-3">¡Inicia sesión y publica ahora tus anuncios!</p>
         </div>
+        <?php if (!empty($errors)): ?>
+            <div class="alert alert-danger" role="alert">
+                <?php foreach ($errors as $err): ?>
+                    <?= htmlspecialchars($err) ?><br>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
         <form id="loginForm" action="/controllers/Login.php" method="POST" novalidate>
             <div class="mb-3">
                 <label for="email" class="form-label">Correo electrónico</label>

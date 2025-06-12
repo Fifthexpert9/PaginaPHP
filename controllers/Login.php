@@ -40,7 +40,6 @@ if (!empty($result['success']) && $result['success']) {
     $_SESSION['logged'] = true;
     $_SESSION['message'] = $result['message'];
 
-    // Asegúrate de que userFavoriteIds existe y es array
     if (!isset($_SESSION['userFavoriteIds']) || !is_array($_SESSION['userFavoriteIds'])) {
         $_SESSION['userFavoriteIds'] = [];
     }
@@ -52,14 +51,10 @@ if (!empty($result['success']) && $result['success']) {
         }
     }
 
-    // Redirige a la página principal
-    header('Location: /');
+    header('Location: /message');
     exit();
 } else {
-    $_SESSION['login_errors'] = [$result['message'] ?? 'Error de autenticación.'];
-    $_SESSION['login_old'] = [
-        'email' => $_POST['email'] ?? ''
-    ];
-    header('Location: /login');
+    $_SESSION['message'] = 'Credenciales incorrectas.';
+    header('Location: /message');
     exit();
 }
