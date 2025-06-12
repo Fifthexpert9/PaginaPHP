@@ -393,9 +393,19 @@ class AdvertService
 
         // Filtros específicos para pisos
         if ($filters['property_types'][0] === 'Piso' && !empty($filters['apartment'])) {
+            // Cambia aquí:
             if (!empty($filters['apartment']['apartment_type'])) {
-                $tipoFiltros[] = "a.apartment_type = ?";
-                $params[] = $filters['apartment']['apartment_type'];
+                $apartmentType = $filters['apartment']['apartment_type'];
+                if (is_array($apartmentType)) {
+                    $placeholders = implode(',', array_fill(0, count($apartmentType), '?'));
+                    $tipoFiltros[] = "a.apartment_type IN ($placeholders)";
+                    foreach ($apartmentType as $type) {
+                        $params[] = $type;
+                    }
+                } else {
+                    $tipoFiltros[] = "a.apartment_type = ?";
+                    $params[] = $apartmentType;
+                }
             }
             if (!empty($filters['apartment']['num_rooms'])) {
                 $tipoFiltros[] = "a.num_rooms = ?";
@@ -438,8 +448,17 @@ class AdvertService
         // Filtros específicos para casas
         if ($filters['property_types'][0] === 'Casa' && !empty($filters['house'])) {
             if (!empty($filters['house']['house_type'])) {
-                $tipoFiltros[] = "h.house_type = ?";
-                $params[] = $filters['house']['house_type'];
+                $houseType = $filters['house']['house_type'];
+                if (is_array($houseType)) {
+                    $placeholders = implode(',', array_fill(0, count($houseType), '?'));
+                    $tipoFiltros[] = "h.house_type IN ($placeholders)";
+                    foreach ($houseType as $type) {
+                        $params[] = $type;
+                    }
+                } else {
+                    $tipoFiltros[] = "h.house_type = ?";
+                    $params[] = $houseType;
+                }
             }
             if (!empty($filters['house']['garden_size_min'])) {
                 $tipoFiltros[] = "h.garden_size >= ?";
