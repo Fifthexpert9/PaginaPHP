@@ -71,7 +71,7 @@ CREATE TABLE
         `pets_allowed` BOOLEAN NOT NULL DEFAULT 0,
         `furnished` BOOLEAN NOT NULL DEFAULT 0,
         `students_only` BOOLEAN NOT NULL DEFAULT 0,
-        `gender_restriction` ENUM ('Sin restricciones', 'Sólo chicos', 'Sólo chicas') NOT NULL DEFAULT 'Sin restricciones',
+        `gender_restriction` ENUM ('Sin restricciones', 'Solo chicos', 'Solo chicas') NOT NULL DEFAULT 'Sin restricciones',
         PRIMARY KEY (`property_id`),
         FOREIGN KEY (`property_id`) REFERENCES `property` (`id`) ON DELETE CASCADE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;

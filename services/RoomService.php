@@ -107,9 +107,9 @@ class RoomService
             }
             $setClause = implode(", ", $setClause);
 
-            $sql = "UPDATE property_room SET $setClause WHERE property_id = :property_id";
+            $sql = "UPDATE `property_room` SET $setClause WHERE `property_id` = :property_id";
             $stmt = $this->db->prepare($sql);
-            $fields['property_id'] = $propertyId;
+            $fields[':property_id'] = $propertyId;
             return $stmt->execute($fields);
         } catch (PDOException $e) {
             error_log('Error al actualizar detalles de habitación: ' . $e->getMessage());

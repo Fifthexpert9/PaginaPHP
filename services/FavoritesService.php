@@ -87,7 +87,7 @@ class FavoritesService
      * @return FavoritesModel[] Array de modelos de favoritos del usuario.
      */
     public function getFavoritesByUserId($userId) {
-        $sql = "SELECT * FROM favorites WHERE user_id = :user_id";
+        $sql = "SELECT * FROM favorites WHERE user_id = :user_id ORDER BY created_at DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([':user_id' => $userId]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);

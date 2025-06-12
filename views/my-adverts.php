@@ -71,8 +71,10 @@ if ($user && isset($user->id)) {
                                             <?php endif; ?>
                                         <?php endif; ?>
                                         <?php if (isset($advert['advert']->description)): ?>
-                                            <p class="card-text mb-1"><strong>Descripción:</strong> <?= htmlspecialchars($advert['advert']->description) ?></p>
-                                        <?php endif; ?>
+                                            <p class="card-text mb-1"><strong>Descripción:</strong></p>
+                                            <p class="card-text flex-grow-1 d-flex align-items-end">
+                                                <?= htmlspecialchars(mb_strimwidth($advert['advert']->description, 0, 250, '...')) ?>
+                                            </p> <?php endif; ?>
                                         <?php if (isset($advert['advert']->created_at)): ?>
                                             <p class="card-text mb-1"><strong>Fecha de publicación:</strong> <?= htmlspecialchars($advert['advert']->created_at) ?></p>
                                         <?php endif; ?>
@@ -81,7 +83,7 @@ if ($user && isset($user->id)) {
                                 <!-- Botones a la derecha -->
                                 <div class="col-lg-2 d-flex flex-column align-items-center justify-content-center p-3">
                                     <a href="/advert-details?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm mb-2 btn-font w-100">ver detalles</a>
-                                    <a href="/editarAnuncio?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm mb-2 btn-font w-100">editar</a>
+                                    <a href="/edit-advert?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm mb-2 btn-font w-100">editar</a>
                                     <form action="/delete-advert" method="post" class="border w-100" style="display:inline;">
                                         <input type="hidden" name="id" value="<?= htmlspecialchars($advert['advert']->id) ?>">
                                         <button type="submit" class="btn btn-danger btn-sm btn-font w-100" onclick="return confirm('¿Seguro que quieres borrar este anuncio?')">borrar</button>

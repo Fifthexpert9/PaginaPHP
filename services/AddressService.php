@@ -165,7 +165,7 @@ class AddressService
 
             $sql = "UPDATE address SET $setClause WHERE id = :id";
             $stmt = $this->db->prepare($sql);
-            $fields['id'] = $id;
+            $fields[':id'] = $id;
             return $stmt->execute($fields);
         } catch (PDOException $e) {
             error_log('Error al actualizar dirección: ' . $e->getMessage());

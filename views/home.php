@@ -41,7 +41,7 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                     foreach ($propertyTypes as $type): ?>
                                         <div class="form-check">
                                             <input class="form-check-input"
-                                                type="checkbox"
+                                                type="radio"
                                                 name="property_types[]"
                                                 value="<?= htmlspecialchars($type) ?>"
                                                 id="property_type_<?= htmlspecialchars($type) ?>"
@@ -94,7 +94,8 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                     <?php endforeach; ?>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-secondary w-100 btn-font">ver propiedades</button>
+                            <div id="dynamic-characteristics"></div>
+                            <button type="submit" class="btn btn-secondary w-100 btn-font mt-3">ver propiedades</button>
                         </form>
                     </div>
                 </div>
@@ -153,11 +154,12 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                                     $isFavorite = isset($_SESSION['user']) && in_array($advert['advert']->id, $_SESSION['userFavoriteIds'] ?? []);
                                                     ?>
                                                     <button
-                                                        class="btn btn-outline-danger btn-sm btn-font favorite-btn"
+                                                        class="btn btn-sm btn-font favorite-btn <?= $isFavorite ? 'btn-danger' : 'btn-outline-secondary' ?>"
                                                         title="<?= $isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos' ?>"
                                                         data-advert-id="<?= $advert['advert']->id ?>">
-                                                        <i class="bi bi-heart-fill mx-2" style="color:<?= $isFavorite ? 'red' : '#ccc' ?>"></i>
-                                                    </button> <a href="/advert-details?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm btn-font w-50" title="Ver detalles">ver detalles</a>
+                                                        <i class="bi bi-heart-fill mx-2" style="color:<?= $isFavorite ? 'white' : '#888' ?>"></i>
+                                                    </button>
+                                                    <a href="/advert-details?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm btn-font w-50" title="Ver detalles">ver detalles</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -188,27 +190,7 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
     </div>
 
     <script>
-        document.querySelectorAll('.favorite-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                const advertId = this.getAttribute('data-advert-id');
-                fetch('/toggle-favorite', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: 'advert_id=' + encodeURIComponent(advertId)
-                    })
-                    .then(response => response.json())
-                    .then((data) => {
-                        if (data.redirect) {
-                            window.location.href = data.redirect;
-                        } else if (data.success) {
-                            this.querySelector('i').style.color = data.is_favorite ? 'red' : '#ccc';
-                            this.title = data.is_favorite ? 'Quitar de favoritos' : 'Añadir a favoritos';
-                        }
-                    });
-            });
-        });
+        <?php require_once __DIR__ . '/assets/js/home.js'; ?>
     </script>
 </main>
 

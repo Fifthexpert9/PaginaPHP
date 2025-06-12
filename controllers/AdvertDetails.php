@@ -1,6 +1,8 @@
 <?php
+
+namespace controllers;
+
 require_once __DIR__ . '/../vendor/autoload.php';
-session_start();
 
 use facades\AdvertFacade;
 use facades\PropertyFacade;
@@ -14,6 +16,8 @@ use converters\HouseConverter;
 use converters\AddressConverter;
 use converters\ImageConverter;
 use converters\UserConverter;
+
+session_start();
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     $_SESSION['message'] = 'Anuncio no encontrado.';

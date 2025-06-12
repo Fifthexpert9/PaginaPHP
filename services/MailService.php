@@ -24,7 +24,6 @@ class MailService
             // Configuración del correo
             $mail->setFrom($from, 'Houspecial');
             $mail->addAddress($to);
-            $mail->addReplyTo($from);
             $mail->Subject = $subject;
             $mail->Body = $body;
             $mail->CharSet = 'UTF-8';

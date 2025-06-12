@@ -1,6 +1,8 @@
 <?php
+
+namespace controllers;
+
 require_once __DIR__ . '/../vendor/autoload.php';
-session_start();
 
 use services\MailService;
 use facades\UserFacade;
@@ -8,6 +10,8 @@ use facades\MessageFacade;
 use converters\UserConverter;
 use converters\MessageConverter;
 use dtos\MessageDto;
+
+session_start();
 
 if (!isset($_SESSION['user'])) {
     header('Location: /login');

@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+namespace controllers;
 
-session_start();
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use facades\UserFacade;
 use facades\AdvertFacade;
@@ -10,6 +10,8 @@ use converters\AddressConverter;
 use converters\PropertyConverter;
 use converters\UserConverter;
 use converters\AdvertConverter;
+
+session_start();
 
 if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
     $_SESSION['message'] = 'Debes iniciar sesión para eliminar tu cuenta.';

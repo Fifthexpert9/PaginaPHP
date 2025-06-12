@@ -1,16 +1,20 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+namespace controllers;
 
-session_start();
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use facades\AdvertFacade;
 use converters\PropertyConverter;
 use converters\AdvertConverter;
+use converters\AddressConverter;
+
+session_start();
 
 $advertFacade = new AdvertFacade(
     new AdvertConverter(),
-    new PropertyConverter()
+    new PropertyConverter(),
+    new AddressConverter()
 );
 
 $advert_id = $_POST['id'];
