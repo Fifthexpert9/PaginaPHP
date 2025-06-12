@@ -28,29 +28,36 @@ function field_error($field, $errors) {
                 <div class="col-12 col-md-6 pe-3">
                     <div class="mb-3">
                         <label for="email" class="form-label">Correo electrónico *</label>
-                        <input type="email" class="form-control<?= field_error('email', $errors) ? ' is-invalid' : '' ?>" id="email" name="email" value="<?= htmlspecialchars($old['email'] ?? '') ?>" required>
-                        <div id="emailError" class="invalid-feedback" style="display:none;"></div>
-                        <?= field_error('email', $errors) ?>
+                        <input type="email" class="form-control<?= field_error('email', $errors) ? ' is-invalid' : '' ?>" id="email" name="email" 
+    value="<?= htmlspecialchars($old['email'] ?? '') ?>" 
+    placeholder="Ej: usuario@email.com" required>
+<div id="emailError" class="invalid-feedback" style="display:none;"></div>
+<?= field_error('email', $errors) ?>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Contraseña *</label>
-                        <input type="password" class="form-control<?= field_error('contraseña', $errors) ? ' is-invalid' : '' ?>" id="password" name="password" required>
-                        <div id="passwordError" class="invalid-feedback" style="display:none;"></div>
-                        <?= field_error('contraseña', $errors) ?>
+                        <input type="password" class="form-control<?= field_error('contraseña', $errors) ? ' is-invalid' : '' ?>" id="password" name="password" 
+    placeholder="Mínimo 6 caracteres" required>
+<div id="passwordError" class="invalid-feedback" style="display:none;"></div>
+<?= field_error('contraseña', $errors) ?>
                     </div>
                 </div>
                 <div class="col-12 col-md-6 border-start ps-3">
                     <div class="mb-3">
                         <label for="name" class="form-label">Nombre *</label>
-                        <input type="text" class="form-control<?= field_error('nombre', $errors) ? ' is-invalid' : '' ?>" id="name" name="name" value="<?= htmlspecialchars($old['name'] ?? '') ?>" required>
-                        <div id="nameError" class="invalid-feedback" style="display:none;"></div>
-                        <?= field_error('nombre', $errors) ?>
+                        <input type="text" class="form-control<?= field_error('nombre', $errors) ? ' is-invalid' : '' ?>" id="name" name="name" 
+    value="<?= htmlspecialchars($old['name'] ?? '') ?>" 
+    placeholder="Ej: Daniel" required>
+<div id="nameError" class="invalid-feedback" style="display:none;"></div>
+<?= field_error('nombre', $errors) ?>
                     </div>
                     <div class="mb-3">
                         <label for="last_name" class="form-label">Apellido *</label>
-                        <input type="text" class="form-control<?= field_error('apellido', $errors) ? ' is-invalid' : '' ?>" id="last_name" name="last_name" value="<?= htmlspecialchars($old['last_name'] ?? '') ?>" required>
-                        <div id="lastNameError" class="invalid-feedback" style="display:none;"></div>
-                        <?= field_error('apellido', $errors) ?>
+                        <input type="text" class="form-control<?= field_error('apellido', $errors) ? ' is-invalid' : '' ?>" id="last_name" name="last_name" 
+    value="<?= htmlspecialchars($old['last_name'] ?? '') ?>" 
+    placeholder="Ej: Martinez" required>
+<div id="lastNameError" class="invalid-feedback" style="display:none;"></div>
+<?= field_error('apellido', $errors) ?>
                     </div>
                 </div>
             </div>
