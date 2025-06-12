@@ -77,7 +77,7 @@ if ($user && isset($user->id)) {
                                 <!-- Botones a la derecha -->
                                 <div class="col-lg-2 d-flex flex-column align-items-center justify-content-center p-3">
                                     <a href="/property-details?id=<?= urlencode($property['id']) ?>" class="btn btn-secondary btn-sm mb-2 w-100 btn-font">ver detalles</a>
-                                    <a href="/editarPropiedad?id=<?= urlencode($property['id']) ?>" class="btn btn-secondary btn-sm mb-2 w-100 btn-font">editar</a>
+                                    <a href="/edit-property?id=<?= urlencode($property['id']) ?>" class="btn btn-secondary btn-sm mb-2 w-100 btn-font">editar</a>
                                     <form action="/delete-property" method="post" class="border w-100" style="display:inline;">
                                         <input type="hidden" name="id" value="<?= htmlspecialchars($property['id']) ?>">
                                         <button type="submit" class="btn btn-danger btn-sm w-100  btn-font" onclick="return confirm('¿Seguro que quieres borrar esta propiedad? También se borrará la dirección asignada a esta propiedad.')">borrar</button>

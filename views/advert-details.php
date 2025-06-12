@@ -14,10 +14,10 @@
                     ?>
                     <button
                         id="favorite-btn"
-                        class="btn btn-outline-danger btn-sm btn-font"
+                        class="btn btn-sm btn-font favorite-btn <?= $isFavorite ? 'btn-danger' : 'btn-outline-secondary' ?>"
                         title="<?= $isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos' ?>"
                         data-advert-id="<?= $advertDto->id ?>">
-                        <i class="bi bi-heart-fill mx-2" style="color:<?= $isFavorite ? 'red' : '#ccc' ?>"></i>
+                        <i class="bi bi-heart-fill mx-2" style="color:<?= $isFavorite ? 'white' : '#888' ?>"></i>
                     </button>
                 </div>
             </div>
@@ -85,6 +85,7 @@
                     <div class="row">
                         <div class="col-7">
                             <p class="mb-2"><strong>Tipo:</strong> <?= htmlspecialchars($propertyDto->property_type ?? 'No especificado') ?></p>
+                            <p class="mb-2"><strong>Tamaño:</strong> <?= htmlspecialchars($propertyDto->built_size ?? 'No especificado') ?> m²</p>
                             <p class="mb-2"><strong>Ubicación:</strong> <?= htmlspecialchars($propertyDto->address->city ?? 'No especificada') ?>, <?= htmlspecialchars($propertyDto->address->province ?? 'no especificada') ?> (<?= htmlspecialchars($propertyDto->address->country ?? 'no especificado') ?>)</p>
                             <p class="mb-2"><strong>Estado:</strong> <?= htmlspecialchars($propertyDto->status ?? 'No especificado') ?></p>
                             <p><strong>Disponibilidad:</strong> <?= htmlspecialchars($propertyDto->immediate_availability ? 'Inmediata' : 'Tendrás que esperar un poco ^^U') ?></p>
@@ -197,6 +198,29 @@
 
                 </div>
             </div>
+
+            <?php if (
+                isset($propertyDto->address->latitude, $propertyDto->address->longitude) &&
+                $propertyDto->address->latitude && $propertyDto->address->longitude
+            ): ?>
+                <div id="map" style="height: 350px; width: 100%; margin-top: 1.5rem; margin-bottom: 1.5rem;"></div>
+                <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+                <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+                <script>
+                    var map = L.map('map').setView([
+                        <?= floatval($propertyDto->address->latitude) ?>,
+                        <?= floatval($propertyDto->address->longitude) ?>
+                    ], 16);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(map);
+                    L.marker([
+                            <?= floatval($propertyDto->address->latitude) ?>,
+                            <?= floatval($propertyDto->address->longitude) ?>
+                        ]).addTo(map)
+                        .bindPopup('<?= htmlspecialchars($propertyDto->address->street ?? '') ?>').openPopup();
+                </script>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
 
@@ -211,26 +235,7 @@
     </div>
 
     <script>
-        document.getElementById('favorite-btn').addEventListener('click', function() {
-            const btn = this; // Referencia al botón
-            const advertId = btn.getAttribute('data-advert-id');
-            fetch('/toggle-favorite', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: 'advert_id=' + encodeURIComponent(advertId)
-                })
-                .then(response => response.json())
-                .then((data) => {
-                    if (data.redirect) {
-                        window.location.href = data.redirect;
-                    } else if (data.success) {
-                        btn.querySelector('i').style.color = data.is_favorite ? 'red' : '#ccc';
-                        btn.title = data.is_favorite ? 'Quitar de favoritos' : 'Añadir a favoritos';
-                    }
-                });
-        });
+        <?php require_once __DIR__ . '/assets/js/advert-details.js'; ?>
     </script>
 </main>
 

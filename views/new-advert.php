@@ -54,37 +54,45 @@ $properties = $propertyFacade->getPropertiesByUserId($_SESSION['user']->id);
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </select>
+                <div class="invalid-feedback"></div>
             </div>
             <div class="mb-3">
                 <label for="action" class="form-label">¿Vendes o alquilas?</label>
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center flex-wrap gap-2">
                     <input type="radio" class="me-1" id="action_1" name="action" value="Venta" />
                     <label for="true" class="me-3">Vendo</label>
                     <input type="radio" class="me-1" id="action_2" name="action" value="Alquiler" />
                     <label for="false" class="me-3">Alquilo</label>
                 </div>
+                <div class="invalid-feedback"></div>
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label">
                     ¿Qué precio va a tener?
                     <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="Por favor, sé justo en el precio."></i>
                 </label>
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center flex-wrap gap-2">
                     <input type="number" class="form-control w-25" id="price" name="price" min="1" placeholder="Ej: 241000" required>
                     <p class="ms-2"> €</p>
                 </div>
+                <div class="invalid-feedback"></div>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">
                     Descripción
                     <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="right" title="¡Añade una pequeña descripción para que los interesados sepan más sobre lo que ofreces!"></i>
                 </label>
-                <textarea class="form-control" id="description" name="description" placeholder="Ej: Vendo mi propiedad porque me mudo... Alquilo mi propiedad a gente que quiera compartir piso..."></textarea>
+                <textarea class="form-control" id="description" name="description" placeholder="Ej: Vendo mi propiedad porque me mudo... Alquilo mi propiedad a gente que quiera compartir piso..." required></textarea>
+                <div class="invalid-feedback"></div>
             </div>
 
             <button type="submit" class="btn btn-secondary btn-font d-flex mx-auto mt-3">crear anuncio</button>
         </form>
     </div>
 </main>
+
+<script>
+    <?php require_once __DIR__ . '/assets/js/new-advert-validation.js'; ?>
+</script>
 
 <?php require_once __DIR__ . '/partials/footer.php'; ?>

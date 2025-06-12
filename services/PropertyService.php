@@ -148,9 +148,9 @@ class PropertyService
             }
             $setClause = implode(", ", $setClause);
 
-            $sql = "UPDATE property SET $setClause WHERE id = :id";
+            $sql = "UPDATE `property` SET $setClause WHERE `id` = :id";
             $stmt = $this->db->prepare($sql);
-            $fields['id'] = $id;
+            $fields[':id'] = $id;
             return $stmt->execute($fields);
         } catch (PDOException $e) {
             error_log('Error al actualizar propiedad: ' . $e->getMessage());

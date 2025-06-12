@@ -44,11 +44,17 @@ try {
                 case '/my-properties':
                     require 'views/my-properties.php';
                     break;
+                case '/edit-property':
+                    require 'views/edit-property.php';
+                    break;
                 case '/delete-property':
                     require 'controllers/DeleteProperty.php';
                     break;
                 case '/my-adverts':
                     require 'views/my-adverts.php';
+                    break;
+                case '/edit-advert':
+                    require 'views/edit-advert.php';
                     break;
                 case '/edit-profile':
                     require 'views/edit-profile.php';

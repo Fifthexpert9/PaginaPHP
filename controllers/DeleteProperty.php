@@ -1,11 +1,13 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+namespace controllers;
 
-session_start();
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use facades\AddressFacade;
 use converters\AddressConverter;
+
+session_start();
 
 $addressFacade = new AddressFacade(new AddressConverter());
 

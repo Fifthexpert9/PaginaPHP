@@ -49,7 +49,7 @@ class UserFacade
             return ['success' => false, 'message' => 'Todos los campos son obligatorios.'];
         }
         if ($this->userService->emailExists($userDto->email)) {
-            return ['success' => false, 'message' => 'El correo ya está registrado. <br> Si tienes problemas para iniciar sesión, por favor, contacta con el messaging.houspecial@gmail.com.'];
+            return ['success' => false, 'message' => 'El correo ya está registrado.<br>Si tienes problemas para iniciar sesión, por favor, contacta con el messaging.houspecial@gmail.com.'];
         }
 
         $userModel = $this->userConverter->dtoToModel($userDto);
