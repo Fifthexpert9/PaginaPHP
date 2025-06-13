@@ -52,3 +52,75 @@ document.addEventListener('DOMContentLoaded', function () {
     // Cargar al inicio si ya hay alguno seleccionado
     loadCharacteristics();
 });
+
+const overlay = document.getElementById('loader-overlay');
+const bar = document.getElementById('loader-bar');
+
+function animateBar(duration = 1800, onComplete) {
+    bar.style.width = '0';
+    let progress = 0;
+    let start = null;
+
+    function step(timestamp) {
+        if (!start) start = timestamp;
+        let elapsed = timestamp - start;
+
+        // Avance aleatorio pero suave
+        let target = Math.min(100, progress + Math.random() * 10 + 5);
+        progress = Math.min(target, (elapsed / duration) * 100);
+
+        bar.style.width = progress + '%';
+
+        if (progress < 100) {
+            requestAnimationFrame(step);
+        } else {
+            bar.style.width = '100%';
+            if (typeof onComplete === 'function') onComplete();
+        }
+    }
+    requestAnimationFrame(step);
+}
+
+function startLoader() {
+    overlay.style.display = 'flex';
+    overlay.classList.remove('fade-out');
+    overlay.classList.add('visible');
+    bar.style.width = '0';
+    void overlay.offsetWidth; // Forzar reflow
+
+    animateBar(1800, () => {
+        overlay.classList.add('fade-out');
+        overlay.classList.remove('visible');
+        document.body.classList.remove('loading');
+        setTimeout(() => {
+            overlay.style.display = 'none';
+            bar.style.width = '0';
+            overlay.classList.remove('fade-out');
+        }, 2000); // 2s para coincidir con el CSS
+    });
+}
+
+document.body.classList.add('loading');
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (!sessionStorage.getItem('houspecialLoaded')) {
+        startLoader();
+        sessionStorage.setItem('houspecialLoaded', '1');
+    } else {
+        overlay.style.display = 'none';
+        bar.style.width = '0';
+        overlay.classList.remove('visible', 'fade-out');
+        document.body.classList.remove('loading');
+    }
+});
+
+// Evento para el logo
+var logo = document.querySelector('.logo');
+if (logo) {
+    logo.style.cursor = 'pointer';
+    logo.addEventListener('click', function(e) {
+        e.preventDefault();
+        sessionStorage.removeItem('houspecialLoaded');
+        window.location.href = '/';
+    });
+}

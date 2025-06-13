@@ -13,6 +13,17 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
 
 <?php require_once __DIR__ . '/partials/head.php'; ?>
 <?php require_once __DIR__ . '/partials/header.php'; ?>
+
+<!-- Loader Overlay -->
+<div id="loader-overlay" class="visible" style="position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;">
+    <div style="width:320px;max-width:90vw;">
+        <div class="text-center mb-4 fs-4 text-light">Cargando Houspecial...</div>
+        <div id="loader-bar-bg" style="width:100%;height:16px;background:#222;border-radius:8px;overflow:hidden;">
+            <div id="loader-bar" style="width:0;height:100%;background:#fff;transition:width 1.5s;"></div>
+        </div>
+    </div>
+</div>
+
 <main>
     <div class="container body-ody-ody">
         <div class="row">
@@ -189,9 +200,11 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
         </div>
     </div>
 
-    <script>
-        <?php require_once __DIR__ . '/assets/js/home.js'; ?>
-    </script>
+    <!-- Incluye los archivos CSS y JS del loader y el resto de scripts -->
+    <link rel="stylesheet" href="/views/assets/textstyles.css">
+    <script src="/views/assets/js/loader.js"></script>
+    <script src="/views/assets/js/home.js"></script>
+
 </main>
 
 <?php require_once __DIR__ . '/partials/footer.php'; ?>

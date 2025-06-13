@@ -132,3 +132,21 @@ body {
 main {
   flex: 1 0 auto;
 }
+
+/* Loader Overlay Styles */
+#loader-overlay {
+    background: #111;
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 2s;
+}
+#loader-overlay.visible {
+    opacity: 1;
+}
+#loader-overlay.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+body.loading {
+    overflow: hidden;
+}
