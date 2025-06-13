@@ -65,7 +65,7 @@ function animateBar(duration = 1800, onComplete) {
         if (!start) start = timestamp;
         let elapsed = timestamp - start;
 
-        // Avance aleatorio pero suave
+        // Avance aleatorio
         let target = Math.min(100, progress + Math.random() * 10 + 5);
         progress = Math.min(target, (elapsed / duration) * 100);
 
@@ -86,8 +86,7 @@ function startLoader() {
     overlay.classList.remove('fade-out');
     overlay.classList.add('visible');
     bar.style.width = '0';
-    void overlay.offsetWidth; // Forzar reflow
-
+    void overlay.offsetWidth;
     animateBar(1800, () => {
         overlay.classList.add('fade-out');
         overlay.classList.remove('visible');
@@ -96,7 +95,7 @@ function startLoader() {
             overlay.style.display = 'none';
             bar.style.width = '0';
             overlay.classList.remove('fade-out');
-        }, 2000); // 2s para coincidir con el CSS
+        }, 2000);
     });
 }
 
