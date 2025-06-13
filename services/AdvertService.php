@@ -310,10 +310,15 @@ class AdvertService
         }
 
         // Filtros de propiedad (property)
-        if (!empty($propertyTypes)) {
-            $in = implode(',', array_fill(0, count($propertyTypes), '?'));
-            $wheres[] = "p.property_type IN ($in)";
-            $params = array_merge($params, $propertyTypes);
+        if (isset($filters['property_types']) && !empty($filters['property_types'])) {
+            $propertyTypes = $filters['property_types'];
+            if (!empty($propertyTypes)) {
+                $in = implode(',', array_fill(0, count($propertyTypes), '?'));
+                $wheres[] = "p.property_type IN ($in)";
+                $params = array_merge($params, $propertyTypes);
+            }
+        } else {
+            $propertyTypes = null;
         }
         if (!empty($filters['built_size_min'])) {
             $wheres[] = "p.built_size >= ?";
@@ -344,7 +349,8 @@ class AdvertService
         $tipoFiltros = [];
 
         // Filtros específicos para habitaciones
-        if ($filters['property_types'][0] === 'Habitación' && !empty($filters['room'])) {
+        if (isset($filters['property_types']) && is_array($filters['property_types']) && in_array('Habitación', $filters['property_types'])) {
+            // lógica para habitaciones
             if (isset($filters['room']['private_bathroom'])) {
                 $tipoFiltros[] = "r.private_bathroom = ?";
                 $params[] = $filters['room']['private_bathroom'];
@@ -372,7 +378,7 @@ class AdvertService
         }
 
         // Filtros específicos para estudios
-        if ($filters['property_types'][0] === 'Estudio' && !empty($filters['studio'])) {
+        if (isset($filters['property_types']) && is_array($filters['property_types']) && in_array('Estudio', $filters['property_types'])) {
             if (isset($filters['studio']['furnished'])) {
                 $tipoFiltros[] = "s.furnished = ?";
                 $params[] = $filters['studio']['furnished'];
@@ -392,7 +398,7 @@ class AdvertService
         }
 
         // Filtros específicos para pisos
-        if ($filters['property_types'][0] === 'Piso' && !empty($filters['apartment'])) {
+        if (isset($filters['property_types']) && is_array($filters['property_types']) && in_array('Piso', $filters['property_types'])) {
             // Cambia aquí:
             if (!empty($filters['apartment']['apartment_type'])) {
                 $apartmentType = $filters['apartment']['apartment_type'];
@@ -446,7 +452,7 @@ class AdvertService
         }
 
         // Filtros específicos para casas
-        if ($filters['property_types'][0] === 'Casa' && !empty($filters['house'])) {
+        if (isset($filters['property_types']) && is_array($filters['property_types']) && in_array('Casa', $filters['property_types'])) {
             if (!empty($filters['house']['house_type'])) {
                 $houseType = $filters['house']['house_type'];
                 if (is_array($houseType)) {
