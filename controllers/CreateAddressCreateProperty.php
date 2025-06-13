@@ -32,9 +32,11 @@ try {
         new ImageConverter()
     );
 
+    $street = $_POST['street'] . ', ' . $_POST['number'];
+
     $addressDto = new AddressDto(
         null,
-        $_POST['street'],
+        $street,
         $_POST['city'],
         $_POST['province'],
         $_POST['postal_code'],
