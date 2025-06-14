@@ -72,12 +72,8 @@
 }
 
 
-* {
-  font-size: small;
-}
-
 html {
-  height: 100%;
+    font-size: 14px; /* o más grande si lo prefieres */
 }
 
 body {
@@ -167,5 +163,42 @@ body.loading {
     transform: rotate(-2deg) scale(1.03);
     box-shadow: 6px 12px 32px 0 rgba(0,0,0,0.18), 0 4px 0 #f7e07e;
 }
+
+/* Modern translate button - alineado con otros botones y más a la izquierda */
+#google_translate_custom_btn {
+    position: absolute;
+    top: 24px;
+    right: 220px; /* Ajusta según tu header/menu */
+    z-index: 99999;
+}
+#google_translate_custom_btn button {
+    background: #f7e07e;
+    color: #222;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 24px;
+    font-family: 'SchoolTeacher', 'Comic Sans MS', cursive, sans-serif;
+    font-size: 1.7em;
+    font-weight: bold;
+    box-shadow: 2px 4px 16px rgba(0,0,0,0.10);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+#google_translate_custom_btn button:hover {
+    background: #ffe066;
+    color: #111;
+}
+
+/* Ajusta el menú de Google Translate para que no se desborde y se vea bien */
+iframe.goog-te-menu-frame {
+    min-width: 220px !important;
+    max-width: 320px !important;
+    width: auto !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18) !important;
+    border: none !important;
+}
+
 
 
