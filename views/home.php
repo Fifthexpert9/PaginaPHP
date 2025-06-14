@@ -124,7 +124,7 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                     <?php else: ?>
                         <?php foreach ($advertsToShow as $advert): ?>
                             <div class="col-12 col-lg-6">
-                                <div class="card h-100 shadow-sm">
+                                <div class="card h-100 postit-card">
                                     <div class="row g-0 h-100">
                                         <div class="col-6 d-flex align-items-stretch" style="overflow: hidden;">
                                             <img src="<?= htmlspecialchars($advert['advert']->main_image) ?>"
