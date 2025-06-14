@@ -200,8 +200,6 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
         </div>
     </div>
 
-    <!-- Incluye los archivos CSS y JS del loader y el resto de scripts -->
-    <!--<link rel="stylesheet" href="/views/assets/textstyles.css">-->
     <script src="/views/assets/js/home.js"></script>
 
 </main>
