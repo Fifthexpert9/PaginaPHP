@@ -24,7 +24,12 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
                 <h4 class="mb-2">¿Dónde está tu casa?</h4>
                 <div class="mb-3">
                     <label for="street" class="form-label">Calle</label>
-                    <input type="text" class="form-control" id="street" name="street" placeholder="Ej: Calle de las Amapolas, 70" required>
+                    <input type="text" class="form-control" id="street" name="street" placeholder="Ej: Calle de las Amapolas" required>
+                    <div class="invalid-feedback"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="number" class="form-label">Número</label>
+                    <input type="text" class="form-control" id="number" name="number" placeholder="Ej: 70" required>
                     <div class="invalid-feedback"></div>
                 </div>
                 <div class="mb-3">

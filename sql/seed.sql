@@ -1,7 +1,6 @@
 USE `tfg`;
 
 INSERT INTO `user` (`name`, `last_name`, `username`, `email`, `password`, `role`)
-INSERT INTO `user` (`name`, `last_name`, `username`, `email`, `password`, `role`)
 VALUES
     ('Admin', 'Admin', 'admin','admin@example.com', '$2y$10$RRCmyLldhgv.Xuk0JILoMOwSTQVdzUNUXceCUGNBhvCqT7WfbqLYG', 'admin'), -- id 1
     ('Juan', 'Pérez', 'juaper087','juan.perez@example.com', '$2y$10$3v7yGcM2Os867cPs.SDtIu5ohbN4xMLogBfw4sBJNjdqRe39A2xae', 'user'), -- id 2
@@ -123,10 +122,8 @@ VALUES
 INSERT INTO `property_apartment` (`property_id`, `apartment_type`, `num_rooms`, `num_bathrooms`, `furnished`, `balcony`, `floor`, `elevator`, `air_conditioning`, `garage`, `pets_allowed`)
 VALUES
     (5, 'Estándar',  3, 2, 0, 1, 0, 0, 1, 1, 0), -- Piso en A Coruña
-    (5, 'Estándar',  3, 2, 0, 1, 0, 0, 1, 1, 0), -- Piso en A Coruña
     (6, 'Ático', 4, 3, 1, 1, 3, 0, 0, 0, 1), -- Piso en Granada
     (11, 'Dúplex', 3, 3, 0, 0, 2, 1, 1, 0, 1), -- Piso en Zaragoza
-    (13, 'Bajo con jardín', 3, 1, 0, 1, 0, 0, 1, 1, 0); -- Piso en Oviedo
     (13, 'Bajo con jardín', 3, 1, 0, 1, 0, 0, 1, 1, 0); -- Piso en Oviedo
 
 INSERT INTO `property_house` (`property_id`, `house_type`, `garden_size`, `num_floors`, `num_rooms`, `num_bathrooms`, `private_garage`, `private_pool`, `furnished`, `terrace`, `storage_room`, `air_conditioning`, `pets_allowed`)

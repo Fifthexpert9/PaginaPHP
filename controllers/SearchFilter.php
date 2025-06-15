@@ -87,7 +87,7 @@ if (!empty($_GET['studio']) && is_array($_GET['studio'])) {
 if (!empty($_GET['apartment']) && is_array($_GET['apartment'])) {
     $apartmentFilters = [];
     if (!empty($_GET['apartment']['apartment_type'])) {
-        $apartmentFilters['apartment_type'] = $_GET['apartment']['apartment_type'];
+        $apartmentFilters['apartment_type'] = $_GET['apartment']['apartment_type']; // Ahora puede ser array
     }
     if (!empty($_GET['apartment']['num_rooms'])) {
         $apartmentFilters['num_rooms'] = $_GET['apartment']['num_rooms'];

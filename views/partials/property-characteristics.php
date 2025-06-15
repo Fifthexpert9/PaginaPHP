@@ -113,8 +113,29 @@ foreach ($types as $type) {
                 </div>
                 <div class="p-2">
                     <div class="mb-3">
-                        <label for="apartment_type" class="form-label">Tipo de piso</label>
-                        <input type="text" class="form-control" id="apartment_type" name="apartment[apartment_type]" placeholder="Ej: Ático, Dúplex...">
+                        <label class="form-label">Tipo de piso</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="apartment[apartment_type][]" id="tipo_estandar" value="Estándar">
+                                <label class="form-check-label" for="tipo_estandar">Estándar</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="apartment[apartment_type][]" id="tipo_loft" value="Loft">
+                                <label class="form-check-label" for="tipo_loft">Loft</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="apartment[apartment_type][]" id="tipo_atico" value="Ático">
+                                <label class="form-check-label" for="tipo_atico">Ático</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="apartment[apartment_type][]" id="tipo_duplex" value="Dúplex">
+                                <label class="form-check-label" for="tipo_duplex">Dúplex</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="apartment[apartment_type][]" id="tipo_bajo" value="Bajo con jardín">
+                                <label class="form-check-label" for="tipo_bajo">Bajo con jardín</label>
+                            </div>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="num_rooms" class="form-label">Nº de habitaciones</label>
@@ -189,104 +210,124 @@ foreach ($types as $type) {
                 <div class="p-2">
                     <div class="mb-3">
                         <label for="house_type" class="form-label">Tipo de casa</label>
-                        <input type="text" class="form-control" id="house_type" name="house[house_type]" placeholder="Ej: Chalet, Adosado...">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Tamaño del jardín (m²)</label>
-                        <div class="input-group">
-                            <span class="input-group-text">Mín</span>
-                            <input type="number" class="form-control" name="house[garden_size_min]" min="0" placeholder="Mínimo">
-                            <span class="input-group-text">Máx</span>
-                            <input type="number" class="form-control" name="house[garden_size_max]" min="0" placeholder="Máximo">
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="house[house_type][]" id="tipo_unifamiliar" value="Unifamiliar">
+                                <label class="form-check-label" for="tipo_unifamiliar">Unifamiliar</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="house[house_type][]" id="tipo_chalet" value="Chalet">
+                                <label class="form-check-label" for="tipo_chalet">Chalet</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="house[house_type][]" id="tipo_adosado" value="Adosado">
+                                <label class="form-check-label" for="tipo_adosado">Adosado</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="house[house_type][]" id="tipo_pareado" value="Pareado">
+                                <label class="form-check-label" for="tipo_pareado">Pareado</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="house[house_type][]" id="tipo_casarural" value="Bajo con Casa rural">
+                                <label class="form-check-label" for="tipo_casarural">Casa rural</label>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nº de plantas</label>
-                        <div class="input-group">
-                            <span class="input-group-text">Mín</span>
-                            <input type="number" class="form-control" name="house[num_floors_min]" min="1" placeholder="Mínimo">
-                            <span class="input-group-text">Máx</span>
-                            <input type="number" class="form-control" name="house[num_floors_max]" min="1" placeholder="Máximo">
+                        <div class="mb-3">
+                            <label class="form-label">Tamaño del jardín (m²)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Mín</span>
+                                <input type="number" class="form-control" name="house[garden_size_min]" min="0" placeholder="Mínimo">
+                                <span class="input-group-text">Máx</span>
+                                <input type="number" class="form-control" name="house[garden_size_max]" min="0" placeholder="Máximo">
+                            </div>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nº de habitaciones</label>
-                        <div class="input-group">
-                            <span class="input-group-text">Mín</span>
-                            <input type="number" class="form-control" name="house[num_rooms_min]" min="1" placeholder="Mínimo">
-                            <span class="input-group-text">Máx</span>
-                            <input type="number" class="form-control" name="house[num_rooms_max]" min="1" placeholder="Máximo">
+                        <div class="mb-3">
+                            <label class="form-label">Nº de plantas</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Mín</span>
+                                <input type="number" class="form-control" name="house[num_floors_min]" min="1" placeholder="Mínimo">
+                                <span class="input-group-text">Máx</span>
+                                <input type="number" class="form-control" name="house[num_floors_max]" min="1" placeholder="Máximo">
+                            </div>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Nº de baños</label>
-                        <div class="input-group">
-                            <span class="input-group-text">Mín</span>
-                            <input type="number" class="form-control" name="house[num_bathrooms_min]" min="1" placeholder="Mínimo">
-                            <span class="input-group-text">Máx</span>
-                            <input type="number" class="form-control" name="house[num_bathrooms_max]" min="1" placeholder="Máximo">
+                        <div class="mb-3">
+                            <label class="form-label">Nº de habitaciones</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Mín</span>
+                                <input type="number" class="form-control" name="house[num_rooms_min]" min="1" placeholder="Mínimo">
+                                <span class="input-group-text">Máx</span>
+                                <input type="number" class="form-control" name="house[num_rooms_max]" min="1" placeholder="Máximo">
+                            </div>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="private_garage" class="form-label">¿Garaje privado?</label>
-                        <select class="form-select" id="private_garage" name="house[private_garage]">
-                            <option value="">Cualquiera</option>
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="private_pool" class="form-label">¿Piscina privada?</label>
-                        <select class="form-select" id="private_pool" name="house[private_pool]">
-                            <option value="">Cualquiera</option>
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="house_furnished" class="form-label">¿Amueblada?</label>
-                        <select class="form-select" id="house_furnished" name="house[furnished]">
-                            <option value="">Cualquiera</option>
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="terrace" class="form-label">¿Terraza/poche?</label>
-                        <select class="form-select" id="terrace" name="house[terrace]">
-                            <option value="">Cualquiera</option>
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="storage_room" class="form-label">¿Trastero?</label>
-                        <select class="form-select" id="storage_room" name="house[storage_room]">
-                            <option value="">Cualquiera</option>
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="house_air_conditioning" class="form-label">¿Aire acondicionado?</label>
-                        <select class="form-select" id="house_air_conditioning" name="house[air_conditioning]">
-                            <option value="">Cualquiera</option>
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="house_pets_allowed" class="form-label">¿Se permiten mascotas?</label>
-                        <select class="form-select" id="house_pets_allowed" name="house[pets_allowed]">
-                            <option value="">Cualquiera</option>
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
-                        </select>
+                        <div class="mb-3">
+                            <label class="form-label">Nº de baños</label>
+                            <div class="input-group">
+                                <span class="input-group-text">Mín</span>
+                                <input type="number" class="form-control" name="house[num_bathrooms_min]" min="1" placeholder="Mínimo">
+                                <span class="input-group-text">Máx</span>
+                                <input type="number" class="form-control" name="house[num_bathrooms_max]" min="1" placeholder="Máximo">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="private_garage" class="form-label">¿Garaje privado?</label>
+                            <select class="form-select" id="private_garage" name="house[private_garage]">
+                                <option value="">Cualquiera</option>
+                                <option value="1">Sí</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="private_pool" class="form-label">¿Piscina privada?</label>
+                            <select class="form-select" id="private_pool" name="house[private_pool]">
+                                <option value="">Cualquiera</option>
+                                <option value="1">Sí</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="house_furnished" class="form-label">¿Amueblada?</label>
+                            <select class="form-select" id="house_furnished" name="house[furnished]">
+                                <option value="">Cualquiera</option>
+                                <option value="1">Sí</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="terrace" class="form-label">¿Terraza/poche?</label>
+                            <select class="form-select" id="terrace" name="house[terrace]">
+                                <option value="">Cualquiera</option>
+                                <option value="1">Sí</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="storage_room" class="form-label">¿Trastero?</label>
+                            <select class="form-select" id="storage_room" name="house[storage_room]">
+                                <option value="">Cualquiera</option>
+                                <option value="1">Sí</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="house_air_conditioning" class="form-label">¿Aire acondicionado?</label>
+                            <select class="form-select" id="house_air_conditioning" name="house[air_conditioning]">
+                                <option value="">Cualquiera</option>
+                                <option value="1">Sí</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="house_pets_allowed" class="form-label">¿Se permiten mascotas?</label>
+                            <select class="form-select" id="house_pets_allowed" name="house[pets_allowed]">
+                                <option value="">Cualquiera</option>
+                                <option value="1">Sí</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-<?php
+    <?php
             break;
     }
 }
-?>
+    ?>
