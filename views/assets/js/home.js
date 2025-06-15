@@ -110,9 +110,9 @@ function startLoader() {
 document.body.classList.add('loading');
 
 document.addEventListener('DOMContentLoaded', function() {
-    if (!sessionStorage.getItem('houspecialLoaded')) {
+    if (!localStorage.getItem('houspecialLoaded')) {
         startLoader();
-        sessionStorage.setItem('houspecialLoaded', '1');
+        localStorage.setItem('houspecialLoaded', '1');
     } else {
         overlay.style.display = 'none';
         bar.style.width = '0';
