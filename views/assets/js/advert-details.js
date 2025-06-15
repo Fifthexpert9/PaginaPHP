@@ -1,5 +1,18 @@
+/**
+ * Script para gestionar la funcionalidad de añadir o quitar un anuncio de favoritos desde la vista de detalles.
+ *
+ * - Escucha el evento click en el botón de favoritos.
+ * - Envía una petición POST a /toggle-favorite con el ID del anuncio.
+ * - Si la respuesta contiene un redirect, redirige al usuario (por ejemplo, si no está autenticado).
+ * - Si la operación es exitosa, cambia el color del icono y el tooltip según el estado de favorito.
+ *
+ * Dependencias:
+ * - El botón debe tener id="favorite-btn" y un atributo data-advert-id con el ID del anuncio.
+ * - El icono de favorito debe estar dentro del botón.
+ */
+
 document.getElementById('favorite-btn').addEventListener('click', function () {
-    const btn = this; // Referencia al botón
+    const btn = this;
     const advertId = btn.getAttribute('data-advert-id');
     fetch('/toggle-favorite', {
         method: 'POST',

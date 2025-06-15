@@ -8,6 +8,10 @@ use dtos\AddressDto;
 /**
  * Clase encargada de convertir entre AddressModel y AddressDto
  * para la transferencia de datos de direcciones.
+ *
+ * Métodos:
+ * - modelToDto: Convierte un modelo de dominio AddressModel en un DTO AddressDto.
+ * - dtoToModel: Convierte un DTO AddressDto en un modelo de dominio AddressModel.
  */
 class AddressConverter {
     /**

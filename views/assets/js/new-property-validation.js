@@ -1,3 +1,25 @@
+/**
+ * Script de validación multipaso para el formulario de nueva propiedad.
+ *
+ * Funcionalidades:
+ * - Valida en tiempo real los campos obligatorios de cada paso del formulario.
+ * - Muestra mensajes de error personalizados y estilos de validación Bootstrap.
+ * - Deshabilita el botón "Siguiente" si algún campo es inválido.
+ * - En el primer paso, valida la existencia real de la dirección usando la API de OpenStreetMap.
+ * - Revalida los campos dinámicos al cambiar el tipo de propiedad.
+ *
+ * Campos validados:
+ * - Todos los campos con atributo required (input, select, textarea).
+ * - Radios y checkboxes se validan por grupo.
+ * - Dirección real validada mediante petición externa en el paso 1.
+ *
+ * Dependencias:
+ * - El formulario debe estar dividido en pasos con clase .step y id="step-X".
+ * - Los botones "Siguiente" deben tener la clase btn-secondary y un onclick="nextStep(X)".
+ * - Los campos deben tener los IDs y names esperados.
+ * - Se usan clases de Bootstrap para feedback visual.
+ */
+
 function setFieldInvalid(field, message) {
   field.classList.add('is-invalid');
   field.classList.remove('is-valid');
@@ -21,23 +43,25 @@ function setFieldValid(field) {
   }
 }
 
+/**
+ * Valida todos los campos obligatorios del paso indicado.
+ * Si es el paso 1, valida también la existencia real de la dirección.
+ * Deshabilita el botón "Siguiente" si hay errores.
+ */
 function checkStepFields(stepNumber) {
   const step = document.getElementById("step-" + stepNumber);
   if (!step) return;
   let allValid = true;
 
-  // Selecciona todos los inputs, selects y textareas requeridos visibles en este paso
   const requiredFields = step.querySelectorAll(
     "input[required], select[required], textarea[required]"
   );
 
-  // Para evitar mensajes duplicados en radios
   const radioGroupsChecked = new Set();
 
   requiredFields.forEach((field) => {
-    // Para radio/checkbox, comprobar si hay alguno seleccionado en el grupo
     if (field.type === "radio") {
-      if (radioGroupsChecked.has(field.name)) return; // Ya validado este grupo
+      if (radioGroupsChecked.has(field.name)) return;
       radioGroupsChecked.add(field.name);
       const group = step.querySelectorAll(`input[name="${field.name}"]`);
       const checked = step.querySelectorAll(`input[name="${field.name}"]:checked`);
@@ -50,7 +74,6 @@ function checkStepFields(stepNumber) {
         }
       });
     } else if (field.type === "checkbox") {
-      // Para checkbox individuales
       if (!field.checked) {
         setFieldInvalid(field, "Este campo no puede estar vacío");
         allValid = false;
@@ -67,13 +90,12 @@ function checkStepFields(stepNumber) {
     }
   });
 
-  // Habilita o deshabilita el botón "siguiente" de este paso
   const nextBtn = step.querySelector(
     'button.btn-secondary[onclick^="nextStep"]'
   );
   if (nextBtn) nextBtn.disabled = !allValid;
 
-  // Validación de dirección real solo en el paso 1
+  // Validación de dirección real en el paso 1
   if (stepNumber === 1 && allValid && nextBtn) {
     nextBtn.disabled = true;
     validateAddressReal(1).then(result => {
@@ -94,38 +116,39 @@ function checkStepFields(stepNumber) {
   }
 }
 
-// Inicializa la validación en todos los pasos
+/**
+ * Inicializa la validación en todos los pasos del formulario.
+ * Añade listeners a los campos requeridos para validar en tiempo real.
+ */
 function initStepValidation() {
-  // Para cada paso
   document.querySelectorAll(".step").forEach((step, idx) => {
     const stepNumber = idx + 1;
-    // Para cada campo requerido en el paso
     step
       .querySelectorAll("input[required], select[required], textarea[required]")
       .forEach((field) => {
         field.addEventListener("input", () => checkStepFields(stepNumber));
         field.addEventListener("change", () => checkStepFields(stepNumber));
       });
-    // Comprobar al cargar
     checkStepFields(stepNumber);
   });
 }
 
-// Llama a la función al cargar la página
+// Inicializa la validación al cargar la página
 window.addEventListener("DOMContentLoaded", initStepValidation);
 
-// --- INTEGRACIÓN CON CAMPOS DINÁMICOS DEL PASO 3 ---
-// Sobrescribe la función loadFieldsForType para reinicializar la validación cuando cambian los campos dinámicos
+// Revalida los campos dinámicos al cambiar el tipo de propiedad
 const originalLoadFieldsForType = window.loadFieldsForType;
 window.loadFieldsForType = function (type) {
   originalLoadFieldsForType(type);
-  // Vuelve a inicializar la validación para los nuevos campos
   initStepValidation();
-  // Y comprueba el paso actual (3)
   checkStepFields(3);
 };
 
-// Validación de dirección real usando Nominatim (OpenStreetMap)
+/**
+ * Valida la existencia real de la dirección usando la API de OpenStreetMap.
+ * Normaliza los valores para comparar correctamente (sin tildes, minúsculas).
+ * Devuelve un objeto { isReal: true/false }.
+ */
 async function validateAddressReal(stepNumber) {
     if (stepNumber !== 1) return { isReal: true };
 

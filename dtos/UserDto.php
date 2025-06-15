@@ -5,13 +5,23 @@ namespace dtos;
 /**
  * DTO para exponer información de usuario sin datos sensibles.
  *
- * @property int $id ID del usuario.
- * @property string $name Nombre del usuario.
- * @property string $last_name Apellido del usuario.
- * @property string $username Nombre de usuario.
- * @property string $email Correo electrónico del usuario.
- * @property string $role Rol del usuario.
- * @property string $registration_date Fecha de registro del usuario.
+ * Este objeto de transferencia de datos (DTO) se utiliza para transportar
+ * información de usuarios entre las distintas capas de la aplicación,
+ * evitando exponer directamente los modelos de dominio ni datos sensibles como contraseñas.
+ *
+ * Propiedades:
+ * - int $id                   ID del usuario.
+ * - string $name              Nombre del usuario.
+ * - string $last_name         Apellido del usuario.
+ * - string $username          Nombre de usuario.
+ * - string $email             Correo electrónico del usuario.
+ * - string $role              Rol del usuario.
+ * - string $registration_date Fecha de registro del usuario.
+ * - mixed $adverts            (Opcional) Anuncios asociados al usuario.
+ *
+ * Métodos:
+ * - __construct: Inicializa el DTO con los datos del usuario.
+ * - toArray: Devuelve los datos del usuario como un array asociativo.
  */
 class UserDto
 {

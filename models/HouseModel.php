@@ -10,6 +10,25 @@ namespace models;
  * habitaciones, baños, si tiene garaje o piscina privada, si está amueblada, terraza, trastero,
  * aire acondicionado y si se permiten mascotas.
  * Se utiliza para transferir información entre las capas de dominio, presentación y persistencia.
+ *
+ * Propiedades:
+ * - int $property_id           ID de la propiedad asociada.
+ * - string $house_type         Tipo de casa.
+ * - int $garden_size           Tamaño del jardín.
+ * - int $num_floors            Número de plantas.
+ * - int $num_rooms             Número de habitaciones.
+ * - int $num_bathrooms         Número de baños.
+ * - bool $private_garage       Indica si tiene garaje privado.
+ * - bool $private_pool         Indica si tiene piscina privada.
+ * - bool $furnished            Indica si está amueblada.
+ * - bool $terrace              Indica si tiene terraza.
+ * - bool $storage_room         Indica si tiene trastero.
+ * - bool $air_conditioning     Indica si tiene aire acondicionado.
+ * - bool $pets_allowed         Indica si se permiten mascotas.
+ *
+ * Métodos:
+ * - __construct: Inicializa el modelo con los datos de la casa.
+ * - Getters y setters para cada propiedad.
  */
 class HouseModel {
     /**

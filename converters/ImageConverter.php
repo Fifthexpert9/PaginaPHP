@@ -6,17 +6,22 @@ use models\ImageModel;
 use dtos\ImageDto;
 
 /**
- * Conversor entre ImageModel y ImageDto.
+ * Clase encargada de convertir entre ImageModel y ImageDto.
  *
- * Permite transformar objetos del modelo de dominio a DTO y viceversa.
+ * Permite transformar objetos del modelo de dominio (ImageModel) a DTO (ImageDto) y viceversa,
+ * facilitando la transferencia de datos entre capas de la aplicación.
+ *
+ * Métodos:
+ * - modelToDto: Convierte un modelo de dominio ImageModel en un DTO ImageDto.
+ * - dtoToModel: Convierte un DTO ImageDto en un modelo de dominio ImageModel.
  */
 class ImageConverter
 {
     /**
      * Convierte un ImageModel a un ImageDto.
      *
-     * @param ImageModel $model
-     * @return ImageDto
+     * @param ImageModel $model Modelo de dominio con los datos de la imagen.
+     * @return ImageDto DTO resultante con la información de la imagen.
      */
     public static function modelToDto(ImageModel $model)
     {
@@ -32,8 +37,8 @@ class ImageConverter
     /**
      * Convierte un ImageDto a un ImageModel.
      *
-     * @param ImageDto $dto
-     * @return ImageModel
+     * @param ImageDto $dto DTO con los datos de la imagen.
+     * @return ImageModel Modelo de dominio con los datos de la imagen.
      */
     public static function dtoToModel(ImageDto $dto)
     {

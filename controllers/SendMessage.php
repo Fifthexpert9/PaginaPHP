@@ -2,6 +2,20 @@
 
 namespace controllers;
 
+/**
+ * Controlador para enviar mensajes entre usuarios sobre un anuncio.
+ *
+ * Este script:
+ * - Verifica que el usuario haya iniciado sesión.
+ * - Recibe los datos del formulario por POST (ID del usuario destinatario, ID del anuncio y mensaje).
+ * - Construye el cuerpo del mensaje en formato HTML para el correo.
+ * - Obtiene el email del destinatario a partir de su ID.
+ * - Utiliza MailService para enviar el correo electrónico.
+ * - Registra el mensaje en la base de datos mediante MessageFacade.
+ * - Gestiona los mensajes de éxito o error en la sesión.
+ * - Redirige a la página de mensaje tras la operación.
+ */
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use services\MailService;
@@ -13,21 +27,24 @@ use dtos\MessageDto;
 
 session_start();
 
+// Verificar que el usuario esté autenticado
 if (!isset($_SESSION['user'])) {
     header('Location: /login');
     exit;
 }
 
+// Procesar el formulario solo si es una petición POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $advertsUserId = $_POST['adverts_user_id'] ?? null;
     $advertId = $_POST['advert_id'] ?? null;
 
+    // Sanitizar y preparar el mensaje del usuario
     $userMessage = nl2br(htmlspecialchars($_POST['message'] ?? ''));
     $fromEmail = htmlspecialchars($_SESSION['user']->email);
     $fromUser = htmlspecialchars($_SESSION['user']->username);
 
+    // Preparar el cuerpo HTML del mensaje
     $backgroundUrl = 'https://i.imgur.com/NJydr4l.png';
-
     $messageText = '
         <div style="
             background: url(' . $backgroundUrl . ') repeat-y center top, #ffffff;
@@ -76,14 +93,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     ';
 
+    // Instanciar los facades y servicios necesarios
     $userFacade = new UserFacade(new UserConverter());
     $messageFacade = new MessageFacade(new MailService(), new MessageConverter());
 
+    // Obtener emails y preparar datos para el envío
     $from = $_SESSION['user']->email;
     $to = $userFacade->getUserById($advertsUserId)->email ?? null;
     $subject = "Nuevo mensaje sobre tu anuncio en Houspecial";
     $body = $messageText;
 
+    // Crear el DTO del mensaje para registrar en la base de datos
     $messageDto = new MessageDto(
         null,
         $_SESSION['user']->id,
@@ -94,6 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         null
     );
 
+    // Enviar el correo y registrar el mensaje
     if ($to && $body) {
         try {
             $mailService = new MailService();
@@ -108,6 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['message'] = "Faltan datos para enviar el mensaje.";
     }
 
+    // Redirigir a la página de mensaje
     header('Location: /message');
     exit;
 }

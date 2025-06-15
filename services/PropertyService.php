@@ -10,13 +10,17 @@ use PDOException;
 /**
  * Servicio para gestionar operaciones relacionadas con propiedades en la base de datos.
  *
+ * Esta clase proporciona métodos para crear, obtener, actualizar, eliminar y buscar propiedades inmobiliarias.
+ * Implementa el patrón Singleton para asegurar una única instancia y reutilizar la conexión a la base de datos.
+ *
  * Métodos principales:
- * - createProperty: Inserta una nueva propiedad.
- * - getPropertyById: Obtiene una propiedad por su ID.
- * - getPropertiesByUserId: Obtiene todas las propiedades de un usuario.
- * - updateProperty: Actualiza los campos de una propiedad existente.
- * - deleteProperty: Elimina una propiedad por su ID.
- * - searchProperties: Busca propiedades aplicando filtros generales y específicos, devolviendo solo las propiedades que cumplen los criterios.
+ * - getInstance(): Obtiene la instancia única del servicio.
+ * - createProperty(PropertyModel $property): Inserta una nueva propiedad.
+ * - getPropertyById($id): Obtiene una propiedad por su ID.
+ * - getPropertiesByUserId($user_id): Obtiene todas las propiedades de un usuario.
+ * - updateProperty($id, $fields): Actualiza los campos de una propiedad existente.
+ * - deleteProperty($id): Elimina una propiedad por su ID.
+ * - searchProperties($filters): Busca propiedades aplicando filtros generales y específicos.
  */
 class PropertyService
 {
@@ -55,7 +59,7 @@ class PropertyService
      * Crea una nueva propiedad en la base de datos.
      *
      * @param PropertyModel $property Modelo con los datos de la propiedad.
-     * @return int ID de la propiedad creada.
+     * @return int|string ID de la propiedad creada o mensaje de error.
      */
     public function createProperty(PropertyModel $property)
     {
@@ -169,5 +173,53 @@ class PropertyService
         $sql = "DELETE FROM property WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([':id' => $id]);
+    }
+
+    /**
+     * Busca propiedades aplicando filtros generales y específicos.
+     *
+     * @param array $filters Filtros para la búsqueda de propiedades.
+     * @return PropertyModel[] Array de propiedades que cumplen los filtros.
+     */
+    public function searchProperties($filters = [])
+    {
+        $sql = "SELECT * FROM property WHERE 1=1";
+        $params = [];
+
+        if (!empty($filters['property_type'])) {
+            $sql .= " AND property_type = :property_type";
+            $params[':property_type'] = $filters['property_type'];
+        }
+
+        if (!empty($filters['status'])) {
+            $sql .= " AND status = :status";
+            $params[':status'] = $filters['status'];
+        }
+
+        if (isset($filters['immediate_availability'])) {
+            $sql .= " AND immediate_availability = :immediate_availability";
+            $params[':immediate_availability'] = $filters['immediate_availability'] ? 1 : 0;
+        }
+
+        if (!empty($filters['user_id'])) {
+            $sql .= " AND user_id = :user_id";
+            $params[':user_id'] = $filters['user_id'];
+        }
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return array_map(function ($property) {
+            return new PropertyModel(
+                $property['id'],
+                $property['property_type'],
+                $property['address_id'],
+                $property['built_size'],
+                $property['status'],
+                $property['immediate_availability'],
+                $property['user_id']
+            );
+        }, $rows);
     }
 }

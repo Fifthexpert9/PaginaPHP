@@ -13,8 +13,14 @@ use dtos\StudioDto;
  * Clase encargada de convertir entre modelos de dominio (PropertyModel, StudioModel)
  * y el DTO StudioDto para la transferencia de datos de estudios.
  *
+ * Responsabilidades:
  * - Convierte modelos de dominio a DTOs para exponerlos en la capa de presentación o API.
  * - Convierte DTOs a modelos de dominio para operaciones de persistencia.
+ *
+ * Métodos principales:
+ * - modelToDto: Convierte un PropertyModel y un StudioModel en un StudioDto, incluyendo imágenes y dirección.
+ * - dtoToPropertyModel: Convierte un StudioDto en un PropertyModel.
+ * - dtoToStudioModel: Convierte un StudioDto en un StudioModel.
  */
 class StudioConverter
 {
@@ -39,6 +45,7 @@ class StudioConverter
      *
      * Obtiene la imagen principal y todas las imágenes asociadas a la propiedad.
      * Si no existen imágenes, se asigna una imagen por defecto ('media/no-image.jpg').
+     * También convierte la dirección asociada usando AddressConverter.
      *
      * @param PropertyModel $propertyModel Modelo con los datos generales de la propiedad.
      * @param StudioModel $studioModel Modelo con los datos específicos del estudio.

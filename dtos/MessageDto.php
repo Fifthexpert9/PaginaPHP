@@ -5,13 +5,22 @@ namespace dtos;
 /**
  * DTO para exponer información de un mensaje entre usuarios.
  *
- * @property int $id ID del mensaje.
- * @property int $sender_id ID del usuario remitente.
- * @property int $receiver_id ID del usuario destinatario.
- * @property int $advert_id ID del anuncio relacionado (si aplica).
- * @property string $subject Asunto del mensaje.
- * @property string $content Contenido del mensaje.
- * @property string $sent_at Fecha y hora de envío del mensaje.
+ * Este objeto de transferencia de datos (DTO) se utiliza para transportar
+ * información de mensajes entre las distintas capas de la aplicación,
+ * evitando exponer directamente los modelos de dominio.
+ *
+ * Propiedades:
+ * - int $id               ID del mensaje.
+ * - int $sender_id        ID del usuario remitente.
+ * - int $receiver_id      ID del usuario destinatario.
+ * - int $advert_id        ID del anuncio relacionado (si aplica).
+ * - string $subject       Asunto del mensaje.
+ * - string $content       Contenido del mensaje.
+ * - string $sent_at       Fecha y hora de envío del mensaje.
+ *
+ * Métodos:
+ * - __construct: Inicializa el DTO con los datos del mensaje.
+ * - toArray: Devuelve los datos del mensaje como un array asociativo.
  */
 class MessageDto
 {

@@ -9,6 +9,10 @@ use dtos\AdvertDto;
 /**
  * Clase encargada de convertir entre AdvertModel y AdvertDto
  * para la transferencia de datos de anuncios.
+ *
+ * Métodos:
+ * - modelToDto: Convierte un modelo de dominio AdvertModel en un DTO AdvertDto, incluyendo la imagen principal.
+ * - dtoToModel: Convierte un DTO AdvertDto en un modelo de dominio AdvertModel (sin la imagen principal).
  */
 class AdvertConverter
 {
@@ -25,14 +29,14 @@ class AdvertConverter
     }
 
     /**
-     * Convierte un AdvertModel y opcionalmente una imagen principal (ImageDto) en un AdvertDto.
+     * Convierte un AdvertModel en un AdvertDto, incluyendo la imagen principal.
      *
      * @param AdvertModel $model Modelo de dominio con los datos del anuncio.
-     * @param string $main_image Imagen principal asociada al anuncio.
      * @return AdvertDto DTO resultante con la información del anuncio.
      */
     public function modelToDto(AdvertModel $model): AdvertDto
     {
+        // Obtener la imagen principal asociada a la propiedad del anuncio
         $main_image = $this->imageService->getMainImageByPropertyId($model->getPropertyId());
 
         if (!$main_image) {

@@ -8,6 +8,19 @@ namespace models;
  * Esta clase encapsula los datos y comportamientos relacionados con un anuncio de una propiedad inmobiliaria.
  * Permite almacenar información relevante como el precio, la acción (alquiler/venta), la descripción, la fecha de creación, etc.
  * Se utiliza para transferir información entre las capas de dominio, presentación y persistencia.
+ *
+ * Propiedades:
+ * - int $id             ID del anuncio.
+ * - int $property_id    ID de la propiedad asociada.
+ * - int $user_id        ID del usuario que publica el anuncio.
+ * - float $price        Precio del anuncio.
+ * - string $action      Acción del anuncio (por ejemplo, 'alquiler', 'venta').
+ * - string $description Descripción del anuncio.
+ * - string $created_at  Fecha de creación del anuncio (formato timestamp o datetime).
+ *
+ * Métodos:
+ * - __construct: Inicializa el modelo con los datos del anuncio.
+ * - Getters y setters para cada propiedad.
  */
 class AdvertModel {
     /**

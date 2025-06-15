@@ -10,14 +10,19 @@ use dtos\UserDto;
  * UserFacade
  * ----------
  * Fachada para gestionar operaciones de usuario en la aplicación.
- * 
+ *
+ * Orquesta la lógica de negocio relacionada con usuarios y su conversión entre modelos y DTOs.
+ * Proporciona una interfaz simplificada para registrar, autenticar, obtener, actualizar y eliminar usuarios,
+ * delegando la lógica a los servicios y conversores correspondientes.
+ *
  * Métodos principales:
  * - userRegister(UserDto $userDto, string $plainPassword): Registra un nuevo usuario.
  * - userLogin($email, $password): Autentica un usuario por email y contraseña.
  * - isRegularUser($id): Indica si el usuario es regular (no admin).
+ * - getUserById($id): Obtiene un usuario por su ID.
  * - updateUser($id, $fields): Actualiza los datos de un usuario.
  * - deleteUser($id): Elimina un usuario por su ID.
- * 
+ *
  * Cada método devuelve un array con el resultado de la operación (success, message, y datos si aplica).
  */
 class UserFacade
@@ -27,7 +32,7 @@ class UserFacade
 
     /**
      * Constructor de UserFacade.
-     * 
+     *
      * @param UserConverter $userConverter Conversor de modelos y DTOs de usuario.
      */
     public function __construct(UserConverter $userConverter)

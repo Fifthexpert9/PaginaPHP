@@ -5,10 +5,19 @@ namespace dtos;
 /**
  * DTO para exponer información de un favorito (relación usuario-anuncio).
  *
- * @property int $id ID del favorito.
- * @property int $user_id ID del usuario que marcó el favorito.
- * @property int $advert_id ID del anuncio marcado como favorito.
- * @property string|null $created_at Fecha en la que se marcó como favorito.
+ * Este objeto de transferencia de datos (DTO) se utiliza para transportar
+ * información sobre la relación de favoritos entre usuarios y anuncios,
+ * evitando exponer directamente los modelos de dominio.
+ *
+ * Propiedades:
+ * - int $id               ID del favorito.
+ * - int $user_id          ID del usuario que marcó el favorito.
+ * - int $advert_id        ID del anuncio marcado como favorito.
+ * - string|null $created_at Fecha en la que se marcó como favorito (opcional).
+ *
+ * Métodos:
+ * - __construct: Inicializa el DTO con los datos del favorito.
+ * - toArray: Devuelve los datos del favorito como un array asociativo.
  */
 class FavoritesDto
 {

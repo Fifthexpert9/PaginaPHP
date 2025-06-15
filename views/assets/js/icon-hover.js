@@ -1,3 +1,17 @@
+/**
+ * Script para animar los iconos de la barra de navegación o botones con efecto hover.
+ *
+ * - Cambia el icono de contorno (por ejemplo, bi-house-heart) por su versión rellena (bi-house-heart-fill) al pasar el mouse.
+ * - Restaura el icono original al quitar el mouse.
+ *
+ * Dependencias:
+ * - Los iconos deben estar dentro de un elemento con la clase .icon-hover.
+ * - Los iconos deben usar clases de Bootstrap Icons (bi-*).
+ *
+ * Ejemplo de uso en HTML:
+ * <div class="icon-hover"><i class="bi bi-house-heart icon"></i></div>
+ */
+
 document.querySelectorAll('.icon-hover .icon').forEach(function(icon) {
     icon.parentElement.addEventListener('mouseenter', function() {
         if (icon.classList.contains('bi-house-heart')) {

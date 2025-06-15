@@ -8,6 +8,18 @@ namespace models;
  * Esta clase encapsula los datos y comportamientos relacionados con una imagen de una propiedad inmobiliaria.
  * Permite almacenar información relevante como la ruta de la imagen, si es la imagen principal, la fecha de subida, etc.
  * Se utiliza para transferir información entre las capas de dominio y presentación o persistencia.
+ *
+ * Propiedades:
+ * - int $id               ID único de la imagen.
+ * - int $propertyId       ID de la propiedad a la que pertenece la imagen.
+ * - string $imagePath     Ruta o URL de la imagen.
+ * - bool $isMain          Indica si la imagen es la principal de la propiedad.
+ * - string|null $uploadedAt Fecha y hora en la que se subió la imagen (formato timestamp o datetime).
+ *
+ * Métodos:
+ * - __construct: Inicializa el modelo con los datos de la imagen.
+ * - getId, getPropertyId, getImagePath, isMain, getUploadedAt: Getters.
+ * - setPropertyId, setImagePath, setIsMain, setUploadedAt: Setters.
  */
 class ImageModel
 {
@@ -56,7 +68,6 @@ class ImageModel
 
     /**
      * Obtiene el ID de la imagen.
-     *
      * @return int
      */
     public function getId()
@@ -66,7 +77,6 @@ class ImageModel
 
     /**
      * Obtiene el ID de la propiedad asociada.
-     *
      * @return int
      */
     public function getPropertyId()
@@ -76,7 +86,6 @@ class ImageModel
 
     /**
      * Obtiene la ruta o URL de la imagen.
-     *
      * @return string
      */
     public function getImagePath()
@@ -86,7 +95,6 @@ class ImageModel
 
     /**
      * Indica si la imagen es la principal de la propiedad.
-     *
      * @return bool
      */
     public function isMain()
@@ -96,7 +104,6 @@ class ImageModel
 
     /**
      * Obtiene la fecha de subida de la imagen.
-     *
      * @return string|null
      */
     public function getUploadedAt()
@@ -106,7 +113,6 @@ class ImageModel
 
     /**
      * Establece el ID de la propiedad asociada.
-     *
      * @param int $propertyId
      * @return void
      */
@@ -117,7 +123,6 @@ class ImageModel
 
     /**
      * Establece la ruta o URL de la imagen.
-     *
      * @param string $imagePath
      * @return void
      */
@@ -128,7 +133,6 @@ class ImageModel
 
     /**
      * Establece si la imagen es la principal de la propiedad.
-     *
      * @param bool $isMain
      * @return void
      */
@@ -139,7 +143,6 @@ class ImageModel
 
     /**
      * Establece la fecha de subida de la imagen.
-     *
      * @param string|null $uploadedAt
      * @return void
      */

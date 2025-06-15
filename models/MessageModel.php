@@ -9,6 +9,19 @@ namespace models;
  * dentro de la plataforma, permitiendo asociar cada mensaje a un anuncio concreto si aplica.
  * Incluye información sobre el remitente, destinatario, anuncio relacionado, asunto, contenido y fecha de envío.
  * Se utiliza para transferir información entre las capas de dominio, presentación y persistencia.
+ *
+ * Propiedades:
+ * - int $id             ID del mensaje.
+ * - int $sender_id      ID del usuario remitente.
+ * - int $receiver_id    ID del usuario destinatario.
+ * - int $advert_id      ID del anuncio relacionado (si aplica).
+ * - string $subject     Asunto del mensaje.
+ * - string $content     Contenido del mensaje.
+ * - string $sent_at     Fecha y hora de envío del mensaje (formato timestamp o datetime).
+ *
+ * Métodos:
+ * - __construct: Inicializa el modelo con los datos del mensaje.
+ * - Getters y setters para cada propiedad.
  */
 class MessageModel
 {

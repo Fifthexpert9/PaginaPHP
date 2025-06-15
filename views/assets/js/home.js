@@ -1,3 +1,20 @@
+/**
+ * Script principal para la página de inicio de Houspecial.
+ *
+ * Funcionalidades:
+ * - Gestión de favoritos: Permite añadir o quitar anuncios de favoritos desde la vista principal.
+ * - Carga dinámica de características: Muestra campos adicionales según los tipos de propiedad seleccionados en el formulario de búsqueda.
+ * - Animación de loader: Muestra una animación de carga al entrar por primera vez en la página.
+ * - Redirección del logo: Permite recargar la página y reiniciar el loader al hacer clic en el logo.
+ *
+ * Dependencias:
+ * - Los botones de favoritos deben tener la clase .favorite-btn y el atributo data-advert-id.
+ * - El loader debe tener los IDs loader-overlay y loader-bar.
+ * - El logo debe tener la clase .logo.
+ * - El contenedor dinámico debe tener el ID dynamic-characteristics.
+ */
+
+// Gestión de favoritos en la página principal
 document.querySelectorAll('.favorite-btn').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
         e.preventDefault();
@@ -15,7 +32,6 @@ document.querySelectorAll('.favorite-btn').forEach(function (btn) {
             if (data.redirect) {
                 window.location.href = data.redirect;
             } else if (data.success) {
-                // Actualiza color, clase y título del botón al instante
                 const icon = button.querySelector('i');
                 if (icon) {
                     icon.style.color = data.is_favorite ? 'white' : '#888';
@@ -28,6 +44,7 @@ document.querySelectorAll('.favorite-btn').forEach(function (btn) {
     });
 });
 
+// Carga dinámica de características según tipos de propiedad seleccionados
 document.addEventListener('DOMContentLoaded', function () {
     const propertyTypeInputs = document.querySelectorAll('input[name="property_types[]"]');
     const dynamicContainer = document.getElementById('dynamic-characteristics');
@@ -42,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        // Construir la query string para múltiples tipos
         const params = new URLSearchParams();
         checkedTypes.forEach(type => params.append('type[]', type));
 
@@ -57,10 +73,10 @@ document.addEventListener('DOMContentLoaded', function () {
         input.addEventListener('change', loadCharacteristics);
     });
 
-    // Cargar al inicio si ya hay alguno seleccionado
     loadCharacteristics();
 });
 
+// Loader animado al cargar la página por primera vez
 const overlay = document.getElementById('loader-overlay');
 const bar = document.getElementById('loader-bar');
 
@@ -73,7 +89,6 @@ function animateBar(duration = 1800, onComplete) {
         if (!start) start = timestamp;
         let elapsed = timestamp - start;
 
-        // Avance aleatorio
         let target = Math.min(100, progress + Math.random() * 10 + 5);
         progress = Math.min(target, (elapsed / duration) * 100);
 
@@ -121,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Evento para el logo
+// Redirección y reinicio del loader al hacer clic en el logo
 var logo = document.querySelector('.logo');
 if (logo) {
     logo.style.cursor = 'pointer';

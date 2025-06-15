@@ -5,19 +5,23 @@ namespace dtos;
 /**
  * DTO (Data Transfer Object) para la entidad Property.
  *
- * Esta clase se utiliza para transferir los datos de una propiedad entre capas de la aplicación
- * (por ejemplo, entre la base de datos, la lógica de negocio y la capa de presentación).
+ * Esta clase se utiliza para transferir los datos de una propiedad entre capas de la aplicación,
+ * como la base de datos, la lógica de negocio y la capa de presentación o API.
+ * Permite exponer solo los datos necesarios de la propiedad, evitando exponer la lógica interna del modelo de dominio.
  *
  * Propiedades:
- * @property int $id                        ID de la propiedad.
- * @property string $property_type          Tipo de propiedad (Habitación, Estudio, Piso, Casa).
- * @property int $address_id                ID de la dirección asociada.
- * @property int $built_size                Tamaño construido de la propiedad (en m²).
- * @property string $status                 Estado de la propiedad (Obra nueva, Reformado, etc.).
- * @property bool $immediate_availability   Indica si la propiedad está disponible inmediatamente.
- * @property int $user_id                   ID del usuario propietario.
- * @property string $main_image             Ruta de la imagen principal de la propiedad (image_path de ImageDto).
- * @property string[] $images               Array de rutas de imágenes (image_path de ImageDto) asociadas a la propiedad.
+ * - int $id                        ID de la propiedad.
+ * - string $property_type          Tipo de propiedad (Habitación, Estudio, Piso, Casa).
+ * - int $address_id                ID de la dirección asociada.
+ * - int $built_size                Tamaño construido de la propiedad (en m²).
+ * - string $status                 Estado de la propiedad (Obra nueva, Reformado, etc.).
+ * - bool $immediate_availability   Indica si la propiedad está disponible inmediatamente.
+ * - int $user_id                   ID del usuario propietario.
+ * - string $main_image             Ruta de la imagen principal de la propiedad (image_path de ImageDto).
+ * - string[] $images               Array de rutas de imágenes (image_path de ImageDto) asociadas a la propiedad.
+ *
+ * Métodos:
+ * - __construct: Inicializa el DTO con los datos de la propiedad.
  */
 class PropertyDto
 {

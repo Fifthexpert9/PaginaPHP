@@ -8,7 +8,19 @@ use dtos\AddressDto;
 
 /**
  * Facade para la gestión de direcciones.
+ *
  * Orquesta la lógica de negocio relacionada con direcciones y su conversión entre modelos y DTOs.
+ * Proporciona una interfaz simplificada para crear, obtener, actualizar y eliminar direcciones,
+ * delegando la lógica a los servicios y conversores correspondientes.
+ *
+ * Métodos:
+ * - __construct: Inicializa el facade con el conversor de direcciones.
+ * - createAddress: Crea una nueva dirección a partir de un DTO.
+ * - getAddressById: Obtiene una dirección por su ID.
+ * - getAddressByPropertyId: Obtiene la dirección asociada a una propiedad.
+ * - updateAddress: Actualiza una dirección existente.
+ * - deleteAddress: Elimina una dirección por su ID.
+ * - deleteAddressByPropertyId: Elimina la dirección asociada a una propiedad.
  */
 class AddressFacade
 {

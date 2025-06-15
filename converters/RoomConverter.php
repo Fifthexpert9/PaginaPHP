@@ -13,8 +13,14 @@ use dtos\RoomDto;
  * Clase encargada de convertir entre modelos de dominio (PropertyModel, RoomModel)
  * y el DTO RoomDto para la transferencia de datos de habitaciones.
  *
+ * Responsabilidades:
  * - Convierte modelos de dominio a DTOs para exponerlos en la capa de presentación o API.
  * - Convierte DTOs a modelos de dominio para operaciones de persistencia.
+ *
+ * Métodos principales:
+ * - modelToDto: Convierte un PropertyModel y un RoomModel en un RoomDto, incluyendo imágenes y dirección.
+ * - dtoToPropertyModel: Convierte un RoomDto en un PropertyModel.
+ * - dtoToRoomModel: Convierte un RoomDto en un RoomModel.
  */
 class RoomConverter
 {
@@ -22,6 +28,11 @@ class RoomConverter
     private $imageService;
     private $addressConverter;
 
+    /**
+     * Constructor de RoomConverter.
+     *
+     * Inicializa los servicios y conversores necesarios para la conversión.
+     */
     public function __construct()
     {
         $this->addressService = AddressService::getInstance();
@@ -34,6 +45,7 @@ class RoomConverter
      *
      * Obtiene la imagen principal y todas las imágenes asociadas a la propiedad.
      * Si no existen imágenes, se asigna una imagen por defecto ('media/no-image.jpg').
+     * También convierte la dirección asociada usando AddressConverter.
      *
      * @param PropertyModel $propertyModel Modelo con los datos generales de la propiedad.
      * @param RoomModel $roomModel Modelo con los datos específicos de la habitación.

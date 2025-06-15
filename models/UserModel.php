@@ -9,6 +9,20 @@ namespace models;
  * Permite almacenar información relevante como el nombre, apellidos, nombre de usuario, correo electrónico,
  * contraseña (hash), rol y fecha de registro. Se utiliza para transferir información entre las capas de dominio,
  * presentación y persistencia.
+ *
+ * Propiedades:
+ * - int $id                  ID del usuario.
+ * - string $name             Nombre del usuario.
+ * - string $last_name        Apellido del usuario.
+ * - string $username         Nombre de usuario.
+ * - string $email            Correo electrónico del usuario.
+ * - string $password         Contraseña del usuario (hash).
+ * - string $role             Rol del usuario (por ejemplo, 'user' o 'admin').
+ * - string $registration_date Fecha de registro del usuario (formato timestamp o datetime).
+ *
+ * Métodos:
+ * - __construct: Inicializa el modelo con los datos del usuario.
+ * - Getters y setters para cada propiedad.
  */
 class UserModel {
     /**

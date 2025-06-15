@@ -9,6 +9,19 @@ namespace models;
  * Permite almacenar información relevante como si tiene baño privado, número máximo de compañeros, si se permiten mascotas,
  * si está amueblada, si es solo para estudiantes y la restricción de género.
  * Se utiliza para transferir información entre las capas de dominio, presentación y persistencia.
+ *
+ * Propiedades:
+ * - int $property_id           ID de la propiedad asociada.
+ * - bool $private_bathroom     Indica si la habitación tiene baño privado.
+ * - int $max_roommates         Número máximo de compañeros de piso.
+ * - bool $pets_allowed         Indica si se permiten mascotas.
+ * - bool $furnished            Indica si la habitación está amueblada.
+ * - bool $students_only        Indica si es solo para estudiantes.
+ * - string $gender_restriction Restricción de género ('None', 'Only males', 'Only females').
+ *
+ * Métodos:
+ * - __construct: Inicializa el modelo con los datos de la habitación.
+ * - Getters y setters para cada propiedad.
  */
 class RoomModel {
     /**

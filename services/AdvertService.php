@@ -9,6 +9,21 @@ use PDOException;
 
 /**
  * Servicio para gestionar operaciones relacionadas con anuncios en la base de datos.
+ *
+ * Esta clase proporciona métodos para crear, obtener, actualizar, eliminar y buscar anuncios inmobiliarios.
+ * Implementa el patrón Singleton para asegurar una única instancia y reutilizar la conexión a la base de datos.
+ *
+ * Métodos principales:
+ * - getInstance(): Obtiene la instancia única del servicio.
+ * - createAdvert(AdvertModel $advert): Crea un nuevo anuncio.
+ * - getAdvertById($id): Obtiene un anuncio por su ID.
+ * - getAdvertsByUserId($userId): Obtiene todos los anuncios publicados por un usuario.
+ * - getAdvertByPropertyId($propertyId): Obtiene un anuncio a partir del ID de la propiedad asociada.
+ * - getAdvertsByPropertyId($propertyId): Obtiene todos los anuncios asociados a una propiedad.
+ * - getAllAdverts(): Obtiene todos los anuncios de la base de datos.
+ * - updateAdvert($id, $fields): Actualiza los campos de un anuncio existente.
+ * - deleteAdvert($id): Elimina un anuncio por su ID.
+ * - searchAdverts($filters): Busca anuncios aplicando filtros generales y específicos.
  */
 class AdvertService
 {
@@ -24,6 +39,7 @@ class AdvertService
 
     /**
      * Constructor privado para evitar instanciación directa.
+     * Establece la conexión a la base de datos.
      */
     private function __construct()
     {

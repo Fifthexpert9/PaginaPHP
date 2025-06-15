@@ -9,6 +9,20 @@ use PDOException;
 
 /**
  * Servicio para gestionar operaciones relacionadas con direcciones en la base de datos.
+ *
+ * Esta clase proporciona métodos para crear, obtener, actualizar y eliminar direcciones,
+ * así como para geocodificar direcciones utilizando el servicio Nominatim de OpenStreetMap.
+ * Implementa el patrón Singleton para asegurar una única instancia y reutilizar la conexión a la base de datos.
+ *
+ * Métodos principales:
+ * - getInstance(): Obtiene la instancia única del servicio.
+ * - createAddress(AddressModel $address): Crea una nueva dirección en la base de datos.
+ * - getAddressById($id): Obtiene una dirección por su ID.
+ * - getAddressByPropertyId($property_id): Obtiene la dirección asociada a una propiedad.
+ * - updateAddress($id, $fields): Actualiza los campos de una dirección existente.
+ * - deleteAddress($id): Elimina una dirección por su ID.
+ * - deleteAddressByPropertyId($property_id): Elimina la dirección asociada a una propiedad.
+ * - geocodeAddress(...): Geocodifica una dirección y obtiene latitud/longitud.
  */
 class AddressService
 {
@@ -45,6 +59,8 @@ class AddressService
 
     /**
      * Crea una nueva dirección en la base de datos.
+     *
+     * Geocodifica la dirección antes de guardarla para obtener latitud y longitud.
      *
      * @param AddressModel $address Modelo con los datos de la dirección.
      * @return int ID de la dirección creada.
@@ -125,6 +141,8 @@ class AddressService
 
     /**
      * Actualiza los campos de una dirección existente.
+     *
+     * Si se actualiza algún campo de dirección relevante, recalcula latitud y longitud.
      *
      * @param int $id ID de la dirección a actualizar.
      * @param array $fields Campos a actualizar (clave => valor).
@@ -217,6 +235,8 @@ class AddressService
 
     /**
      * Geocodifica una dirección utilizando el servicio Nominatim de OpenStreetMap.
+     *
+     * Devuelve un array con la latitud y longitud de la dirección, o null si no se pudo geocodificar.
      *
      * @param string $street Calle de la dirección.
      * @param string $city Ciudad de la dirección.

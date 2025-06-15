@@ -8,6 +8,21 @@ namespace models;
  * Esta clase encapsula los datos y comportamientos relacionados con una dirección postal.
  * Permite almacenar información relevante como la calle, ciudad, provincia, código postal, país y coordenadas geográficas.
  * Se utiliza para transferir información entre las capas de dominio, presentación y persistencia.
+ *
+ * Propiedades:
+ * - int $id                ID de la dirección.
+ * - string $street         Calle de la dirección.
+ * - string $city           Ciudad.
+ * - string $province       Provincia.
+ * - string $postal_code    Código postal.
+ * - string $country        País.
+ * - float|null $latitude   Latitud geográfica (opcional).
+ * - float|null $longitude  Longitud geográfica (opcional).
+ *
+ * Métodos:
+ * - __construct: Inicializa el modelo con los datos de la dirección.
+ * - getId, getStreet, getCity, getProvince, getPostalCode, getCountry, getLatitude, getLongitude: Getters.
+ * - setStreet, setCity, setProvince, setPostalCode, setCountry, setLatitude, setLongitude: Setters.
  */
 class AddressModel {
     /**

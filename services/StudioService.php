@@ -9,6 +9,16 @@ use PDOException;
 
 /**
  * Servicio para gestionar operaciones relacionadas con estudios en la base de datos.
+ *
+ * Esta clase proporciona métodos para crear, obtener, actualizar y eliminar estudios asociados a propiedades.
+ * Implementa el patrón Singleton para asegurar una única instancia y reutilizar la conexión a la base de datos.
+ *
+ * Métodos principales:
+ * - getInstance(): Obtiene la instancia única del servicio.
+ * - createStudio(StudioModel $studio): Crea un nuevo estudio.
+ * - getStudioByPropertyId($propertyId): Obtiene un estudio por el ID de la propiedad asociada.
+ * - updateStudio($propertyId, $fields): Actualiza los campos de un estudio existente.
+ * - deleteStudio($propertyId): Elimina un estudio por el ID de la propiedad asociada.
  */
 class StudioService
 {

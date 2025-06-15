@@ -3,14 +3,21 @@
 namespace utils;
 
 use services\ImageService;
-use converters\PropertyConverter;
-use converters\AdvertConverter;
 use converters\ImageConverter;
 use dtos\ImageDto;
 
 /**
- * Facade para la gestión de imágenes.
- * Orquesta la lógica de negocio relacionada con las imágenes de las propiedades y su conversión entre modelos y DTOs.
+ * Útil para la gestión de imágenes de propiedades.
+ *
+ * Esta clase orquesta la lógica de negocio relacionada con las imágenes de las propiedades y su conversión entre modelos y DTOs.
+ * Permite transformar archivos subidos en DTOs, insertar imágenes en la base de datos, y eliminar imágenes por su ID.
+ * Facilita la integración entre la capa de servicios y la capa de presentación.
+ *
+ * Métodos principales:
+ * - __construct(ImageConverter $imageConverter): Inicializa el facade con el conversor de imágenes.
+ * - transformImagesToArrayDto($images, $property_id): Convierte archivos subidos ($_FILES) en un array de ImageDto.
+ * - addImages($imageDtos): Inserta varias imágenes en la base de datos asociadas a una propiedad.
+ * - deleteImageById($id): Elimina una imagen por su ID.
  */
 class ImageUtils
 {
@@ -18,7 +25,7 @@ class ImageUtils
     private $imageConverter;
 
     /**
-     * Constructor de ImageFacade.
+     * Constructor de ImageUtils.
      *
      * @param ImageConverter $imageConverter Conversor de imágenes.
      */
@@ -27,17 +34,6 @@ class ImageUtils
         $this->imageService = ImageService::getInstance();
         $this->imageConverter = $imageConverter;
     }
-
-    /**
-     * Añade una imagen a una propiedad.
-     *
-     * @param ImageDto $imageDto DTO de la imagen.
-     * @return bool True si la inserción fue exitosa, false en caso contrario.
-     */
-    /*public function addImage($imageDto)
-    {
-        return $this->imageService->addImage($this->imageConverter->dtoToModel($imageDto));
-    }*/
 
     /**
      * Transforma un array de archivos subidos ($_FILES) en un array de objetos ImageDto.
@@ -111,89 +107,6 @@ class ImageUtils
 
         return $result;
     }
-
-    /**
-     * Obtiene todas las imágenes de una propiedad.
-     *
-     * @param int $property_id ID de la propiedad.
-     * @return ImageDto[] Array de DTOs de imágenes de esa propiedad, o una imagen por defecto si no tiene ninguna.
-     */
-    /*public function getImagesByPropertyId($property_id)
-    {
-        $imageModels = $this->imageService->getImagesByPropertyId($property_id);
-
-        if (empty($imageModels)) {
-            return [new ImageDto(0, 0, 'media/no-image.jpg', 1, null)];
-        }
-
-        return array_map([$this->imageConverter, 'modelToDto'], $imageModels);
-    }*/
-
-    /**
-     * Obtiene la imagen principal de una propiedad.
-     *
-     * Busca la imagen marcada como principal (is_main = true) para la propiedad indicada.
-     * Si no existe ninguna imagen principal, devuelve un DTO con una imagen por defecto.
-     *
-     * @param int $property_id ID de la propiedad.
-     * @return ImageDto DTO de la imagen principal, o una imagen por defecto si no existe.
-     */
-    /*public function getMainImageByPropertyId($property_id)
-    {
-        $imageModel = $this->imageService->getMainImageByPropertyId($property_id);
-        if (!$imageModel) {
-            return new ImageDto(0, 0, 'media/no-image.jpg', 1, null);
-        }
-        return $this->imageConverter->modelToDto($imageModel);
-    }*/
-
-    /**
-     * Obtiene la imagen principal asociada a un anuncio.
-     *
-     * Busca el anuncio por su ID, obtiene el property_id asociado y recupera la imagen principal de esa propiedad.
-     * Si no existe imagen principal, devuelve un DTO con una imagen por defecto.
-     * Si el anuncio no existe o no tiene propiedad asociada, devuelve un mensaje de error.
-     *
-     * @param int $advert_id ID del anuncio.
-     * @return ImageDto|string DTO de la imagen principal, una imagen por defecto, o un mensaje de error si no existe anuncio o propiedad.
-     */
-    /*public function getMainImageByAdvertId($advert_id)
-    {
-        $advertFacade = new AdvertFacade(new AdvertConverter(), new PropertyConverter(), $this->imageConverter);
-
-        $advert = $advertFacade->getAdvertById($advert_id);
-
-        if (!$advert || !isset($advert['advert']->property_id)) {
-            return 'No existe el anuncio o no tiene una propiedad asociada.';
-        }
-
-        $imageModel = $this->imageService->getMainImageByPropertyId($advert['advert']->property_id);
-
-        if (!$imageModel) {
-            return new ImageDto(0, 0, 'media/no-image.jpg', 1, null);
-        }
-        return $this->imageConverter->modelToDto($imageModel);
-    }*/
-
-    /*public function getImagesByAdvertId($advert_id)
-    {
-        $advertFacade = new AdvertFacade(new AdvertConverter(), new PropertyConverter(), $this->imageConverter);
-
-        $advert = $advertFacade->getAdvertById($advert_id);
-
-        if (!$advert || !isset($advert['advert']->property_id)) {
-            return null;
-        }
-
-        $imageModel = $this->imageService->getImagesByPropertyId($advert['advert']->property_id);
-
-        if (!$imageModel || empty($imageModel)) {
-            return new ImageDto(0, 0, 'media/no-image.jpg', 1, null);
-        } else {
-                    return array_map([$this->imageConverter, 'modelToDto'], $imageModels);
-
-        }
-    }*/
 
     /**
      * Elimina una imagen por su ID.

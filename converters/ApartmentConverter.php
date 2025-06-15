@@ -13,8 +13,14 @@ use dtos\ApartmentDto;
  * Clase encargada de convertir entre modelos de dominio (PropertyModel, ApartmentModel)
  * y el DTO ApartmentDto para la transferencia de datos de pisos.
  *
+ * Responsabilidades:
  * - Convierte modelos de dominio a DTOs para exponerlos en la capa de presentación o API.
  * - Convierte DTOs a modelos de dominio para operaciones de persistencia.
+ *
+ * Métodos principales:
+ * - modelToDto: Convierte un PropertyModel y un ApartmentModel en un ApartmentDto, incluyendo imágenes y dirección.
+ * - dtoToPropertyModel: Convierte un ApartmentDto en un PropertyModel.
+ * - dtoToApartmentModel: Convierte un ApartmentDto en un ApartmentModel.
  */
 class ApartmentConverter
 {
@@ -39,6 +45,7 @@ class ApartmentConverter
      *
      * Obtiene la imagen principal y todas las imágenes asociadas a la propiedad.
      * Si no existen imágenes, se asigna una imagen por defecto ('media/no-image.jpg').
+     * También convierte la dirección asociada usando AddressConverter.
      *
      * @param PropertyModel $propertyModel Modelo con los datos generales de la propiedad.
      * @param ApartmentModel $apartmentModel Modelo con los datos específicos del piso.

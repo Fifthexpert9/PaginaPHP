@@ -8,6 +8,18 @@ namespace models;
  * Esta clase encapsula los datos y comportamientos relacionados con un estudio (vivienda tipo "estudio").
  * Permite almacenar información relevante como si está amueblado, si tiene balcón, aire acondicionado y si se permiten mascotas.
  * Se utiliza para transferir información entre las capas de dominio, presentación y persistencia.
+ *
+ * Propiedades:
+ * - int $property_id           ID de la propiedad asociada.
+ * - bool $furnished            Indica si el estudio está amueblado.
+ * - bool $balcony              Indica si el estudio tiene balcón.
+ * - bool $air_conditioning     Indica si el estudio tiene aire acondicionado.
+ * - bool $pets_allowed         Indica si se permiten mascotas en el estudio.
+ *
+ * Métodos:
+ * - __construct: Inicializa el modelo con los datos del estudio.
+ * - getPropertyId, getFurnished, getBalcony, getAirConditioning, getPetsAllowed: Getters.
+ * - setPropertyId, setFurnished, setBalcony, setAirConditioning, setPetsAllowed: Setters.
  */
 class StudioModel {
     /**

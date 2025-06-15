@@ -1,3 +1,17 @@
+/*
+ * Archivo de estilos globales y fuentes personalizadas.
+ *
+ * Propósito:
+ * - Define las fuentes personalizadas utilizadas en la aplicación mediante @font-face.
+ * - Oculta el widget original y la barra superior de Google Translate para que solo se muestre el botón de traducción personalizado en el header.
+ *
+ * Detalles:
+ * - Las reglas @font-face permiten usar tipografías propias en toda la web.
+ * - Las reglas para Google Translate aseguran que el usuario solo vea el botón de traducción personalizado y no los elementos visuales por defecto de Google.
+ * - No ocultes el botón con id="open-translate", ya que es el que debe mostrarse en el header.
+ */
+
+/* Declaraciones de fuentes personalizadas */
 @font-face {
   font-family: 'FirstSchool';
   src: url('/views/assets/fonts/FirstSchool.otf') format('opentype');
@@ -49,7 +63,7 @@
 }
 
 .tooltip-inner {
-    background-color: #6c757d !important; /* secondary de Bootstrap */
+    background-color: #6c757d !important;
     color: #fff !important;
     font-size: 1em;
     border-radius: 0.4em;
@@ -73,7 +87,7 @@
 
 
 html {
-    font-size: 14px; /* o más grande si lo prefieres */
+    font-size: 14px;
 }
 
 body {
@@ -129,7 +143,6 @@ main {
   flex: 1 0 auto;
 }
 
-/* Loader Overlay Styles */
 #loader-overlay {
     background: #111;
     opacity: 1;
@@ -147,7 +160,6 @@ body.loading {
     overflow: hidden;
 }
 
-/* Post-it style for property cards */
 .postit-card {
     background: #fffbe7;
     border: 1.5px solid #f7e07e;
@@ -165,32 +177,14 @@ body.loading {
 }
 
 
-/* Modern translate button - alineado con otros botones y más a la izquierda */
 #google_translate_custom_btn {
-    position: absolute;
-    top: 24px;
-    right: 220px; /* Ajusta según tu header/menu */
-    z-index: 99999;
-}
-#google_translate_custom_btn button {
-    background: #f7e07e;
-    color: #222;
-    border: none;
-    border-radius: 24px;
-    padding: 10px 24px;
-    font-family: 'SchoolTeacher', 'Comic Sans MS', cursive, sans-serif;
-    font-size: 1.7em;
-    font-weight: bold;
-    box-shadow: 2px 4px 16px rgba(0,0,0,0.10);
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-}
-#google_translate_custom_btn button:hover {
-    background: #ffe066;
-    color: #111;
+    display: none;
 }
 
-/* Ajusta el menú de Google Translate para que no se desborde y se vea bien */
+#google_translate_custom_btn button {
+    display: none;
+}
+
 iframe.goog-te-menu-frame {
     min-width: 220px !important;
     max-width: 320px !important;
@@ -203,6 +197,22 @@ iframe.goog-te-menu-frame {
 
 body.loading #google_translate_custom_btn {
     display: none !important;
+}
+
+/* Oculta el widget original de Google Translate */
+#google_translate_element .goog-te-gadget {
+    display: none !important;
+}
+
+/* Oculta la barra superior de Google Translate */
+.goog-te-banner-frame.skiptranslate,
+body > .goog-te-banner-frame {
+    display: none !important;
+}
+
+/* Evita desplazamiento del body cuando aparece la barra de Google Translate */
+body {
+    top: 0 !important;
 }
 
 

@@ -9,14 +9,19 @@ namespace dtos;
  * incluyendo los datos básicos del anuncio y la ruta de la imagen principal de la propiedad asociada.
  * Se utiliza para transferir datos entre la capa de dominio y la capa de presentación o API.
  *
- * @property int $id ID del anuncio.
- * @property int $property_id ID de la propiedad asociada.
- * @property int $user_id ID del usuario que publica el anuncio.
- * @property float $price Precio del anuncio.
- * @property string $action Acción del anuncio (por ejemplo, 'alquiler', 'venta').
- * @property string $description Descripción del anuncio.
- * @property string $created_at Fecha de creación del anuncio.
- * @property string $main_image Ruta de la imagen principal asociada al anuncio.
+ * Propiedades:
+ * - int $id               ID del anuncio.
+ * - int $property_id      ID de la propiedad asociada.
+ * - int $user_id          ID del usuario que publica el anuncio.
+ * - float $price          Precio del anuncio.
+ * - string $action        Acción del anuncio (por ejemplo, 'alquiler', 'venta').
+ * - string $description   Descripción del anuncio.
+ * - string $created_at    Fecha de creación del anuncio.
+ * - string $main_image    Ruta de la imagen principal asociada al anuncio.
+ *
+ * Métodos:
+ * - __construct: Inicializa el DTO con los datos del anuncio.
+ * - toArray: Devuelve los datos del anuncio como un array asociativo.
  */
 class AdvertDto
 {
@@ -70,7 +75,7 @@ class AdvertDto
      * @param string $action Acción del anuncio (por ejemplo, 'alquiler', 'venta').
      * @param string $description Descripción del anuncio.
      * @param string $created_at Fecha de creación del anuncio.
-     * @param string $main_image Ruta de la imagen principal asociada al anuncio.
+     * @param string|null $main_image Ruta de la imagen principal asociada al anuncio.
      */
     public function __construct(
         $id,
