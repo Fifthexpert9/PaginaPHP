@@ -1,7 +1,7 @@
 <header>
     <nav class="navbar navbar-expand-lg bg-body-tertiary py-1">
         <div class="container d-flex align-items-center">
-            <a class="navbar-brand logo" href="/">houspecial</a>
+            <a class="navbar-brand logo" href="/">Houspecial</a>
             <ul class="navbar-nav mb-2 mb-lg-0 flex-row gap-4">
                 <?php if (!empty($_SESSION['logged']) && $_SESSION['logged']): ?>
                     <li class="nav-item">

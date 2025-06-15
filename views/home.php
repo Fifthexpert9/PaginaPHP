@@ -109,7 +109,7 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                 </div>
                             </div>
                             <div id="dynamic-characteristics"></div>
-                            <button type="submit" class="btn btn-secondary w-100 btn-font mt-3">ver propiedades</button>
+                            <button type="submit" class="btn btn-secondary w-100 btn-font mt-3">Ver propiedades</button>
                         </form>
                     </div>
                 </div>
