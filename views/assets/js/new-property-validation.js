@@ -75,21 +75,21 @@ function checkStepFields(stepNumber) {
 
   // Validación de dirección real solo en el paso 1
   if (stepNumber === 1 && allValid && nextBtn) {
-    nextBtn.disabled = true; 
-    validateAddressReal(1).then(isReal => {
-      if (!isReal) {
-        setFieldInvalid(document.getElementById('street'), "Introduce una dirección real y existente.");
-        setFieldInvalid(document.getElementById('city'), "IIntroduce una ciudad real y existente.");
-        setFieldInvalid(document.getElementById('province'), "Introduce una provincia real y existente.");
-        setFieldInvalid(document.getElementById('country'), "Introduce un país real y existente.");
-        nextBtn.disabled = true;
-      } else {
-        setFieldValid(document.getElementById('street'));
-        setFieldValid(document.getElementById('city'));
-        setFieldValid(document.getElementById('province'));
-        setFieldValid(document.getElementById('country'));
-        nextBtn.disabled = false;
-      }
+    nextBtn.disabled = true;
+    validateAddressReal(1).then(result => {
+        if (!result.isReal) {
+            setFieldInvalid(document.getElementById('street'), "Introduce una dirección real y existente.");
+            setFieldInvalid(document.getElementById('city'), "");
+            setFieldInvalid(document.getElementById('province'), "");
+            setFieldInvalid(document.getElementById('country'), "");
+            nextBtn.disabled = true;
+        } else {
+            setFieldValid(document.getElementById('street'));
+            setFieldValid(document.getElementById('city'));
+            setFieldValid(document.getElementById('province'));
+            setFieldValid(document.getElementById('country'));
+            nextBtn.disabled = false;
+        }
     });
   }
 }
@@ -127,55 +127,53 @@ window.loadFieldsForType = function (type) {
 
 // Validación de dirección real usando Nominatim (OpenStreetMap)
 async function validateAddressReal(stepNumber) {
-  if (stepNumber !== 1) return true; // Solo validar en el paso 1
+    if (stepNumber !== 1) return { isReal: true };
 
-  const street = document.getElementById('street').value.trim();
-  const city = document.getElementById('city').value.trim();
-  const province = document.getElementById('province').value.trim();
-  const country = document.getElementById('country').value.trim();
+    const street = document.getElementById('street').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const province = document.getElementById('province').value.trim();
+    const country = document.getElementById('country').value.trim();
 
-  // Solo validar si todos los campos tienen valor
-  if (!street || !city || !province || !country) return false;
-
-
-  const query = encodeURIComponent(`${street}, ${city}, ${province}, ${country}`);
-  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${query}&addressdetails=1&limit=1`;
-
-  try {
-    const response = await fetch(url, { headers: { 'Accept-Language': 'es' } });
-    const data = await response.json();
-    if (data.length === 0) return false;
-
-    // Comprobación extra: que la ciudad, provincia y país coincidan
-    const address = data[0].address;
-
-    // Helper para comparar ignorando mayúsculas/minúsculas y tildes
-    function normalize(str) {
-      return str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+    if (!street || !city || !province || !country) {
+        return { isReal: false };
     }
 
-    const inputCity = normalize(city);
-    const inputProvince = normalize(province);
-    const inputCountry = normalize(country);
+    const query = encodeURIComponent(`${street}, ${city}, ${province}, ${country}`);
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${query}&addressdetails=1&limit=1`;
 
-    const cityMatch =
-      [address.city, address.town, address.village, address.hamlet]
-        .filter(Boolean)
-        .some(val => normalize(val).includes(inputCity));
+    try {
+        const response = await fetch(url, { headers: { 'Accept-Language': 'es' } });
+        const data = await response.json();
+        if (data.length === 0) {
+            return { isReal: false };
+        }
 
-    const provinceMatch =
-      [address.state, address.region, address.county, address.province]
-        .filter(Boolean)
-        .some(val => normalize(val).includes(inputProvince));
+        const address = data[0].address;
 
-    const countryMatch = address.country && normalize(address.country).includes(inputCountry);
+        function normalize(str) {
+            return str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+        }
 
-    if (cityMatch && provinceMatch && countryMatch) {
-      return true;
+        const inputCity = normalize(city);
+        const inputProvince = normalize(province);
+        const inputCountry = normalize(country);
+
+        const cityMatch =
+            [address.city, address.town, address.village, address.hamlet]
+                .filter(Boolean)
+                .some(val => normalize(val).includes(inputCity));
+
+        const provinceMatch =
+            [address.state, address.region, address.county, address.province]
+                .filter(Boolean)
+                .some(val => normalize(val).includes(inputProvince));
+
+        const countryMatch = address.country && normalize(address.country).includes(inputCountry);
+
+        const isReal = cityMatch && provinceMatch && countryMatch;
+
+        return { isReal };
+    } catch (e) {
+        return { isReal: false };
     }
-    return false;
-  } catch (e) {
-    
-    return false;
-  }
 }

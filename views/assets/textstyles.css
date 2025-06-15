@@ -164,6 +164,7 @@ body.loading {
     box-shadow: 6px 12px 32px 0 rgba(0,0,0,0.18), 0 4px 0 #f7e07e;
 }
 
+
 /* Modern translate button - alineado con otros botones y más a la izquierda */
 #google_translate_custom_btn {
     position: absolute;

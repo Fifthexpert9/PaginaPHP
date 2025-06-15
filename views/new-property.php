@@ -16,7 +16,7 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
 <main class="container d-flex justify-content-center align-items-center my-3">
     <div class="card shadow-sm pt-2 ps-4 pe-4 pb-4" style="max-width: 500px; width: 100%;">
         <div class="text-center mt-1 mb-3">
-            <h2 class="logo">registrar propiedad</h2>
+            <h2 class="logo">Registrar propiedad</h2>
         </div>
         <form id="multiStepForm" action="/controllers/CreateAddressCreateProperty.php" method="POST" enctype="multipart/form-data">
             <!-- Paso 1 -->

@@ -1,6 +1,8 @@
 document.querySelectorAll('.favorite-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
+    btn.addEventListener('click', function (e) {
+        e.preventDefault();
         const advertId = this.getAttribute('data-advert-id');
+        const button = this;
         fetch('/toggle-favorite', {
             method: 'POST',
             headers: {
@@ -8,15 +10,21 @@ document.querySelectorAll('.favorite-btn').forEach(function (btn) {
             },
             body: 'advert_id=' + encodeURIComponent(advertId)
         })
-            .then(response => response.json())
-            .then((data) => {
-                if (data.redirect) {
-                    window.location.href = data.redirect;
-                } else if (data.success) {
-                    this.querySelector('i').style.color = data.is_favorite ? 'red' : '#ccc';
-                    this.title = data.is_favorite ? 'Quitar de favoritos' : 'Añadir a favoritos';
+        .then(response => response.json())
+        .then((data) => {
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            } else if (data.success) {
+                // Actualiza color, clase y título del botón al instante
+                const icon = button.querySelector('i');
+                if (icon) {
+                    icon.style.color = data.is_favorite ? 'white' : '#888';
                 }
-            });
+                button.classList.remove('btn-danger', 'btn-outline-secondary');
+                button.classList.add(data.is_favorite ? 'btn-danger' : 'btn-outline-secondary');
+                button.title = data.is_favorite ? 'Quitar de favoritos' : 'Añadir a favoritos';
+            }
+        });
     });
 });
 
