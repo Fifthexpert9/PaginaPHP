@@ -9,7 +9,18 @@ use PDO;
 /**
  * Servicio para la gestión de imágenes asociadas a propiedades.
  *
- * Permite realizar operaciones CRUD sobre las imágenes de propiedades.
+ * Esta clase proporciona métodos para realizar operaciones CRUD sobre las imágenes de propiedades inmobiliarias.
+ * Permite añadir, obtener, eliminar y marcar imágenes como principales para una propiedad.
+ * Implementa el patrón Singleton para asegurar una única instancia y reutilizar la conexión a la base de datos.
+ *
+ * Métodos principales:
+ * - getInstance(): Obtiene la instancia única del servicio.
+ * - addImage(ImageModel $image): Añade una nueva imagen a una propiedad.
+ * - getImageById($id): Obtiene una imagen por su ID.
+ * - getMainImageByPropertyId($propertyId): Obtiene la imagen principal de una propiedad.
+ * - getImagesByPropertyId($propertyId): Obtiene todas las imágenes asociadas a una propiedad.
+ * - deleteImageById($id): Elimina una imagen por su ID.
+ * - setMainImage($imageId, $propertyId): Marca una imagen como principal para una propiedad.
  */
 class ImageService
 {

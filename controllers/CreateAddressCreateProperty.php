@@ -2,6 +2,17 @@
 
 namespace controllers;
 
+/**
+ * Controlador para crear una nueva propiedad y su dirección asociada.
+ *
+ * Este script:
+ * - Recibe los datos del formulario por POST (dirección, propiedad y campos específicos según el tipo).
+ * - Instancia los DTOs correspondientes para dirección, propiedad y tipo específico.
+ * - Llama al PropertyFacade para crear la propiedad, la dirección y las imágenes.
+ * - Gestiona los mensajes de éxito o error en la sesión.
+ * - Redirige a la página de mensaje tras la operación.
+ */
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use facades\PropertyFacade;
@@ -22,6 +33,7 @@ use dtos\AddressDto;
 session_start();
 
 try {
+    // Instanciar el PropertyFacade con todos los converters necesarios
     $propertyFacade = new PropertyFacade(
         new PropertyConverter(),
         new RoomConverter(),
@@ -45,6 +57,7 @@ try {
         null
     );
 
+    // Crear DTO de propiedad con los datos generales
     $propertyDto = new PropertyDto(
         null,
         $_POST['property_type'],
@@ -59,6 +72,7 @@ try {
 
     $images = $_FILES['images'];
 
+    // Crear DTO específico según el tipo de propiedad
     $specificDto = null;
     switch ($_POST['property_type']) {
         case 'Habitación':
@@ -147,31 +161,15 @@ try {
             break;
     }
 
+    // Llama al facade para crear la propiedad, la dirección y las imágenes
     $result = $propertyFacade->createProperty($addressDto, $propertyDto, $images, $specificDto);
 
+    // Guarda el mensaje de resultado en la sesión y redirige
     $_SESSION['message'] = $result;
-
-    /*
-    if (is_numeric($resultPropertyFacade)) {
-        $imageDtos = $imageFacade->transformImagesToArrayDto($images, $resultPropertyFacade);
-        if (!empty($imageDtos)) {
-            $resultImageFacade = $imageFacade->addImages($imageDtos);
-            if ($resultImageFacade === true) {
-                $_SESSION['message'] = 'Propiedad registrada correctamente. ID de propiedad: ' . $resultPropertyFacade;
-            } else {
-                $_SESSION['message'] = 'Error al registrar las imágenes de la propiedad';
-            }
-        } else {
-            $_SESSION['message'] = 'Propiedad sin fotografías registrada correctamente. ID de propiedad: ' . $resultPropertyFacade;
-        }
-    } else {
-        $_SESSION['message'] = $resultPropertyFacade;
-    }
-    */
-
     header('Location: /message');
     exit();
 } catch (\Throwable $e) {
+    // Manejo de errores: guarda el mensaje en la sesión y redirige
     $_SESSION['message'] = 'Error al registrar la propiedad: ' . $e->getMessage();
     header('Location: /message');
     exit();

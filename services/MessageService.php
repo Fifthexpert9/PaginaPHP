@@ -9,6 +9,17 @@ use PDOException;
 
 /**
  * Servicio para gestionar operaciones relacionadas con mensajes entre usuarios en la base de datos.
+ *
+ * Esta clase proporciona métodos para crear, obtener, listar y eliminar mensajes enviados entre usuarios.
+ * Implementa el patrón Singleton para asegurar una única instancia y reutilizar la conexión a la base de datos.
+ *
+ * Métodos principales:
+ * - getInstance(): Obtiene la instancia única del servicio.
+ * - createMessage(MessageModel $message): Crea un nuevo mensaje.
+ * - getMessageById($id): Obtiene un mensaje por su ID.
+ * - getMessagesSentByUser($userId): Obtiene todos los mensajes enviados por un usuario.
+ * - getMessagesReceivedByUser($userId): Obtiene todos los mensajes recibidos por un usuario.
+ * - deleteMessageById($id): Elimina un mensaje por su ID.
  */
 class MessageService
 {
@@ -139,33 +150,6 @@ class MessageService
         }, $stmt->fetchAll(PDO::FETCH_ASSOC));
         return $messages;
     }
-
-    /**
-     * Actualiza los campos de un mensaje existente.
-     *
-     * @param int $id ID del mensaje a actualizar.
-     * @param array $fields Campos a actualizar (clave => valor).
-     * @return bool True si la actualización fue exitosa, false en caso contrario.
-     */
-    /*
-     public function updateMessage($id, $fields) {
-        try {
-            $setClause = [];
-            foreach ($fields as $key => $value) {
-                $setClause[] = "`$key` = :$key";
-            }
-            $setClause = implode(", ", $setClause);
-
-            $sql = "UPDATE message SET $setClause WHERE id = :id";
-            $stmt = $this->db->prepare($sql);
-            $fields['id'] = $id;
-            return $stmt->execute($fields);
-        } catch (PDOException $e) {
-            error_log('Error al actualizar mensaje: ' . $e->getMessage());
-            return false;
-        }
-    }
-    */
 
     /**
      * Elimina un mensaje por su ID.

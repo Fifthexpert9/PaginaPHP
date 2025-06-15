@@ -8,6 +8,17 @@ use PDO;
 
 /**
  * Servicio para gestionar operaciones relacionadas con favoritos (relación usuario-anuncio) en la base de datos.
+ *
+ * Esta clase proporciona métodos para añadir, obtener y eliminar favoritos, permitiendo asociar usuarios con anuncios marcados como favoritos.
+ * Implementa el patrón Singleton para asegurar una única instancia y reutilizar la conexión a la base de datos.
+ *
+ * Métodos principales:
+ * - getInstance(): Obtiene la instancia única del servicio.
+ * - addFavorite($userId, $advertId): Añade un anuncio a favoritos para un usuario.
+ * - getFavoriteById($id): Obtiene un favorito por su ID.
+ * - getFavoritesByUserId($userId): Obtiene todos los favoritos de un usuario.
+ * - removeFavorite($userId, $advertId): Elimina un favorito por usuario y anuncio.
+ * - deleteFavoriteById($id): Elimina un favorito por su ID.
  */
 class FavoritesService 
 {

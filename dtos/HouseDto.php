@@ -6,31 +6,35 @@ namespace dtos;
  * DTO para exponer información de una casa junto con los datos de la propiedad, la dirección y las imágenes.
  *
  * Este DTO agrupa toda la información relevante de una casa ofertada, incluyendo los datos generales de la propiedad,
- * la dirección (AddressDto), los datos específicos de la casa, y las imágenes relativas a ella..
+ * la dirección (AddressDto), los datos específicos de la casa y las imágenes relativas a ella.
  * Se utiliza para transferir datos entre la capa de dominio y la capa de presentación o API.
  *
- * @property int $property_id ID de la propiedad.
- * @property string $property_type Tipo de propiedad.
- * @property int $built_size Superficie construida (m²).
- * @property float $price Precio de la casa.
- * @property string $status Estado de la casa.
- * @property bool $immediate_availability Disponibilidad inmediata.
- * @property int $user_id ID del usuario propietario.
- * @property string $main_image Ruta de la imagen principal de la casa (image_path de ImageDto).
- * @property string[] $images Array de rutas de imágenes (image_path de ImageDto) asociadas a la casa.
- * @property AddressDto $address Objeto con la dirección de la casa.
- * @property string $house_type Tipo de casa.
- * @property int $garden_size Tamaño del jardín.
- * @property int $num_floors Número de plantas.
- * @property int $num_rooms Número de habitaciones.
- * @property int $num_bathrooms Número de baños.
- * @property bool $private_garage Indica si tiene garaje privado.
- * @property bool $private_pool Indica si tiene piscina privada.
- * @property bool $furnished Indica si está amueblada.
- * @property bool $terrace Indica si tiene terraza.
- * @property bool $storage_room Indica si tiene trastero.
- * @property bool $air_conditioning Indica si tiene aire acondicionado.
- * @property bool $pets_allowed Indica si se permiten mascotas.
+ * Propiedades:
+ * - int $property_id                  ID de la propiedad.
+ * - string $property_type             Tipo de propiedad.
+ * - int $built_size                   Superficie construida (m²).
+ * - string $status                    Estado de la casa.
+ * - bool $immediate_availability      Disponibilidad inmediata.
+ * - int $user_id                      ID del usuario propietario.
+ * - string $main_image                Ruta de la imagen principal de la casa.
+ * - string[] $images                  Array de rutas de imágenes asociadas a la casa.
+ * - AddressDto $address               Objeto con la dirección de la casa.
+ * - string $house_type                Tipo de casa.
+ * - int $garden_size                  Tamaño del jardín.
+ * - int $num_floors                   Número de plantas.
+ * - int $num_rooms                    Número de habitaciones.
+ * - int $num_bathrooms                Número de baños.
+ * - bool $private_garage              Indica si tiene garaje privado.
+ * - bool $private_pool                Indica si tiene piscina privada.
+ * - bool $furnished                   Indica si está amueblada.
+ * - bool $terrace                     Indica si tiene terraza.
+ * - bool $storage_room                Indica si tiene trastero.
+ * - bool $air_conditioning            Indica si tiene aire acondicionado.
+ * - bool $pets_allowed                Indica si se permiten mascotas.
+ *
+ * Métodos:
+ * - __construct: Inicializa el DTO con los datos de la casa.
+ * - toArray: Devuelve los datos de la casa como un array asociativo.
  */
 class HouseDto
 {
@@ -70,8 +74,8 @@ class HouseDto
      * @param string $status Estado de la casa.
      * @param bool $immediate_availability Disponibilidad inmediata.
      * @param int $user_id ID del usuario propietario.
-     * @param string $main_image Ruta de la imagen principal de la casa (image_path de ImageDto).
-     * @param string[] $images (opcional) Array de rutas de imágenes (image_path de ImageDto) asociadas a la casa.
+     * @param string $main_image Ruta de la imagen principal de la casa.
+     * @param string[] $images (opcional) Array de rutas de imágenes asociadas a la casa.
      * @param AddressDto $address Objeto con la dirección de la casa.
      * @param string $house_type Tipo de casa.
      * @param int $garden_size Tamaño del jardín.
@@ -79,6 +83,7 @@ class HouseDto
      * @param int $num_rooms Número de habitaciones.
      * @param int $num_bathrooms Número de baños.
      * @param bool $private_garage Indica si tiene garaje privado.
+     * @param bool $private_pool Indica si tiene piscina privada.
      * @param bool $furnished Indica si está amueblada.
      * @param bool $terrace Indica si tiene terraza.
      * @param bool $storage_room Indica si tiene trastero.
@@ -94,7 +99,7 @@ class HouseDto
         $user_id,
         $main_image,
         $images = [],
-        $address, // AddressDto
+        $address,
         $house_type,
         $garden_size,
         $num_floors,

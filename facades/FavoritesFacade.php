@@ -8,7 +8,18 @@ use dtos\FavoritesDto;
 
 /**
  * Facade para la gestión de favoritos.
+ *
  * Orquesta la lógica de negocio relacionada con favoritos y su conversión entre modelos y DTOs.
+ * Proporciona una interfaz simplificada para añadir, obtener y eliminar favoritos,
+ * delegando la lógica a los servicios y conversores correspondientes.
+ *
+ * Métodos:
+ * - __construct: Inicializa el facade con el conversor de favoritos.
+ * - addFavorite: Añade un anuncio a favoritos para un usuario.
+ * - getFavoriteById: Obtiene un favorito por su ID.
+ * - getFavoritesByUserId: Obtiene todos los favoritos de un usuario.
+ * - removeFavorite: Elimina un favorito por usuario y anuncio.
+ * - deleteFavoriteById: Elimina un favorito por su ID.
  */
 class FavoritesFacade
 {
@@ -18,7 +29,6 @@ class FavoritesFacade
     /**
      * Constructor de FavoritesFacade.
      *
-     * @param FavoritesService $favoritesService Servicio de favoritos.
      * @param FavoritesConverter $favoritesConverter Conversor de favoritos.
      */
     public function __construct(FavoritesConverter $favoritesConverter)

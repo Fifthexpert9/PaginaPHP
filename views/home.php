@@ -1,5 +1,4 @@
 <?php
-
 require_once 'controllers\SearchFilter.php';
 
 $advertsPerPage = 6;
@@ -13,6 +12,21 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
 
 <?php require_once __DIR__ . '/partials/head.php'; ?>
 <?php require_once __DIR__ . '/partials/header.php'; ?>
+
+<!-- Botón de traducción personalizado -->
+<div id="google_translate_custom_btn"></div>
+<div id="google_translate_element" style="display:none;"></div>
+
+<!-- Loader Overlay -->
+<div id="loader-overlay" class="visible" style="position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;">
+    <div style="width:320px;max-width:90vw;">
+        <div class="text-center mb-4 fs-4 text-light">Cargando Houspecial...</div>
+        <div id="loader-bar-bg" style="width:100%;height:16px;background:#222;border-radius:8px;overflow:hidden;">
+            <div id="loader-bar" style="width:0;height:100%;background:#fff;transition:width 1.5s;"></div>
+        </div>
+    </div>
+</div>
+
 <main>
     <div class="container body-ody-ody">
         <div class="row">
@@ -95,7 +109,7 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                 </div>
                             </div>
                             <div id="dynamic-characteristics"></div>
-                            <button type="submit" class="btn btn-secondary w-100 btn-font mt-3">ver propiedades</button>
+                            <button type="submit" class="btn btn-secondary w-100 btn-font mt-3">Ver propiedades</button>
                         </form>
                     </div>
                 </div>
@@ -113,7 +127,7 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                     <?php else: ?>
                         <?php foreach ($advertsToShow as $advert): ?>
                             <div class="col-12 col-lg-6">
-                                <div class="card h-100 shadow-sm">
+                                <div class="card h-100 postit-card">
                                     <div class="row g-0 h-100">
                                         <div class="col-6 d-flex align-items-stretch" style="overflow: hidden;">
                                             <img src="<?= htmlspecialchars($advert['advert']->main_image) ?>"
@@ -159,7 +173,7 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
                                                         data-advert-id="<?= $advert['advert']->id ?>">
                                                         <i class="bi bi-heart-fill mx-2" style="color:<?= $isFavorite ? 'white' : '#888' ?>"></i>
                                                     </button>
-                                                    <a href="/advert-details?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm btn-font w-50" title="Ver detalles">ver detalles</a>
+                                                    <a href="/advert-details?id=<?= urlencode($advert['advert']->id) ?>" class="btn btn-secondary btn-sm btn-font w-50" title="Ver detalles">Detalles</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -189,9 +203,29 @@ $advertsToShow = array_slice($adverts, $start, $advertsPerPage);
         </div>
     </div>
 
-    <script>
-        <?php require_once __DIR__ . '/assets/js/home.js'; ?>
+    <script src="/views/assets/js/home.js"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'es',
+                includedLanguages: 'en,fr,de,it,pt,ca,gl,eu',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+
+        // Botón personalizado simple y moderno
+        document.addEventListener('DOMContentLoaded', function() {
+            var btnDiv = document.getElementById('google_translate_custom_btn');
+            if (btnDiv) {
+                btnDiv.innerHTML = '<button id="open-translate">🌐</button>';
+                document.getElementById('open-translate').onclick = function() {
+                    var elem = document.querySelector('.goog-te-gadget-icon');
+                    if (elem) elem.click();
+                };
+            }
+        });
     </script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </main>
 
 <?php require_once __DIR__ . '/partials/footer.php'; ?>

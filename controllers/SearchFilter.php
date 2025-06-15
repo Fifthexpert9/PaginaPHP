@@ -2,6 +2,16 @@
 
 namespace controllers;
 
+/**
+ * Controlador para filtrar y buscar anuncios según los parámetros recibidos por GET.
+ *
+ * Este script:
+ * - Recoge los filtros de búsqueda enviados por GET (acción, tipo de propiedad, precio, ciudad, provincia, disponibilidad, estado, y filtros específicos por tipo).
+ * - Construye un array de filtros en base a los parámetros recibidos.
+ * - Llama al método searchAdverts del AdvertFacade si hay filtros, o a getAllAdverts si no hay filtros.
+ * - El resultado se almacena en la variable $adverts para su uso en la vista.
+ */
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use facades\AdvertFacade;
@@ -11,12 +21,14 @@ use converters\AddressConverter;
 
 session_start();
 
+// Instanciar el AdvertFacade con los converters necesarios
 $advertFacade = new AdvertFacade(
     new AdvertConverter(),
     new PropertyConverter(),
     new AddressConverter()
 );
 
+// Construir el array de filtros a partir de los parámetros GET
 $filters = [];
 if (!empty($_GET['action'])) {
     $filters['action'] = $_GET['action'];
@@ -40,6 +52,7 @@ if (!empty($_GET['status'])) {
     $filters['status'] = $_GET['status'];
 }
 
+// Filtros específicos para habitaciones
 if (!empty($_GET['room']) && is_array($_GET['room'])) {
     $roomFilters = [];
     if (isset($_GET['room']['private_bathroom']) && $_GET['room']['private_bathroom'] !== '') {
@@ -65,6 +78,7 @@ if (!empty($_GET['room']) && is_array($_GET['room'])) {
     }
 }
 
+// Filtros específicos para estudios
 if (!empty($_GET['studio']) && is_array($_GET['studio'])) {
     $studioFilters = [];
     if (isset($_GET['studio']['furnished']) && $_GET['studio']['furnished'] !== '') {
@@ -84,6 +98,7 @@ if (!empty($_GET['studio']) && is_array($_GET['studio'])) {
     }
 }
 
+// Filtros específicos para pisos
 if (!empty($_GET['apartment']) && is_array($_GET['apartment'])) {
     $apartmentFilters = [];
     if (!empty($_GET['apartment']['apartment_type'])) {
@@ -121,6 +136,7 @@ if (!empty($_GET['apartment']) && is_array($_GET['apartment'])) {
     }
 }
 
+// Filtros específicos para casas
 if (!empty($_GET['house']) && is_array($_GET['house'])) {
     $houseFilters = [];
     if (!empty($_GET['house']['house_type'])) {
@@ -176,6 +192,7 @@ if (!empty($_GET['house']) && is_array($_GET['house'])) {
     }
 }
 
+// Ejecutar la búsqueda de anuncios según los filtros
 if (!empty($filters)) {
     $adverts = $advertFacade->searchAdverts($filters);
     if (is_string($adverts)) {

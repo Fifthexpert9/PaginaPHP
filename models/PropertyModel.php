@@ -9,6 +9,20 @@ namespace models;
  * Permite almacenar información relevante como el tipo de propiedad, dirección asociada,
  * superficie construida, estado, disponibilidad inmediata y usuario propietario.
  * Se utiliza para transferir información entre las capas de dominio, presentación y persistencia.
+ *
+ * Propiedades:
+ * - int $id                        ID de la propiedad.
+ * - string $property_type          Tipo de propiedad (por ejemplo, 'Piso', 'Casa', 'Habitación', 'Estudio').
+ * - int $address_id                ID de la dirección asociada.
+ * - int $built_size                Superficie construida en metros cuadrados (m²).
+ * - string $status                 Estado de la propiedad (por ejemplo, 'Obra nueva', 'Reformado', etc.).
+ * - bool $immediate_availability   Indica si la propiedad tiene disponibilidad inmediata.
+ * - int $user_id                   ID del usuario propietario de la propiedad.
+ *
+ * Métodos:
+ * - __construct: Inicializa el modelo con los datos de la propiedad.
+ * - getId, getPropertyType, getAddressId, getBuiltSize, getStatus, getImmediateAvailability, getUserId: Getters.
+ * - setPropertyType, setAddressId, setBuiltSize, setStatus, setImmediateAvailability, setUserId: Setters.
  */
 class PropertyModel {
     /**
@@ -30,11 +44,6 @@ class PropertyModel {
      * @var int Superficie construida en metros cuadrados (m²).
      */
     private $built_size;
-
-    /**
-     * @var float Precio de la propiedad (puede estar comentado si el precio está en otra entidad).
-     */
-    //private $price;
 
     /**
      * @var string Estado de la propiedad (por ejemplo, 'Obra nueva', 'Reformado', etc.).
@@ -67,7 +76,6 @@ class PropertyModel {
         $property_type,
         $address_id,
         $built_size,
-        //$price,
         $status,
         $immediate_availability,
         $user_id
@@ -76,7 +84,6 @@ class PropertyModel {
         $this->property_type = $property_type;
         $this->address_id = $address_id;
         $this->built_size = $built_size;
-        //$this->price = $price;
         $this->status = $status;
         $this->immediate_availability = $immediate_availability;
         $this->user_id = $user_id;
@@ -107,12 +114,6 @@ class PropertyModel {
      * @return int
      */
     public function getBuiltSize() { return $this->built_size; }
-
-    /**
-     * Obtiene el precio de la propiedad.
-     * @return float
-     */
-    //public function getPrice() { return $this->price; }
 
     /**
      * Obtiene el estado de la propiedad.
@@ -151,12 +152,6 @@ class PropertyModel {
      * @param int $built_size
      */
     public function setBuiltSize($built_size) { $this->built_size = $built_size; }
-
-    /**
-     * Establece el precio de la propiedad.
-     * @param float $price
-     */
-    //public function setPrice($price) { $this->price = $price; }
 
     /**
      * Establece el estado de la propiedad.

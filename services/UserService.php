@@ -9,10 +9,13 @@ use PDOException;
 
 /**
  * Servicio para gestionar operaciones relacionadas con usuarios en la base de datos.
- * 
+ *
+ * Esta clase proporciona métodos para crear, obtener, actualizar, eliminar y autenticar usuarios.
+ * Implementa el patrón Singleton para asegurar una única instancia y reutilizar la conexión a la base de datos.
+ *
  * Métodos principales:
  * - getInstance(): Devuelve la instancia única de UserService (singleton).
- * - createUsername($name, $last_name): Genera un nombre de usuario único a partir del nombre y apellido.
+ * - createUsername($name, $last_name): Genera un nombre de usuario único a partir del nombre y apellido (sin tildes).
  * - addUser(UserModel $user): Agrega un nuevo usuario a la base de datos.
  * - getUserById($id): Obtiene un usuario por su ID.
  * - getUserByEmail($email): Obtiene un usuario por su email.
@@ -61,14 +64,32 @@ class UserService
     /**
      * Genera un nombre de usuario único a partir del nombre y apellido.
      *
+     * Elimina tildes y caracteres especiales, toma los primeros 3 caracteres del nombre y apellido,
+     * añade un número aleatorio de 3 cifras y verifica que no exista en la base de datos.
+     *
      * @param string $name Nombre del usuario.
      * @param string $last_name Apellido del usuario.
      * @return string Nombre de usuario generado.
      */
     public function createUsername($name, $last_name)
     {
-        $namePart = substr(strtolower(trim(preg_replace('/\s+/', '', $name))), 0, 3);
-        $lastNamePart = substr(strtolower(trim(preg_replace('/\s+/', '', $last_name))), 0, 3);
+        $normalize = function($string) {
+            $unwanted = [
+                'á'=>'a','é'=>'e','í'=>'i','ó'=>'o','ú'=>'u',
+                'Á'=>'a','É'=>'e','Í'=>'i','Ó'=>'o','Ú'=>'u',
+                'à'=>'a','è'=>'e','ì'=>'i','ò'=>'o','ù'=>'u',
+                'ä'=>'a','ë'=>'e','ï'=>'i','ö'=>'o','ü'=>'u',
+                'â'=>'a','ê'=>'e','î'=>'i','ô'=>'o','û'=>'u',
+                'ñ'=>'n','Ñ'=>'n','ç'=>'c','Ç'=>'c'
+            ];
+            return strtr($string, $unwanted);
+        };
+
+        $nameNorm = $normalize($name);
+        $lastNameNorm = $normalize($last_name);
+
+        $namePart = substr(strtolower(trim(preg_replace('/\s+/', '', $nameNorm))), 0, 3);
+        $lastNamePart = substr(strtolower(trim(preg_replace('/\s+/', '', $lastNameNorm))), 0, 3);
 
         $randomNumber = str_pad(rand(1, 999), 3, '0', STR_PAD_LEFT);
 

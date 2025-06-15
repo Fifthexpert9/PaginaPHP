@@ -7,11 +7,16 @@ use services\ImageService;
 use dtos\PropertyDto;
 
 /**
- * Conversor para la entidad Property.
+ * Clase encargada de convertir entre PropertyModel y PropertyDto.
  *
- * Permite convertir entre PropertyModel (modelo de dominio) y PropertyDto (objeto de transferencia de datos).
- * También se encarga de obtener la imagen principal y todas las imágenes asociadas a la propiedad,
+ * Permite transformar objetos del modelo de dominio (PropertyModel) a DTO (PropertyDto) y viceversa,
+ * facilitando la transferencia de datos entre capas de la aplicación.
+ * Además, obtiene la imagen principal y todas las imágenes asociadas a la propiedad,
  * devolviendo rutas válidas o una imagen por defecto si no existen.
+ *
+ * Métodos:
+ * - modelToDto: Convierte un modelo de dominio PropertyModel en un DTO PropertyDto, incluyendo imágenes.
+ * - dtoToModel: Convierte un DTO PropertyDto en un modelo de dominio PropertyModel.
  */
 class PropertyConverter
 {

@@ -26,7 +26,18 @@ use dtos\ImageDto;
 
 /**
  * Facade para la gestión de propiedades.
+ *
  * Orquesta la lógica de negocio relacionada con propiedades y su conversión entre modelos y DTOs.
+ * Proporciona una interfaz simplificada para crear, obtener, actualizar y eliminar propiedades,
+ * así como para gestionar sus datos específicos (habitaciones, estudios, pisos, casas), imágenes y direcciones.
+ *
+ * Métodos principales:
+ * - __construct: Inicializa la fachada con los servicios y conversores necesarios.
+ * - createProperty: Crea una nueva propiedad con todos sus datos asociados.
+ * - getCompletePropertyById: Obtiene una propiedad completa por su ID, devolviendo el DTO específico según el tipo.
+ * - getPropertiesByUserId: Obtiene todas las propiedades de un usuario, devolviendo información básica y la imagen principal.
+ * - updateProperty: Actualiza una propiedad existente y sus datos específicos.
+ * - deleteProperty: Elimina una propiedad por su ID.
  */
 class PropertyFacade
 {
@@ -51,12 +62,13 @@ class PropertyFacade
      * Inicializa la fachada de propiedades con los servicios y conversores necesarios para cada tipo de propiedad.
      * Permite gestionar propiedades de tipo habitación, estudio, piso y casa, utilizando el servicio y conversor adecuado según el tipo.
      *
-     * @param HouseService $houseService Servicio específico para casas.
+     * @param PropertyConverter $propertyConverter Conversor para propiedades generales.
      * @param RoomConverter $roomConverter Conversor para habitaciones.
      * @param StudioConverter $studioConverter Conversor para estudios.
      * @param ApartmentConverter $apartmentConverter Conversor para pisos.
      * @param HouseConverter $houseConverter Conversor para casas.
      * @param AddressConverter $addressConverter Conversor para direcciones.
+     * @param ImageConverter $imageConverter Conversor para imágenes.
      */
     public function __construct(
         PropertyConverter $propertyConverter,
@@ -86,7 +98,7 @@ class PropertyFacade
     /**
      * Crea una nueva propiedad con todos sus datos asociados.
      *
-     * Este método orquesta el proceso de alta de una propiedad, incluyendo:
+     * Orquesta el proceso de alta de una propiedad, incluyendo:
      *  - Inserción de la dirección (AddressDto)
      *  - Inserción de los datos generales de la propiedad (PropertyDto)
      *  - Inserción de las imágenes asociadas (array de ImageDto)
@@ -217,7 +229,7 @@ class PropertyFacade
     /**
      * Obtiene una propiedad completa por su ID.
      *
-     * Este método busca una propiedad por su identificador. Si la propiedad existe,
+     * Busca una propiedad por su identificador. Si la propiedad existe,
      * detecta su tipo (Habitación, Estudio, Piso o Casa) y utiliza el conversor y servicio
      * específico para obtener el DTO correspondiente con todos los datos, tanto generales
      * como específicos del tipo de propiedad.
@@ -267,7 +279,7 @@ class PropertyFacade
     /**
      * Obtiene todas las propiedades de un usuario, devolviendo información básica y la imagen principal.
      *
-     * Este método recupera todas las propiedades asociadas a un usuario concreto,
+     * Recupera todas las propiedades asociadas a un usuario concreto,
      * devolviendo un array donde cada elemento contiene:
      *  - El identificador de la propiedad ('id')
      *  - Un texto descriptivo ('text') con el id, tipo y ciudad
@@ -303,6 +315,9 @@ class PropertyFacade
 
     /**
      * Actualiza una propiedad existente y sus datos específicos.
+     *
+     * Actualiza los datos generales de la propiedad y, según el tipo,
+     * actualiza también los datos específicos (habitaciones, estudios, pisos o casas).
      *
      * @param int $id ID de la propiedad a actualizar.
      * @param array $fields Campos generales a actualizar (clave => valor).

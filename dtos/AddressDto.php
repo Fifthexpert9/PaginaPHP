@@ -5,24 +5,41 @@ namespace dtos;
 /**
  * DTO para exponer información de una dirección.
  *
- * @property int $id ID de la dirección.
- * @property string $street Calle de la dirección.
- * @property string $city Ciudad.
- * @property string $province Provincia.
- * @property string $postal_code Código postal.
- * @property string $country País.
- * @property float|null $latitude Latitud geográfica (opcional).
- * @property float|null $longitude Longitud geográfica (opcional).
+ * Este objeto de transferencia de datos (DTO) se utiliza para transportar
+ * información de direcciones entre las distintas capas de la aplicación,
+ * evitando exponer directamente los modelos de dominio.
+ *
+ * Propiedades:
+ * - int $id               ID de la dirección.
+ * - string $street        Calle de la dirección.
+ * - string $city          Ciudad.
+ * - string $province      Provincia.
+ * - string $postal_code   Código postal.
+ * - string $country       País.
+ * - float|null $latitude  Latitud geográfica (opcional).
+ * - float|null $longitude Longitud geográfica (opcional).
+ *
+ * Métodos:
+ * - __construct: Inicializa el DTO con los datos de la dirección.
+ * - toArray: Devuelve los datos de la dirección como un array asociativo.
  */
 class AddressDto
 {
+    /** @var int ID de la dirección */
     public $id;
+    /** @var string Calle de la dirección */
     public $street;
+    /** @var string Ciudad */
     public $city;
+    /** @var string Provincia */
     public $province;
+    /** @var string Código postal */
     public $postal_code;
+    /** @var string País */
     public $country;
+    /** @var float|null Latitud geográfica (opcional) */
     public $latitude;
+    /** @var float|null Longitud geográfica (opcional) */
     public $longitude;
 
     /**

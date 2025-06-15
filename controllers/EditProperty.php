@@ -2,6 +2,20 @@
 
 namespace controllers;
 
+/**
+ * Controlador para editar una propiedad existente.
+ *
+ * Este script:
+ * - Verifica que el usuario haya iniciado sesión.
+ * - Recibe los datos del formulario por POST (ID de la propiedad, dirección, datos generales y específicos).
+ * - Instancia los facades necesarios para la operación.
+ * - Actualiza la dirección asociada a la propiedad.
+ * - Actualiza los datos generales de la propiedad.
+ * - Actualiza los datos específicos según el tipo de propiedad (Habitación, Estudio, Piso, Casa).
+ * - Gestiona los mensajes de éxito o error en la sesión.
+ * - Redirige a la página de mensaje tras la operación.
+ */
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use facades\PropertyFacade;
@@ -16,6 +30,7 @@ use facades\AddressFacade;
 
 session_start();
 
+// Verificar que el usuario esté autenticado
 if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
     $_SESSION['message'] = 'Debes iniciar sesión para editar una propiedad.';
     header('Location: /message');
@@ -23,6 +38,7 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['user']->id)) {
 }
 
 try {
+    // Instanciar los facades necesarios
     $propertyFacade = new PropertyFacade(
         new PropertyConverter(),
         new RoomConverter(),
@@ -34,7 +50,7 @@ try {
     );
     $addressFacade = new AddressFacade(new AddressConverter());
 
-
+    // Obtener el ID de la propiedad a editar
     $propertyId = $_POST['id'] ?? null;
     if (!$propertyId) {
         throw new \Exception('ID de propiedad no especificado.');
@@ -61,7 +77,7 @@ try {
         'immediate_availability' => isset($_POST['immediate_availability']) ? intval($_POST['immediate_availability']) : 0
     ];
 
-    // 3. Actualizar datos específicos según tipo
+    // 3. Actualizar datos específicos según tipo de propiedad
     $propertyType = $_POST['property_type'] ?? '';
     $specificFields = [];
     switch ($propertyType) {
@@ -127,5 +143,6 @@ try {
     $_SESSION['message'] = 'Error al actualizar la propiedad: ' . $e->getMessage();
 }
 
+// Redirigir a la página de mensaje con el resultado
 header('Location: /message');
 exit();

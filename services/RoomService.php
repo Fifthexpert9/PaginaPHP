@@ -9,6 +9,16 @@ use PDOException;
 
 /**
  * Servicio para gestionar operaciones relacionadas con habitaciones en la base de datos.
+ *
+ * Esta clase proporciona métodos para crear, obtener, actualizar y eliminar habitaciones asociadas a propiedades.
+ * Implementa el patrón Singleton para asegurar una única instancia y reutilizar la conexión a la base de datos.
+ *
+ * Métodos principales:
+ * - getInstance(): Obtiene la instancia única del servicio.
+ * - createRoom(RoomModel $room): Crea una nueva habitación.
+ * - getRoomByPropertyId($propertyId): Obtiene una habitación por el ID de la propiedad asociada.
+ * - updateRoom($propertyId, $fields): Actualiza los campos de una habitación existente.
+ * - deleteRoom($propertyId): Elimina una habitación por el ID de la propiedad asociada.
  */
 class RoomService
 {

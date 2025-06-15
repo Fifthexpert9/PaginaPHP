@@ -1,4 +1,19 @@
+/**
+ * Script para mostrar dinámicamente los campos específicos según el tipo de propiedad seleccionada en el formulario de nueva propiedad.
+ *
+ * Funcionalidades:
+ * - Genera y muestra los campos correspondientes a Habitación, Estudio, Piso o Casa según la selección del usuario.
+ * - Cada función retorna el HTML necesario para los campos específicos de cada tipo de propiedad.
+ * - Al cambiar el tipo de propiedad, se actualizan los campos del formulario en el contenedor con id="dynamic-fields".
+ *
+ * Dependencias:
+ * - El formulario debe tener radios con name="property_type" para seleccionar el tipo de propiedad.
+ * - El contenedor donde se insertan los campos dinámicos debe tener id="dynamic-fields".
+ * - Se utilizan clases y atributos compatibles con Bootstrap para estilos y validación.
+ */
+
 function getRoomFields() {
+  // Devuelve los campos específicos para una Habitación
   return `
         <div class="mb-3">
                         <label for="private_bathroom" class="form-label">
@@ -74,6 +89,7 @@ function getRoomFields() {
 }
 
 function getStudioFields() {
+  // Devuelve los campos específicos para un Estudio
   return `
         <div class="mb-3">
                         <label for="furnished" class="form-label">
@@ -127,6 +143,7 @@ function getStudioFields() {
 }
 
 function getApartmentFields() {
+  // Devuelve los campos específicos para un Piso
   return `
         <div class="mb-3">
                         <label for="apartment_type" class="form-label">
@@ -249,6 +266,7 @@ function getApartmentFields() {
 }
 
 function getHouseFields() {
+  // Devuelve los campos específicos para una Casa
   return `
         <div class="mb-3">
                         <label for="house_type" class="form-label">
@@ -401,6 +419,7 @@ function loadFieldsForType(type) {
   document.getElementById("dynamic-fields").innerHTML = html;
 }
 
+// Escucha cambios en los radios de tipo de propiedad y actualiza los campos dinámicos
 document
   .querySelectorAll('input[name="property_type"]')
   .forEach(function (radio) {

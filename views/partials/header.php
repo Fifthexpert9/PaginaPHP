@@ -2,7 +2,12 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary py-1">
         <div class="container d-flex align-items-center">
             <a class="navbar-brand logo" href="/">houspecial</a>
-            <ul class="navbar-nav mb-2 mb-lg-0 flex-row gap-4">
+            <ul class="navbar-nav mb-2 mb-lg-0 flex-row gap-4 align-items-center">
+                <li class="nav-item">
+                    <button id="open-translate" class="nav-link text-black icon-hover me-5" title="Traducir página" style="background:none;border:none;padding:0;">
+                        <i class="bi bi-translate icon"></i>
+                    </button>
+                </li>
                 <?php if (!empty($_SESSION['logged']) && $_SESSION['logged']): ?>
                     <li class="nav-item">
                         <a class="nav-link text-black icon-hover" href="/manager" title="Crear propiedad/anuncio"><i class="bi bi-plus-circle icon"></i></a>
@@ -31,3 +36,7 @@
         </div>
     </nav>
 </header>
+
+<div id="google_translate_element" style="display:none;"></div>
+<script src="/views/assets/js/header-translator.js"></script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>

@@ -9,6 +9,16 @@ use PDOException;
 
 /**
  * Servicio para gestionar operaciones relacionadas con apartamentos en la base de datos.
+ *
+ * Esta clase proporciona métodos para crear, obtener, actualizar y eliminar apartamentos asociados a propiedades.
+ * Implementa el patrón Singleton para asegurar una única instancia y reutilizar la conexión a la base de datos.
+ *
+ * Métodos principales:
+ * - getInstance(): Obtiene la instancia única del servicio.
+ * - createApartment(ApartmentModel $apartment): Crea un nuevo apartamento.
+ * - getApartmentByPropertyId($propertyId): Obtiene un apartamento por el ID de la propiedad asociada.
+ * - updateApartment($propertyId, $fields): Actualiza los campos de un apartamento existente.
+ * - deleteApartment($propertyId): Elimina un apartamento por el ID de la propiedad asociada.
  */
 class ApartmentService
 {

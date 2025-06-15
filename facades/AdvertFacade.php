@@ -12,7 +12,21 @@ use dtos\AdvertDto;
 
 /**
  * Facade para la gestión de anuncios (advert).
+ *
  * Orquesta la lógica de negocio relacionada con anuncios y su conversión entre modelos y DTOs.
+ * Proporciona una interfaz simplificada para crear, obtener, actualizar, eliminar y buscar anuncios,
+ * delegando la lógica a los servicios y conversores correspondientes.
+ *
+ * Métodos principales:
+ * - __construct: Inicializa el facade con los conversores y servicios necesarios.
+ * - createAdvert: Crea un nuevo anuncio a partir de un DTO.
+ * - getAdvertById: Obtiene un anuncio por su ID, junto con su título, DTO y propiedad asociada.
+ * - getAdvertsByUserId: Obtiene todos los anuncios publicados por un usuario.
+ * - getAdvertsByPropertyId: Obtiene todos los anuncios asociados a una propiedad concreta.
+ * - getAllAdverts: Obtiene todos los anuncios del sistema.
+ * - updateAdvert: Actualiza los datos de un anuncio.
+ * - deleteAdvert: Elimina un anuncio por su ID.
+ * - searchAdverts: Busca anuncios aplicando filtros generales y específicos.
  */
 class AdvertFacade
 {
@@ -47,10 +61,10 @@ class AdvertFacade
      * Genera el título de un anuncio a partir del anuncio, la propiedad y la dirección.
      *
      * El título sigue la estructura:
-     * "(property_type, de property) en (action, de advert) en (street, de address), (city, de address)"
+     * "(property_type, de property) en (action, de advert) en (street, de address)"
      *
-     * @param int $advertId ID del anuncio.
      * @param PropertyModel $propertyModel Modelo de la propiedad asociada.
+     * @param string $action Acción del anuncio.
      * @param AddressModel|null $addressModel Modelo de la dirección asociada o null.
      * @return string Título generado para el anuncio.
      */
@@ -100,7 +114,6 @@ class AdvertFacade
 
         $addressModel = $this->addressService->getAddressByPropertyId($propertyModel->getId());
 
-
         return [
             'title' => $this->generateAdvertTitle($propertyModel, $advertModel->getAction(), $addressModel),
             'advert' => $this->advertConverter->modelToDto($advertModel),
@@ -116,13 +129,15 @@ class AdvertFacade
      * y construye un array con:
      *  - 'title': título generado a partir del tipo de propiedad, acción y dirección,
      *  - 'advert': DTO del anuncio,
-     *  - 'property': DTO de la propiedad asociada.
+     *  - 'property': DTO de la propiedad asociada,
+     *  - 'address': DTO de la dirección asociada (puede ser null).
      *
      * @param int $userId ID del usuario cuyos anuncios se desean obtener.
      * @return array[] Array de arrays con las claves:
      *                 - 'title' (string): Título generado para el anuncio.
      *                 - 'advert' (AdvertDto): DTO del anuncio.
      *                 - 'property' (PropertyDto): DTO de la propiedad asociada.
+     *                 - 'address' (AddressDto|null): DTO de la dirección asociada.
      */
     public function getAdvertsByUserId($userId)
     {
@@ -152,13 +167,15 @@ class AdvertFacade
      * y construye un array con:
      *  - 'title': título generado a partir del tipo de propiedad, acción y dirección,
      *  - 'advert': DTO del anuncio,
-     *  - 'property': DTO de la propiedad asociada.
+     *  - 'property': DTO de la propiedad asociada,
+     *  - 'address': DTO de la dirección asociada (puede ser null).
      *
      * @param int $propertyId ID de la propiedad cuyos anuncios se desean obtener.
      * @return array[] Array de arrays con las claves:
      *                 - 'title' (string): Título generado para el anuncio.
      *                 - 'advert' (AdvertDto): DTO del anuncio.
      *                 - 'property' (PropertyDto): DTO de la propiedad asociada.
+     *                 - 'address' (AddressDto|null): DTO de la dirección asociada.
      */
     public function getAdvertsByPropertyId($propertyId)
     {
@@ -187,12 +204,14 @@ class AdvertFacade
      * obtiene el modelo de la propiedad y la dirección asociada, y construye un array con:
      *  - 'title': título generado a partir del tipo de propiedad, acción y dirección,
      *  - 'advert': DTO del anuncio,
-     *  - 'property': DTO de la propiedad asociada.
+     *  - 'property': DTO de la propiedad asociada,
+     *  - 'address': DTO de la dirección asociada (puede ser null).
      *
      * @return array[] Array de arrays con las claves:
      *                 - 'title' (string): Título generado para el anuncio.
      *                 - 'advert' (AdvertDto): DTO del anuncio.
      *                 - 'property' (PropertyDto): DTO de la propiedad asociada.
+     *                 - 'address' (AddressDto|null): DTO de la dirección asociada.
      */
     public function getAllAdverts()
     {
@@ -219,7 +238,7 @@ class AdvertFacade
      *
      * @param int $id ID del anuncio a actualizar.
      * @param array $fields Campos a actualizar (clave => valor).
-     * @return array Resultado de la operación (success, message)
+     * @return array|string Resultado de la operación (success, message) o mensaje de error.
      */
     public function updateAdvert($id, $fields)
     {

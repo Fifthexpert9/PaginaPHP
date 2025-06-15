@@ -6,24 +6,29 @@ namespace dtos;
  * DTO para exponer información de una habitación junto con los datos de la propiedad y la dirección.
  *
  * Este DTO agrupa toda la información relevante de una habitación ofertada, incluyendo los datos generales de la propiedad,
- * la dirección (AddressDto), los datos específicos de la habitación, y las imágenes relativas a ella.
+ * la dirección (AddressDto), los datos específicos de la habitación y las imágenes relativas a ella.
  * Se utiliza para transferir datos entre la capa de dominio y la capa de presentación o API.
  *
- * @property int $property_id ID de la propiedad.
- * @property string $property_type Tipo de propiedad.
- * @property int $built_size Superficie construida (m²).
- * @property string $status Estado de la propiedad.
- * @property bool $immediate_availability Disponibilidad inmediata.
- * @property int $user_id ID del usuario propietario.
- * @property string $main_image Ruta de la imagen principal de la propiedad (image_path de ImageDto).
- * @property string[] $images Array de rutas de imágenes (image_path de ImageDto) asociadas a la propiedad.
- * @property AddressDto $address Objeto con la dirección de la propiedad.
- * @property bool $private_bathroom Indica si la habitación tiene baño privado.
- * @property int $max_roommates Número máximo de compañeros.
- * @property bool $pets_allowed Indica si se permiten mascotas.
- * @property bool $furnished Indica si está amueblada.
- * @property bool $students_only Indica si es solo para estudiantes.
- * @property string $gender_restriction Restricción de género.
+ * Propiedades:
+ * - int $property_id                ID de la propiedad.
+ * - string $property_type           Tipo de propiedad.
+ * - int $built_size                 Superficie construida (m²).
+ * - string $status                  Estado de la propiedad.
+ * - bool $immediate_availability    Disponibilidad inmediata.
+ * - int $user_id                    ID del usuario propietario.
+ * - string $main_image              Ruta de la imagen principal de la propiedad (image_path de ImageDto).
+ * - string[] $images                Array de rutas de imágenes (image_path de ImageDto) asociadas a la propiedad.
+ * - AddressDto $address             Objeto con la dirección de la propiedad.
+ * - bool $private_bathroom          Indica si la habitación tiene baño privado.
+ * - int $max_roommates              Número máximo de compañeros.
+ * - bool $pets_allowed              Indica si se permiten mascotas.
+ * - bool $furnished                 Indica si está amueblada.
+ * - bool $students_only             Indica si es solo para estudiantes.
+ * - string $gender_restriction      Restricción de género.
+ *
+ * Métodos:
+ * - __construct: Inicializa el DTO con los datos de la habitación.
+ * - toArray: Devuelve los datos de la habitación como un array asociativo.
  */
 class RoomDto
 {
@@ -47,7 +52,6 @@ class RoomDto
     public $furnished;
     public $students_only;
     public $gender_restriction;
-
 
     /**
      * Constructor de RoomDto.
@@ -77,7 +81,7 @@ class RoomDto
         $user_id,
         $main_image,
         $images = [],
-        $address, // AddressDto
+        $address,
         $private_bathroom,
         $max_roommates,
         $pets_allowed,

@@ -9,27 +9,30 @@ namespace dtos;
  * la dirección (AddressDto), los datos específicos del apartamento y las imágenes relativas a él.
  * Se utiliza para transferir datos entre la capa de dominio y la capa de presentación o API.
  *
- * @property int $property_id ID de la propiedad.
- * @property string $property_type Tipo de propiedad.
- * @property int $built_size Superficie construida (m²).
- * @property float $price Precio del apartamento.
- * @property string $status Estado del apartamento.
- * @property bool $immediate_availability Disponibilidad inmediata.
- * @property int $user_id ID del usuario propietario.
- * @property string $main_image Ruta de la imagen principal de la propiedad (image_path de ImageDto).
- * @property string[] $images Array de rutas de imágenes (image_path de ImageDto) asociadas a la propiedad.
- * @property AddressDto $address Objeto con la dirección del apartamento.
- * @property string $apartment_type Tipo de apartamento.
- * @property int $num_rooms Número de habitaciones.
- * @property int $num_bathrooms Número de baños.
- * @property bool $furnished Indica si está amueblado.
- * @property bool $balcony Indica si tiene balcón.
- * @property int $floor Planta en la que se encuentra.
- * @property bool $elevator Indica si tiene ascensor.
- * @property bool $air_conditioning Indica si tiene aire acondicionado.
- * @property bool $garage Indica si tiene garaje.
- * @property bool $pool Indica si tiene piscina.
- * @property bool $pets_allowed Indica si se permiten mascotas.
+ * Propiedades:
+ * - int $property_id                  ID de la propiedad.
+ * - string $property_type             Tipo de propiedad.
+ * - int $built_size                   Superficie construida (m²).
+ * - string $status                    Estado del apartamento.
+ * - bool $immediate_availability      Disponibilidad inmediata.
+ * - int $user_id                      ID del usuario propietario.
+ * - string $main_image                Ruta de la imagen principal de la propiedad.
+ * - string[] $images                  Array de rutas de imágenes asociadas a la propiedad.
+ * - AddressDto $address               Objeto con la dirección del apartamento.
+ * - string $apartment_type            Tipo de apartamento.
+ * - int $num_rooms                    Número de habitaciones.
+ * - int $num_bathrooms                Número de baños.
+ * - bool $furnished                   Indica si está amueblado.
+ * - bool $balcony                     Indica si tiene balcón.
+ * - int $floor                        Planta en la que se encuentra.
+ * - bool $elevator                    Indica si tiene ascensor.
+ * - bool $air_conditioning            Indica si tiene aire acondicionado.
+ * - bool $garage                      Indica si tiene garaje.
+ * - bool $pets_allowed                Indica si se permiten mascotas.
+ *
+ * Métodos:
+ * - __construct: Inicializa el DTO con los datos del apartamento.
+ * - toArray: Devuelve los datos del apartamento como un array asociativo.
  */
 class ApartmentDto
 {
@@ -64,12 +67,11 @@ class ApartmentDto
      * @param int $property_id ID de la propiedad.
      * @param string $property_type Tipo de propiedad.
      * @param int $built_size Superficie construida (m²).
-     * @param float $price Precio del apartamento.
      * @param string $status Estado del apartamento.
      * @param bool $immediate_availability Disponibilidad inmediata.
      * @param int $user_id ID del usuario propietario.
-     * @param string $main_image Ruta de la imagen principal de la propiedad (image_path de ImageDto).
-     * @param string[] $images (opcional) Array de rutas de imágenes (image_path de ImageDto) asociadas a la propiedad.
+     * @param string $main_image Ruta de la imagen principal de la propiedad.
+     * @param string[] $images (opcional) Array de rutas de imágenes asociadas a la propiedad.
      * @param AddressDto $address Objeto con la dirección del apartamento.
      * @param string $apartment_type Tipo de apartamento.
      * @param int $num_rooms Número de habitaciones.
@@ -91,7 +93,7 @@ class ApartmentDto
         $user_id,
         $main_image,
         $images = [],
-        $address, // AddressDto
+        $address,
         $apartment_type,
         $num_rooms,
         $num_bathrooms,

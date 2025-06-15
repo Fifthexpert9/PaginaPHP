@@ -9,20 +9,24 @@ namespace dtos;
  * la dirección (AddressDto), los datos específicos del estudio y las imágenes relativas a él.
  * Se utiliza para transferir datos entre la capa de dominio y la capa de presentación o API.
  *
- * @property int $property_id ID de la propiedad.
- * @property string $property_type Tipo de propiedad.
- * @property int $built_size Superficie construida (m²).
- * @property float $price Precio del estudio.
- * @property string $status Estado del estudio.
- * @property bool $immediate_availability Disponibilidad inmediata.
- * @property int $user_id ID del usuario propietario.
- * @property string $main_image Ruta de la imagen principal de la propiedad (image_path de ImageDto).
- * @property string[] $images Array de rutas de imágenes (image_path de ImageDto) asociadas a la propiedad.
- * @property AddressDto $address Objeto con la dirección del estudio.
- * @property bool $furnished Indica si está amueblado.
- * @property bool $balcony Indica si tiene balcón.
- * @property bool $air_conditioning Indica si tiene aire acondicionado.
- * @property bool $pets_allowed Indica si se permiten mascotas.
+ * Propiedades:
+ * - int $property_id                ID de la propiedad.
+ * - string $property_type           Tipo de propiedad.
+ * - int $built_size                 Superficie construida (m²).
+ * - string $status                  Estado del estudio.
+ * - bool $immediate_availability    Disponibilidad inmediata.
+ * - int $user_id                    ID del usuario propietario.
+ * - string $main_image              Ruta de la imagen principal de la propiedad (image_path de ImageDto).
+ * - string[] $images                Array de rutas de imágenes (image_path de ImageDto) asociadas a la propiedad.
+ * - AddressDto $address             Objeto con la dirección del estudio.
+ * - bool $furnished                 Indica si está amueblado.
+ * - bool $balcony                   Indica si tiene balcón.
+ * - bool $air_conditioning          Indica si tiene aire acondicionado.
+ * - bool $pets_allowed              Indica si se permiten mascotas.
+ *
+ * Métodos:
+ * - __construct: Inicializa el DTO con los datos del estudio.
+ * - toArray: Devuelve los datos del estudio como un array asociativo.
  */
 class StudioDto
 {
@@ -51,7 +55,6 @@ class StudioDto
      * @param int $property_id ID de la propiedad.
      * @param string $property_type Tipo de propiedad.
      * @param int $built_size Superficie construida (m²).
-     * @param float $price Precio del estudio.
      * @param string $status Estado del estudio.
      * @param bool $immediate_availability Disponibilidad inmediata.
      * @param int $user_id ID del usuario propietario.
@@ -107,6 +110,8 @@ class StudioDto
             'status' => $this->status,
             'immediate_availability' => $this->immediate_availability,
             'user_id' => $this->user_id,
+            'main_image' => $this->main_image,
+            'images' => $this->images,
             'address' => $this->address ? $this->address->toArray() : null,
             'furnished' => $this->furnished,
             'balcony' => $this->balcony,

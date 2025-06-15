@@ -9,6 +9,16 @@ use PDOException;
 
 /**
  * Servicio para gestionar operaciones relacionadas con casas en la base de datos.
+ *
+ * Esta clase proporciona métodos para crear, obtener, actualizar y eliminar casas asociadas a propiedades.
+ * Implementa el patrón Singleton para asegurar una única instancia y reutilizar la conexión a la base de datos.
+ *
+ * Métodos principales:
+ * - getInstance(): Obtiene la instancia única del servicio.
+ * - createHouse(HouseModel $house): Crea una nueva casa.
+ * - getHouseByPropertyId($propertyId): Obtiene una casa por el ID de la propiedad asociada.
+ * - updateHouse($propertyId, $fields): Actualiza los campos de una casa existente.
+ * - deleteHouse($propertyId): Elimina una casa por el ID de la propiedad asociada.
  */
 class HouseService
 {

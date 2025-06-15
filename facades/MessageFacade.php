@@ -9,8 +9,19 @@ use converters\MessageConverter;
 use dtos\MessageDto;
 
 /**
- * Facade para la gestión de mensajes.
- * Orquesta la lógica de negocio relacionada con los mensajes entre usuarios y su conversión entre modelos y DTOs.
+ * Facade para la gestión de mensajes entre usuarios.
+ *
+ * Orquesta la lógica de negocio relacionada con los mensajes y su conversión entre modelos y DTOs.
+ * Proporciona una interfaz simplificada para registrar, obtener y eliminar mensajes,
+ * delegando la lógica a los servicios y conversores correspondientes.
+ *
+ * Métodos:
+ * - __construct: Inicializa el facade con los servicios y conversores necesarios.
+ * - registerMessage: Registra un mensaje en la base de datos y envía un correo al receptor.
+ * - getMessageById: Obtiene un mensaje por su ID.
+ * - getMessagesSentByUser: Obtiene todos los mensajes enviados por un usuario.
+ * - getMessagesReceivedByUser: Obtiene todos los mensajes recibidos por un usuario.
+ * - deleteMessageById: Elimina un mensaje por su ID.
  */
 class MessageFacade
 {
@@ -22,7 +33,6 @@ class MessageFacade
     /**
      * Constructor de MessageFacade.
      *
-     * @param MessageService $messageService Servicio de mensajes.
      * @param MailService $mailService Servicio de envío de mensajes mediante PHPMailer.
      * @param MessageConverter $messageConverter Conversor de mensajes.
      */

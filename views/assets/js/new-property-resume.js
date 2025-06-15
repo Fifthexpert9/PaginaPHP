@@ -1,3 +1,17 @@
+/**
+ * Script para mostrar un resumen dinámico de los datos introducidos en el formulario de nueva propiedad.
+ *
+ * Funcionalidades:
+ * - Recoge los valores de los campos del formulario según el tipo de propiedad seleccionado.
+ * - Genera y muestra un resumen estructurado en HTML en el elemento con id="summary-section" al llegar al último paso.
+ * - El resumen incluye ubicación, datos generales y características específicas según el tipo de vivienda.
+ *
+ * Dependencias:
+ * - Los campos del formulario deben tener los IDs y names esperados (ej: 'street', 'city', 'property_type', etc.).
+ * - El resumen se muestra al llegar al paso 4 del formulario multipaso.
+ * - window.nextStep debe estar definido previamente para poder ser sobrescrito.
+ */
+
 function getRadioValue(name) {
     const checked = document.querySelector('input[name="' + name + '"]:checked');
     return checked ? checked.nextElementSibling.textContent.trim() : '';
@@ -78,6 +92,7 @@ function showSummary() {
     document.getElementById('summary-section').innerHTML = html;
 }
 
+// Sobrescribe la función nextStep para mostrar el resumen al llegar al paso 4
 const originalNextStepSummary = window.nextStep;
 window.nextStep = function (step) {
     originalNextStepSummary(step);

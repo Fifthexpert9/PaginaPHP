@@ -8,6 +8,10 @@ use dtos\FavoritesDto;
 /**
  * Clase encargada de convertir entre FavoritesModel y FavoritesDto
  * para la transferencia de datos de favoritos.
+ *
+ * Métodos:
+ * - modelToDto: Convierte un modelo de dominio FavoritesModel en un DTO FavoritesDto.
+ * - dtoToModel: Convierte un DTO FavoritesDto en un modelo de dominio FavoritesModel.
  */
 class FavoritesConverter {
     /**

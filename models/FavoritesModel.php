@@ -9,6 +9,17 @@ namespace models;
  * permitiendo asociar un usuario con un anuncio marcado como favorito. Incluye información sobre
  * el usuario, el anuncio y la fecha en la que se marcó como favorito.
  * Se utiliza para transferir información entre las capas de dominio, presentación y persistencia.
+ *
+ * Propiedades:
+ * - int $id             ID del favorito (registro único en la tabla de favoritos).
+ * - int $user_id        ID del usuario que marcó el favorito.
+ * - int $advert_id      ID del anuncio marcado como favorito.
+ * - string|null $created_at Fecha en la que se marcó como favorito (formato timestamp o datetime).
+ *
+ * Métodos:
+ * - __construct: Inicializa el modelo con los datos del favorito.
+ * - getId, getUserId, getAdvertId, getCreatedAt: Getters.
+ * - setUserId, setAdvertId, setCreatedAt: Setters.
  */
 class FavoritesModel {
     /**

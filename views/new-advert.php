@@ -37,7 +37,7 @@ $properties = $propertyFacade->getPropertiesByUserId($_SESSION['user']->id);
 <main class="container d-flex justify-content-center align-items-center my-3">
     <div class="card shadow-sm pt-2 ps-4 pe-4 pb-4" style="max-width: 500px; width: 100%;">
         <div class="text-center mt-1 mb-3">
-            <h2 class="logo">crear anuncio</h2>
+            <h2 class="logo">Crear anuncio</h2>
         </div>
         <form id="multiStepForm" action="/controllers/CreateAdvert.php" method="POST">
             <div class="mb-3">

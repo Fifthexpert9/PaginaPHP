@@ -14,6 +14,18 @@ use PDOException;
  *
  * Ejemplo de uso:
  * $db = DatabaseModel::getInstance()->db;
+ *
+ * Propiedades:
+ * - static DatabaseModel|null $instance Instancia única de la clase.
+ * - string $dbConnectionString          Cadena de conexión DSN.
+ * - string $dbUser                     Usuario de la base de datos.
+ * - string $dbPassword                 Contraseña de la base de datos.
+ * - PDO $db                            Conexión PDO activa.
+ *
+ * Métodos:
+ * - __construct(): Constructor privado, establece la conexión PDO.
+ * - getInstance(): Obtiene la instancia única de la clase.
+ * - getConnection(): Devuelve la conexión PDO activa.
  */
 class DatabaseModel {
     /**

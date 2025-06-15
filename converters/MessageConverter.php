@@ -8,6 +8,10 @@ use dtos\MessageDto;
 /**
  * Clase encargada de convertir entre MessageModel y MessageDto
  * para la transferencia de datos de mensajes.
+ *
+ * Métodos:
+ * - modelToDto: Convierte un modelo de dominio MessageModel en un DTO MessageDto.
+ * - dtoToModel: Convierte un DTO MessageDto en un modelo de dominio MessageModel.
  */
 class MessageConverter {
     /**

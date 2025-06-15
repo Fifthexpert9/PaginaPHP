@@ -7,8 +7,25 @@ namespace models;
  *
  * Esta clase encapsula los datos y comportamientos relacionados con un apartamento.
  * Permite almacenar información relevante como el tipo de apartamento, número de habitaciones, baños, si está amueblado,
- * si tiene balcón, planta, ascensor, aire acondicionado, garaje, piscina y si se permiten mascotas.
+ * si tiene balcón, planta, ascensor, aire acondicionado, garaje y si se permiten mascotas.
  * Se utiliza para transferir información entre las capas de dominio, presentación y persistencia.
+ *
+ * Propiedades:
+ * - int $property_id           ID de la propiedad asociada.
+ * - string $apartment_type     Tipo de apartamento.
+ * - int $num_rooms             Número de habitaciones.
+ * - int $num_bathrooms         Número de baños.
+ * - bool $furnished            Indica si está amueblado.
+ * - bool $balcony              Indica si tiene balcón.
+ * - int $floor                 Planta en la que se encuentra.
+ * - bool $elevator             Indica si tiene ascensor.
+ * - bool $air_conditioning     Indica si tiene aire acondicionado.
+ * - bool $garage               Indica si tiene garaje.
+ * - bool $pets_allowed         Indica si se permiten mascotas.
+ *
+ * Métodos:
+ * - __construct: Inicializa el modelo con los datos del apartamento.
+ * - Getters y setters para cada propiedad.
  */
 class ApartmentModel
 {
@@ -63,11 +80,6 @@ class ApartmentModel
     private $garage;
 
     /**
-     * @var bool Indica si tiene piscina.
-     */
-    private $pool;
-
-    /**
      * @var bool Indica si se permiten mascotas.
      */
     private $pets_allowed;
@@ -85,7 +97,6 @@ class ApartmentModel
      * @param bool   $elevator          Indica si tiene ascensor.
      * @param bool   $air_conditioning  Indica si tiene aire acondicionado.
      * @param bool   $garage            Indica si tiene garaje.
-     * @param bool   $pool              Indica si tiene piscina.
      * @param bool   $pets_allowed      Indica si se permiten mascotas.
      */
     public function __construct(
@@ -99,7 +110,6 @@ class ApartmentModel
         $elevator,
         $air_conditioning,
         $garage,
-        //$pool,
         $pets_allowed
     ) {
         $this->property_id = $property_id;
@@ -112,7 +122,6 @@ class ApartmentModel
         $this->elevator = $elevator;
         $this->air_conditioning = $air_conditioning;
         $this->garage = $garage;
-        //$this->pool = $pool;
         $this->pets_allowed = $pets_allowed;
     }
 
@@ -207,12 +216,6 @@ class ApartmentModel
     {
         return $this->garage;
     }
-
-    /**
-     * Indica si tiene piscina.
-     * @return bool
-     */
-    //public function hasPool() { return $this->pool; }
 
     /**
      * Indica si se permiten mascotas.
@@ -314,12 +317,6 @@ class ApartmentModel
     {
         $this->garage = $garage;
     }
-
-    /**
-     * Establece si tiene piscina.
-     * @param bool $pool
-     */
-    //public function setPool($pool) { $this->pool = $pool; }
 
     /**
      * Establece si se permiten mascotas.
