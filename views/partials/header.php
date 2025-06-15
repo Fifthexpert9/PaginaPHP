@@ -31,3 +31,27 @@
         </div>
     </nav>
 </header>
+<!-- Botón de traducción personalizado -->
+<div id="google_translate_custom_btn"></div>
+<div id="google_translate_element" style="display:none;"></div>
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'es',
+            includedLanguages: 'en,fr,de,it,pt,ca,gl,eu',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        }, 'google_translate_element');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var btnDiv = document.getElementById('google_translate_custom_btn');
+        if (btnDiv) {
+            btnDiv.innerHTML = '<button id="open-translate">🌐</button>';
+            document.getElementById('open-translate').onclick = function() {
+                var elem = document.querySelector('.goog-te-gadget-icon');
+                if (elem) elem.click();
+            };
+        }
+    });
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>

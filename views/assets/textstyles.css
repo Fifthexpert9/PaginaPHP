@@ -200,5 +200,9 @@ iframe.goog-te-menu-frame {
     border: none !important;
 }
 
+body.loading #google_translate_custom_btn {
+    display: none !important;
+}
+
 
 
